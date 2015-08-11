@@ -17,4 +17,12 @@
       directory="static"
       />
 
+  <browser:page
+    name="stop-words-settings"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    class="collective.contentalerts.browser.controlpanel.ControlPanelView"
+    permission="collective.contentalerts.stop_words.edit"
+    layer="collective.contentalerts.interfaces.ICollectiveContentalertsLayer"
+    />
+
 </configure>
