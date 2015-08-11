@@ -8,12 +8,12 @@ class ControlPanelForm(controlpanel.RegistryEditForm):
 
     schema = IStopWords
     label = _(
-        u'blacklist_words_controlpanel_settings_label',
-        default=u'Blacklist words'
+        u'stop_words_controlpanel_settings_label',
+        default=u'Stop words'
     )
     description = _(
-        u'blacklist_words_controlpanel_settings_description',
-        default=u'Edit blacklist words.'
+        u'stop_words_controlpanel_settings_description',
+        default=u'Edit stop words.'
     )
 
 
