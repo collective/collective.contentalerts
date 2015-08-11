@@ -6,4 +6,3 @@ def post_install(context):
     if context.readDataFile('collectivecontentalerts_default.txt') is None:
         return
     # Do something during the installation of this package
-

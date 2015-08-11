@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
 """Setup tests for this package."""
+from collective.contentalerts.interfaces import ICollectiveContentalertsLayer
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
 from plone import api
+from plone.browserlayer import utils
 
 import unittest2 as unittest
 
@@ -17,13 +19,13 @@ class TestSetup(unittest.TestCase):
         self.installer = api.portal.get_tool('portal_quickinstaller')
 
     def test_product_installed(self):
-        """Test if collective.contentalerts is installed with portal_quickinstaller."""
-        self.assertTrue(self.installer.isProductInstalled('collective.contentalerts'))
+        """Test if the add-on is installed with portal_quickinstaller."""
+        self.assertTrue(
+            self.installer.isProductInstalled('collective.contentalerts')
+        )
 
     def test_browserlayer(self):
         """Test that ICollectiveContentalertsLayer is registered."""
-        from collective.contentalerts.interfaces import ICollectiveContentalertsLayer
-        from plone.browserlayer import utils
         self.assertIn(ICollectiveContentalertsLayer, utils.registered_layers())
 
 
@@ -38,4 +40,6 @@ class TestUninstall(unittest.TestCase):
 
     def test_product_uninstalled(self):
         """Test if collective.contentalerts is cleanly uninstalled."""
-        self.assertFalse(self.installer.isProductInstalled('collective.contentalerts'))
+        self.assertFalse(
+            self.installer.isProductInstalled('collective.contentalerts')
+        )
