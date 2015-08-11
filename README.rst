@@ -5,29 +5,36 @@
 ========================
 collective.contentalerts
 ========================
-Tell me what your product does
+Get alerts whenever a (custom list of) word is found on a content object,
+be that object any content type (Dexterity or Archetypes).
+
+Can be used to:
+
+- moderate: used as a blacklist.
+- highlight: used as a whitelist.
 
 Features
 --------
-- Can be bullet points
-
+- manage a list of words that will be used to search (blacklist/whitelist)
+- integration with  `plone.app.contentrules`_
+- standalone utility
+- provide different word lists if you need them
 
 Examples
 --------
 This add-on can be seen in action at the following sites:
-- Is there a page on the internet where everybody can see the features?
 
+- *Still not*
 
 Documentation
 -------------
-Full documentation for end users can be found in the "docs" folder, and is also available online at http://docs.plone.org/foo/bar
-
+Full documentation for end users can be found in the "docs" folder.
 
 Translations
 ------------
-This product has been translated into
+This product has been translated into:
 
-- Klingon (thanks, K'Plai)
+- *Still not*
 
 Installation
 ------------
@@ -47,7 +54,6 @@ Contribute
 ----------
 - Issue Tracker: https://github.com/collective/collective.contentalerts/issues
 - Source Code: https://github.com/collective/collective.contentalerts
-- Documentation: https://docs.plone.org/foo/bar
 
 Support
 -------
@@ -56,3 +62,12 @@ If you are having issues, please let us know.
 License
 -------
 The project is licensed under the GPLv2.
+
+Credits
+-------
+
+`der Freitag`_ sponsored the creation of this add-on.
+
+
+.. _plone.app.contentrules:  https://pypi.python.org/pypi/plone.app.contentrules
+.. _der Freitag:  https://www.freitag.de
