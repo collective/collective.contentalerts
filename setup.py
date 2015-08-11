@@ -43,14 +43,23 @@ setup(
     zip_safe=False,
     install_requires=[
         'plone.api',
+        'plone.app.registry',
+        'Products.GenericSetup',
         'setuptools',
-        'z3c.jbot',
+        'zope.i18nmessageid',
+        'zope.interface',
+        'zope.publisher',
+        'zope.schema',
     ],
     extras_require={
         'test': [
-            'plone.app.testing',
-            'plone.app.contenttypes',
             'plone.app.robotframework[debug]',
+            'plone.app.testing',
+            'plone.browserlayer',
+            'plone.registry',
+            'plone.testing',
+            'robotsuite',
+            'zope.component',
         ],
     },
     entry_points="""
