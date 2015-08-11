@@ -18,7 +18,7 @@
       directory="profiles/default"
       description="Installs the collective.contentalerts add-on."
       provides="Products.GenericSetup.interfaces.EXTENSION"
-      />
+  />
 
   <genericsetup:importStep
       name="collective.contentalerts-postInstall"
