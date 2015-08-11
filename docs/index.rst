@@ -1,0 +1,5 @@
+====================
+collective.contentalerts
+====================
+
+User documentation
