@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+from collective.contentalerts.interfaces import IStopWords
+from plone.registry.interfaces import IRegistry
+from zope.component import getUtility
+
 import HTMLParser
 import re
 import unicodedata
@@ -17,6 +21,9 @@ class Alert(object):
         """
         if text is None:
             return u''
+
+        if stop_words is None:
+            stop_words = self._get_registry_stop_words()
 
         # get all the stop words occurrences on the text
         snippets_data = {}
@@ -61,6 +68,9 @@ class Alert(object):
         """
         if not text or text is None:
             return False
+
+        if stop_words is None:
+            stop_words = self._get_registry_stop_words()
 
         normalized_text = self.html_normalize(text)
         for word in stop_words.split('\n'):
@@ -126,3 +136,12 @@ class Alert(object):
         seen = set()
         seen_add = seen.add
         return [x for x in sequence if not (x in seen or seen_add(x))]
+
+    def _get_registry_stop_words(self):
+        """Returns the stop words found on the registry, if any."""
+        registry = getUtility(IRegistry)
+        try:
+            records = registry.forInterface(IStopWords)
+            return records.stop_words or u''
+        except KeyError:
+            return u''

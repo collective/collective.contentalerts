@@ -44,8 +44,10 @@ setup(
     install_requires=[
         'plone.api',
         'plone.app.registry',
+        'plone.registry',
         'Products.GenericSetup',
         'setuptools',
+        'zope.component',
         'zope.i18nmessageid',
         'zope.interface',
         'zope.publisher',
@@ -55,8 +57,6 @@ setup(
         'test': [
             'plone.app.testing',
             'plone.browserlayer',
-            'plone.registry',
-            'zope.component',
         ],
     },
     entry_points="""
