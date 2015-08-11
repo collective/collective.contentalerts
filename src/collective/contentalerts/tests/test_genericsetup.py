@@ -8,7 +8,7 @@ from zope.component import getUtility
 import unittest
 
 
-class RegistryTest(unittest.TestCase):
+class GenericSetupTest(unittest.TestCase):
     layer = COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING
 
     def setUp(self):
