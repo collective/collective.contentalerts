@@ -1,0 +1,10 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    i18n_domain="collective.contentalerts">
+
+  <permission
+    id="collective.contentalerts.stop_words.edit"
+    title="collective.contentalerts: Edit stop words"
+    />
+
+</configure>

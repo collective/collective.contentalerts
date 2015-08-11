@@ -24,3 +24,14 @@ class GenericSetupTest(unittest.TestCase):
             'collective.contentalerts.interfaces.IStopWords.stop_words',
             registry
         )
+
+    def test_roles_with_permission(self):
+        """Check that the permission is given to the appropriate roles."""
+        permission = 'collective.contentalerts: Edit stop words'
+        roles = [
+            r['name']
+            for r in self.portal.rolesOfPermission(permission)
+            if r['selected']
+        ]
+        self.assertIn('Manager', roles)
+        self.assertIn('Site Administrator', roles)
