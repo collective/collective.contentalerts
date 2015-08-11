@@ -1,0 +1,5 @@
+<registry>
+
+  <records interface="collective.contentalerts.interfaces.IStopWords" />
+
+</registry>
