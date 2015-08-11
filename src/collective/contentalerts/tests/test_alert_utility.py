@@ -237,3 +237,29 @@ class GetSnippetsTestCase(unittest.TestCase):
             snippet_text,
             u'two, one\n\n...s two t...\n\n...d one m...\n\n...e two t...'
         )
+
+
+class HasStopWordsTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.has_words = Alert().has_stop_words
+
+    def test_no_text(self):
+        text = None
+        stop_words = u'one\ntwo'
+        self.assertFalse(self.has_words(text, stop_words))
+
+    def test_empty_text(self):
+        text = u''
+        stop_words = u'one\ntwo'
+        self.assertFalse(self.has_words(text, stop_words))
+
+    def test_no_stop_word_in_text(self):
+        text = u'Random normal text'
+        stop_words = u'one\ntwo'
+        self.assertFalse(self.has_words(text, stop_words))
+
+    def test_stop_word_in_text(self):
+        text = u'Alerts two text'
+        stop_words = u'one\ntwo'
+        self.assertTrue(self.has_words(text, stop_words))
