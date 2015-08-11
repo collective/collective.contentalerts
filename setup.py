@@ -53,12 +53,9 @@ setup(
     ],
     extras_require={
         'test': [
-            'plone.app.robotframework[debug]',
             'plone.app.testing',
             'plone.browserlayer',
             'plone.registry',
-            'plone.testing',
-            'robotsuite',
             'zope.component',
         ],
     },
