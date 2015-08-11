@@ -2,6 +2,14 @@
    If you want to learn more about writing documentation, please check out: http://docs.plone.org/about/documentation_styleguide_addons.html
    This text does not appear on pypi or github. It is a comment.
 
+.. image:: https://secure.travis-ci.org/collective/collective.contentalerts.png?branch=master
+    :target: http://travis-ci.org/collective/collective.contentalerts
+    :alt: Travis
+
+.. image:: https://coveralls.io/repos/collective/collective.contentalerts/badge.svg?branch=master&service=github
+    :target: https://coveralls.io/github/collective/collective.contentalerts?branch=master
+    :alt: Coveralls
+
 ========================
 collective.contentalerts
 ========================
