@@ -12,6 +12,11 @@
 
   <include package=".browser" />
 
+  <utility
+    factory="collective.contentalerts.utilities.Alert"
+    provides="collective.contentalerts.interfaces.IAlert"
+  />
+
   <genericsetup:registerProfile
       name="default"
       title="collective.contentalerts"
