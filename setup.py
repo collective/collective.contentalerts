@@ -50,7 +50,6 @@ setup(
         'zope.component',
         'zope.i18nmessageid',
         'zope.interface',
-        'zope.publisher',
         'zope.schema',
     ],
     extras_require={
