@@ -86,24 +86,24 @@ class HTMLNormalizeTestCase(unittest.TestCase):
         self.assertEqual(self.normalize(text), u'uau')
 
     def test_unicode_normalized_form(self):
-        text = u'süspicious'
-        self.assertEqual(self.normalize(text), u'suspicious')
+        text = u'älert'
+        self.assertEqual(self.normalize(text), u'alert')
 
     def test_unicode_normalized_form_lower_case(self):
-        text = u'sÜspicious'
-        self.assertEqual(self.normalize(text), u'suspicious')
+        text = u'Älert'
+        self.assertEqual(self.normalize(text), u'alert')
 
     def test_html_entity(self):
-        text = u's&#220;spicious'
-        self.assertEqual(self.normalize(text), u'suspicious')
+        text = u'alert&#220;s'
+        self.assertEqual(self.normalize(text), u'alertus')
 
     def test_html_entity_lower_case(self):
-        text = u's&#252;spicious'
-        self.assertEqual(self.normalize(text), u'suspicious')
+        text = u'alert&#252;s'
+        self.assertEqual(self.normalize(text), u'alertus')
 
     def test_multiple_spaces_on_source(self):
-        text = u'suspicious     text'
-        self.assertEqual(self.normalize(text), u'suspicious text')
+        text = u'alert     text'
+        self.assertEqual(self.normalize(text), u'alert text')
 
     def test_string(self):
         text = 'some string'

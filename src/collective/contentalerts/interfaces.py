@@ -26,7 +26,7 @@ class IStopWords(Interface):
 
 
 class IAlert(Interface):
-    """Utility to know if a given text contains suspicious text."""
+    """Utility to know if a given text contains stop words."""
 
     def get_snippets(text, stop_words=None, chars=150):
         """Returns the stop words found in the text surrounded by some text.
