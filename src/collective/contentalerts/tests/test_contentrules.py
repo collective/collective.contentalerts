@@ -2,6 +2,7 @@
 from collective.contentalerts.contentrules import TextAlertCondition
 from collective.contentalerts.contentrules import TextAlertConditionEditForm
 from collective.contentalerts.interfaces import IStopWords
+from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_DEXTERITY_INTEGRATION_TESTING  # noqa
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
 from plone.app.contentrules.rule import Rule
 from plone.app.discussion.interfaces import IConversation
@@ -25,6 +26,13 @@ class CommentDummyEvent(object):
 
     def __init__(self, obj):
         self.comment = obj
+
+
+@implementer(IObjectEvent)
+class ContentTypeDummyEvent(object):
+
+    def __init__(self, obj):
+        self.object = obj
 
 
 class TextAlertConditionTestCase(unittest.TestCase):
@@ -256,3 +264,52 @@ class TextAlertConditionTestCase(unittest.TestCase):
             IExecutable
         )
         self.assertFalse(executable())
+
+    def test_archetypes_document(self):
+        name = self.portal.invokeFactory(
+            id='doc2',
+            title='Document 1',
+            type_name='Document'
+        )
+        document = self.portal[name]
+        document.setText('this gives one alert')
+        condition = TextAlertCondition()
+        condition.stop_words = u'one alert\nanother alert'
+
+        executable = getMultiAdapter(
+            (self.portal, condition, ContentTypeDummyEvent(document)),
+            IExecutable
+        )
+        self.assertTrue(executable())
+
+
+class DexterityTextAlertConditionTestCase(unittest.TestCase):
+    layer = COLLECTIVE_CONTENTALERTS_DEXTERITY_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        self.request = self.layer['request']
+        self.registry = getUtility(IRegistry)
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+        self.name = 'collective.contentalerts.TextAlert'
+        self.element = getUtility(
+            IRuleCondition,
+            name=self.name
+        )
+
+        registry = getUtility(IRegistry)
+        self.records = registry.forInterface(IStopWords)
+
+    def test_dexterity_document(self):
+        document_id = self.portal.invokeFactory('Document', 'bla')
+        document = self.portal[document_id]
+        document.text = u'one alert and no more'
+        condition = TextAlertCondition()
+        condition.stop_words = u'one alert\nanother alert'
+
+        executable = getMultiAdapter(
+            (self.portal, condition, ContentTypeDummyEvent(document)),
+            IExecutable
+        )
+        self.assertTrue(executable())

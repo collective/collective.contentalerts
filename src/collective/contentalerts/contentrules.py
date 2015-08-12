@@ -19,7 +19,19 @@ class TextAlertConditionExecutor(object):
         self.event = event
 
     def __call__(self):
-        text = getattr(self.event.comment, 'text', None)
+        text = None
+
+        # if it's a comment
+        if getattr(self.event, 'comment', None):
+            if getattr(self.event.comment, 'text', None):
+                text = self.event.comment.text
+        # if it's a AT/DX
+        elif getattr(self.event, 'object', None):
+            if getattr(self.event.object, 'getText', None):
+                text = self.event.object.getText()
+            elif getattr(self.event.object, 'text', None):
+                text = self.event.object.text
+
         if not text or text is None:
             return False
 
