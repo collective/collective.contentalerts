@@ -72,6 +72,9 @@ class Alert(object):
         if stop_words is None:
             stop_words = self._get_registry_stop_words()
 
+        if stop_words is None or stop_words.strip() == u'':
+            return False
+
         normalized_text = self.html_normalize(text)
         for word in stop_words.split('\n'):
             normalized_word = self.html_normalize(word)

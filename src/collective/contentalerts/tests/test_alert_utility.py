@@ -34,6 +34,13 @@ class AlertUtilityTestCase(unittest.TestCase):
             u''
         )
 
+    def test_has_words_from_empty_registry(self):
+        """Check that if the registry is empty has_stop_words returns False."""
+        self.records.stop_words = u''
+        self.assertFalse(
+            self.utility.has_stop_words(u'some random text')
+        )
+
     def test_has_words_from_registry(self):
         """Check that has_stop_words works with the registry."""
         self.records.stop_words = u'random\nalert me\nlala'
