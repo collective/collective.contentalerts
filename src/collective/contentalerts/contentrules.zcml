@@ -1,0 +1,42 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope"
+  xmlns:browser="http://namespaces.zope.org/browser"
+  xmlns:plone="http://namespaces.plone.org/plone">
+
+  <!-- Text alert condition -->
+  <adapter
+    factory="collective.contentalerts.contentrules.TextAlertConditionExecutor"
+    for="zope.interface.Interface
+         collective.contentalerts.interfaces.ITextAlertCondition
+         zope.interface.Interface"
+    provides="plone.contentrules.rule.interfaces.IExecutable"
+  />
+
+  <browser:page
+    class="collective.contentalerts.contentrules.TextAlertConditionAddForm"
+    for="plone.app.contentrules.browser.interfaces.IRuleConditionAdding"
+    name="collective.contentalerts.TextAlert"
+    permission="plone.app.contentrules.ManageContentRules"
+  />
+
+  <browser:page
+    class="collective.contentalerts.contentrules.TextAlertConditionEditForm"
+    for="collective.contentalerts.interfaces.ITextAlertCondition"
+    name="edit"
+    permission="plone.app.contentrules.ManageContentRules"
+  />
+
+  <plone:ruleCondition
+    addview="collective.contentalerts.TextAlert"
+    description="Apply when words from a list are found on the text"
+    editview="edit"
+    event="zope.component.interfaces.IObjectEvent"
+    factory="collective.contentalerts.contentrules.TextAlertCondition"
+    for="*"
+    name="collective.contentalerts.TextAlert"
+    schema="collective.contentalerts.interfaces.ITextAlertCondition"
+    title="Text alert"
+  />
+
+</configure>
+

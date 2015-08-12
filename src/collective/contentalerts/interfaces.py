@@ -54,3 +54,20 @@ class IAlert(Interface):
         :returns: whether the text contains words from the stop words.
         :rtype: bool
         """
+
+
+class ITextAlertCondition(Interface):
+    """Marker interface for the text alert plone.app.contentrules condition."""
+
+    stop_words = schema.Text(
+        title=_(
+            u'contentrules_text_alert_condition_field_title',
+            default=u'Stop words'
+        ),
+        description=_(
+            u'contentrules_text_alert_condition_field_description',
+            default=u'One stop word per line, keep it empty if you want to '
+                    u'use the generic one.'
+        ),
+        required=False,
+    )
