@@ -18,18 +18,18 @@
   />
 
   <genericsetup:registerProfile
-      name="default"
-      title="collective.contentalerts"
-      directory="profiles/default"
-      description="Installs the collective.contentalerts add-on."
-      provides="Products.GenericSetup.interfaces.EXTENSION"
+    name="default"
+    title="collective.contentalerts"
+    directory="profiles/default"
+    description="Installs the collective.contentalerts add-on."
+    provides="Products.GenericSetup.interfaces.EXTENSION"
   />
 
   <genericsetup:importStep
-      name="collective.contentalerts-postInstall"
-      title="collective.contentalerts post_install import step"
-      description="Post install import step from collective.contentalerts"
-      handler=".setuphandlers.post_install">
+    name="collective.contentalerts-postInstall"
+    title="collective.contentalerts post_install import step"
+    description="Post install import step from collective.contentalerts"
+    handler=".setuphandlers.post_install">
   </genericsetup:importStep>
 
 </configure>
