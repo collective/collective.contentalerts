@@ -9,6 +9,7 @@
   <i18n:registerTranslations directory="locales" />
 
   <include file="permissions.zcml" />
+  <include file="contentrules.zcml" />
 
   <include package=".browser" />
 

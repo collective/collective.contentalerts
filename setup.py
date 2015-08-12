@@ -43,17 +43,24 @@ setup(
     zip_safe=False,
     install_requires=[
         'plone.api',
+        'plone.app.contentrules',
         'plone.app.registry',
+        'plone.contentrules',
         'plone.registry',
         'Products.GenericSetup',
         'setuptools',
+        'Zope2',
         'zope.component',
+        # XXX migrate to z3c.form on Plone 5 (p.a.contentrules 4.0.5)
+        'zope.formlib',
         'zope.i18nmessageid',
         'zope.interface',
         'zope.schema',
     ],
     extras_require={
         'test': [
+            'plone.app.contenttypes[test]<1.2', # to get Plone 4.3 compatibility
+            'plone.app.discussion',
             'plone.app.testing',
             'plone.browserlayer',
         ],
