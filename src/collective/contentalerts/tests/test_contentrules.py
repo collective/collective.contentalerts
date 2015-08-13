@@ -282,6 +282,33 @@ class TextAlertConditionTestCase(unittest.TestCase):
         )
         self.assertTrue(executable())
 
+    def test_stop_words_on_request(self):
+        comment = self._add_comment('whatever')
+        condition = TextAlertCondition()
+
+        condition.stop_words = u'one alert\nanother alert'
+
+        executable = getMultiAdapter(
+            (self.portal, condition, CommentDummyEvent(comment)),
+            IExecutable
+        )
+        executable()
+        self.assertEqual(
+            self.request.get('stop_words'),
+            condition.stop_words
+        )
+
+    def test_stop_words_not_in_request(self):
+        comment = self._add_comment('whatever')
+        condition = TextAlertCondition()
+
+        executable = getMultiAdapter(
+            (self.portal, condition, CommentDummyEvent(comment)),
+            IExecutable
+        )
+        executable()
+        self.assertIsNone(self.request.get('stop_words'))
+
 
 class DexterityTextAlertConditionTestCase(unittest.TestCase):
     layer = COLLECTIVE_CONTENTALERTS_DEXTERITY_INTEGRATION_TESTING

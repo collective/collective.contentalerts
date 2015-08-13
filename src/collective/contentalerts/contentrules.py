@@ -38,6 +38,9 @@ class TextAlertConditionExecutor(object):
         stop_words = self.element.stop_words
         if stop_words is None or stop_words.strip() == u'':
             stop_words = None
+        else:
+            request = self.context.REQUEST
+            request.set('stop_words', stop_words)
 
         alert_utility = getUtility(IAlert)
 
