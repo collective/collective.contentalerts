@@ -24,6 +24,8 @@ class Alert(object):
 
         if stop_words is None:
             stop_words = self._get_registry_stop_words()
+            if not stop_words:
+                return u''
 
         # get all the stop words occurrences on the text
         snippets_data = {}
@@ -145,6 +147,6 @@ class Alert(object):
         registry = getUtility(IRegistry)
         try:
             records = registry.forInterface(IStopWords)
-            return records.stop_words or u''
+            return records.stop_words or None
         except KeyError:
-            return u''
+            return None

@@ -29,8 +29,12 @@ class AlertUtilityTestCase(unittest.TestCase):
         key = self.records.__schema__.__identifier__ + '.stop_words'
         del self.registry.records[key]
 
+        self.assertIsNone(self.utility._get_registry_stop_words())
+
+    def test_empty_registry_no_error(self):
+        self.records.stop_words = u''
         self.assertEqual(
-            self.utility._get_registry_stop_words(),
+            self.utility.get_snippets(u'some random text'),
             u''
         )
 
