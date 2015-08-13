@@ -32,7 +32,7 @@ class TextAlertConditionExecutor(object):
             elif getattr(self.event.object, 'text', None):
                 text = self.event.object.text
 
-        if not text or text is None:
+        if not text:
             return False
 
         stop_words = self.element.stop_words
