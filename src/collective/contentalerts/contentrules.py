@@ -6,6 +6,7 @@ from collective.contentalerts.interfaces import ITextAlertCondition
 from plone.app.contentrules.browser.formhelper import AddForm
 from plone.app.contentrules.browser.formhelper import EditForm
 from plone.contentrules.rule.interfaces import IRuleElementData
+from plone.stringinterp.adapters import BaseSubstitution
 from zope.component import getUtility
 from zope.formlib import form
 from zope.interface import implementer
@@ -81,3 +82,43 @@ class TextAlertConditionEditForm(EditForm):
     description = _(u'A text alert condition makes the rule apply '
                     u'only if there are stop words on the object\'s text.')
     form_name = _(u'Configure element')
+
+
+class TextAlertSubstitution(BaseSubstitution):
+    """Text alert string substitution."""
+    category = _(u'All Content')
+    description = _(u'Text alert snippets')
+
+    def safe_call(self):
+        text = self._get_text()
+        stop_words = self._get_stop_words()
+
+        alert_utility = getUtility(IAlert)
+        return alert_utility.get_snippets(text, stop_words=stop_words)
+
+    def _get_text(self):
+        text = self._get_comment()
+        if text is not None:
+            return text
+
+        if getattr(self.context, 'getText', None):
+            return self.context.getText()
+        elif getattr(self.context, 'text', None):
+            return self.context.text
+        else:
+            return u''
+
+    def _get_stop_words(self):
+        return self.context.REQUEST.get('stop_words') or None
+
+    def _get_comment(self):
+        # Update this once p.a.discussion is updated to >2.3.3
+        sdm = getattr(self.context, 'session_data_manager', None)
+        session = {}
+        if sdm:
+            data = sdm.getSessionData(create=False)
+            if data:
+                session = data
+        comment = session.get('comment', {})
+        comment_text = comment.get('text', None)
+        return comment_text
