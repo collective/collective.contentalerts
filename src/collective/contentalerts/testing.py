@@ -11,6 +11,7 @@ from plone.app.testing import applyProfile
 from zope.component import getSiteManager
 
 import collective.contentalerts
+import doctest
 
 
 class CollectiveContentalertsLayer(PloneSandboxLayer):
@@ -68,3 +69,5 @@ COLLECTIVE_CONTENTALERTS_DEXTERITY_INTEGRATION_TESTING = IntegrationTesting(
     bases=(COLLECTIVE_CONTENTALERTS_DEXTERITY_FIXTURE,),
     name='CollectiveContentalertsDexterityLayer:IntegrationTesting'
 )
+
+optionflags = (doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE)
