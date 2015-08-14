@@ -227,6 +227,15 @@ class GetSnippetsTestCase(unittest.TestCase):
             u'\n\n...n third alert o...'
         )
 
+    def test_ignore_empty_lines(self):
+        text = u'and one alert or text'
+        stop_words = u'one alert\n\n\n\nsecond alert\nthird alert'
+        snippet_text = self.snippets(text, stop_words, chars=2)
+        self.assertEqual(
+            snippet_text,
+            u'one alert\n\n...d one alert o...'
+        )
+
     def test_same_stop_word_more_than_once(self):
         text = u'Alerts one text and one more text'
         stop_words = u'one\ntwo'

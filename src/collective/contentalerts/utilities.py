@@ -33,6 +33,7 @@ class Alert(object):
         normalized_stop_words = [
             self.html_normalize(a)
             for a in stop_words.splitlines()
+            if a
         ]
         for word in normalized_stop_words:
             index = normalized_text.find(word)
