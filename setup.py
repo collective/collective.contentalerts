@@ -34,7 +34,7 @@ setup(
     keywords='Python Plone',
     author='Gil Forcada',
     author_email='gilforcada@gmail.com',
-    url='http://pypi.python.org/pypi/collective.contentalerts',
+    url='https://github.com/collective.contentalerts/collective.contentalerts',
     license='GPL version 2',
     packages=find_packages('src', exclude=['ez_setup']),
     namespace_packages=['collective'],
