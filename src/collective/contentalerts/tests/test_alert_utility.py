@@ -215,6 +215,18 @@ class GetSnippetsTestCase(unittest.TestCase):
             u'one, two\n\n... one ...\n\n... two ...'
         )
 
+    def test_different_line_endings(self):
+        text = u'and one alert or second alert and even third alert on text'
+        stop_words = u'one alert\r\nsecond alert\nthird alert'
+        snippet_text = self.snippets(text, stop_words, chars=2)
+        self.assertEqual(
+            snippet_text,
+            u'one alert, second alert, third alert'
+            u'\n\n...d one alert o...'
+            u'\n\n...r second alert a...'
+            u'\n\n...n third alert o...'
+        )
+
     def test_same_stop_word_more_than_once(self):
         text = u'Alerts one text and one more text'
         stop_words = u'one\ntwo'
