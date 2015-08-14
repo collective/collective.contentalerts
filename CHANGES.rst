@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.4 (unreleased)
+----------------
+
+- Nothing changed yet.
+
+
 0.3 (2015-08-14)
 ----------------
 - Correctly split stop words text so that it takes into account different line endings.
