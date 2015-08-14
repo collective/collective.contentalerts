@@ -470,11 +470,22 @@ class ContentRulesSubstitutionsTest(unittest.TestCase):
         text_alert = getAdapter(
             self.document,
             IStringSubstitution,
-            name=u'text_alert'
+            name=u'comment_alert'
         )
         self.assertEqual(
             text_alert._get_text(),
             text
+        )
+
+    def test_no_comment_no_text(self):
+        text_alert = getAdapter(
+            self.document,
+            IStringSubstitution,
+            name=u'comment_alert'
+        )
+        self.assertEqual(
+            text_alert._get_text(),
+            u''
         )
 
     def test_get_text_from_document(self):

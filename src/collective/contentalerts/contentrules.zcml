@@ -46,5 +46,12 @@
     provides="plone.stringinterp.interfaces.IStringSubstitution"
   />
 
+  <adapter
+    factory="collective.contentalerts.contentrules.CommentAlertSubstitution"
+    for="zope.interface.Interface"
+    name="comment_alert"
+    provides="plone.stringinterp.interfaces.IStringSubstitution"
+  />
+
 </configure>
 
