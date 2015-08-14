@@ -72,3 +72,7 @@ class ITextAlertCondition(Interface):
         ),
         required=False,
     )
+
+
+class IHasStopWords(Interface):
+    """Marker interface attached to objects that have stop words."""
