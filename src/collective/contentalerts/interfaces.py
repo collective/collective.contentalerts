@@ -10,6 +10,7 @@ class ICollectiveContentalertsLayer(Interface):
 
 
 class IStopWords(Interface):
+    """Registry settings schema being used by this distribution."""
 
     stop_words = schema.Text(
         title=_(
@@ -57,7 +58,7 @@ class IAlert(Interface):
 
 
 class ITextAlertCondition(Interface):
-    """Marker interface for the text alert plone.app.contentrules condition."""
+    """Schema for the text alert plone.app.contentrules condition."""
 
     stop_words = schema.Text(
         title=_(
