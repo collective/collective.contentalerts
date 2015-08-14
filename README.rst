@@ -33,8 +33,8 @@ Features
 - integration with  `plone.app.contentrules`_:
 
   - a condition to look for stop words
-  - a string substitution to add on emails the snippets where the stop words
-    where found
+  - string substitutions to add on emails the snippets where the stop words
+    where found (one for documents and one for comments)
 
 - standalone utility
 - provide different word lists if you need them,
