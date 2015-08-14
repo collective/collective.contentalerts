@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.3 (unreleased)
+0.3 (2015-08-14)
 ----------------
 - Correctly split stop words text so that it takes into account different line endings.
   [gforcada]
