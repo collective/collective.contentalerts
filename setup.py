@@ -59,7 +59,7 @@ setup(
     ],
     extras_require={
         'test': [
-            'plone.app.contenttypes[test]<1.2', # to get Plone 4.3 compatibility
+            'plone.app.contenttypes[test]<1.2',  # to get Plone 4.3 compatibility
             'plone.app.discussion',
             'plone.app.testing',
             'plone.browserlayer',
