@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.2 (unreleased)
+0.2 (2015-08-14)
 ----------------
 - Split string subtitutions in two: ``text_alert`` and ``comment_alert``.
   [gforcada]
