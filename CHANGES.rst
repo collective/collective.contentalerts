@@ -3,9 +3,11 @@ Changelog
 
 0.3 (unreleased)
 ----------------
+- Correctly split stop words text so that it takes into account different line endings.
+  [gforcada]
 
-- Nothing changed yet.
-
+- Ignore empty lines on stop words to not produce unexpected results.
+  [gforcada]
 
 0.2 (2015-08-14)
 ----------------
