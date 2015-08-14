@@ -38,5 +38,13 @@
     title="Text alert"
   />
 
+  <!-- Content rules string substitution -->
+  <adapter
+    factory="collective.contentalerts.contentrules.TextAlertSubstitution"
+    for="zope.interface.Interface"
+    name="text_alert"
+    provides="plone.stringinterp.interfaces.IStringSubstitution"
+  />
+
 </configure>
 

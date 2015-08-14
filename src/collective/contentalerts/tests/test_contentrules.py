@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from Testing.ZopeTestCase.utils import setupCoreSessions
 from collective.contentalerts.contentrules import TextAlertCondition
 from collective.contentalerts.contentrules import TextAlertConditionEditForm
 from collective.contentalerts.interfaces import IStopWords
@@ -12,7 +13,9 @@ from plone.contentrules.engine.interfaces import IRuleStorage
 from plone.contentrules.rule.interfaces import IExecutable
 from plone.contentrules.rule.interfaces import IRuleCondition
 from plone.registry.interfaces import IRegistry
+from plone.stringinterp.interfaces import IStringSubstitution
 from zope.component import createObject
+from zope.component import getAdapter
 from zope.component import getMultiAdapter
 from zope.component import getUtility
 from zope.component.interfaces import IObjectEvent
@@ -282,6 +285,33 @@ class TextAlertConditionTestCase(unittest.TestCase):
         )
         self.assertTrue(executable())
 
+    def test_stop_words_on_request(self):
+        comment = self._add_comment('whatever')
+        condition = TextAlertCondition()
+
+        condition.stop_words = u'one alert\nanother alert'
+
+        executable = getMultiAdapter(
+            (self.portal, condition, CommentDummyEvent(comment)),
+            IExecutable
+        )
+        executable()
+        self.assertEqual(
+            self.request.get('stop_words'),
+            condition.stop_words
+        )
+
+    def test_stop_words_not_in_request(self):
+        comment = self._add_comment('whatever')
+        condition = TextAlertCondition()
+
+        executable = getMultiAdapter(
+            (self.portal, condition, CommentDummyEvent(comment)),
+            IExecutable
+        )
+        executable()
+        self.assertIsNone(self.request.get('stop_words'))
+
 
 class DexterityTextAlertConditionTestCase(unittest.TestCase):
     layer = COLLECTIVE_CONTENTALERTS_DEXTERITY_INTEGRATION_TESTING
@@ -313,3 +343,113 @@ class DexterityTextAlertConditionTestCase(unittest.TestCase):
             IExecutable
         )
         self.assertTrue(executable())
+
+    def test_get_substitution_text_from_document(self):
+        stop_words = 'hi\nalert'
+        self.request.set('stop_words', stop_words)
+        document_id = self.portal.invokeFactory('Document', 'bla')
+        document = self.portal[document_id]
+        document.text = u'Some text that contains an alert and more'
+        text_alert = getAdapter(
+            document,
+            IStringSubstitution,
+            name=u'text_alert'
+        )
+        self.assertNotEqual(text_alert().find('alert'), -1)
+
+
+class ContentRulesSubstitutionsTest(unittest.TestCase):
+    layer = COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING
+
+    def setUp(self):
+        setupCoreSessions(self.layer['app'])
+
+        self.portal = self.layer['portal']
+        self.request = self.layer['request']
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+        name = self.portal.invokeFactory(
+            id='doc1',
+            title='Document 1',
+            type_name='Document')
+
+        self.document = self.portal[name]
+
+    def _add_comment(self, text='lilala'):
+        comment = createObject('plone.Comment')
+        comment.text = text
+        comment.author_username = 'jim'
+        comment.author_name = 'Jim'
+        comment.author_email = 'jim@example.com'
+        conversation = IConversation(self.document)
+        conversation.addComment(comment)
+
+    def test_stop_words_on_request(self):
+        stop_words = 'hi\nI am around'
+        self.request.set('stop_words', stop_words)
+        text_alert = getAdapter(
+            self.document,
+            IStringSubstitution,
+            name=u'text_alert'
+        )
+        self.assertEqual(
+            text_alert._get_stop_words(),
+            stop_words
+        )
+
+    def test_no_stop_words_on_request(self):
+        text_alert = getAdapter(
+            self.document,
+            IStringSubstitution,
+            name=u'text_alert'
+        )
+        self.assertIsNone(text_alert._get_stop_words())
+
+    def test_get_text_from_comment(self):
+        text = 'some random text'
+        self._add_comment(text=text)
+        text_alert = getAdapter(
+            self.document,
+            IStringSubstitution,
+            name=u'text_alert'
+        )
+        self.assertEqual(
+            text_alert._get_text(),
+            text
+        )
+
+    def test_get_text_from_document(self):
+        text = 'some random text'
+        self.document.setText(text)
+        text_alert = getAdapter(
+            self.document,
+            IStringSubstitution,
+            name=u'text_alert'
+        )
+        self.assertIn(
+            text,
+            text_alert._get_text(),
+        )
+
+    def test_get_snippet(self):
+        stop_words = 'hi\nalert'
+        self.request.set('stop_words', stop_words)
+        self.document.setText('Some text that contains an alert and more')
+        text_alert = getAdapter(
+            self.document,
+            IStringSubstitution,
+            name=u'text_alert'
+        )
+        self.assertNotEqual(text_alert().find('alert'), -1)
+
+    def test_no_snippet(self):
+        self.document.setText('Some text that contains an alert and more')
+        text_alert = getAdapter(
+            self.document,
+            IStringSubstitution,
+            name=u'text_alert'
+        )
+        self.assertEqual(
+            text_alert(),
+            u'',
+        )
