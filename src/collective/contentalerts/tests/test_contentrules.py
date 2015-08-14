@@ -2,6 +2,7 @@
 from Testing.ZopeTestCase.utils import setupCoreSessions
 from collective.contentalerts.contentrules import TextAlertCondition
 from collective.contentalerts.contentrules import TextAlertConditionEditForm
+from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWords
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_DEXTERITY_INTEGRATION_TESTING  # noqa
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
@@ -311,6 +312,64 @@ class TextAlertConditionTestCase(unittest.TestCase):
         )
         executable()
         self.assertIsNone(self.request.get('stop_words'))
+
+    def test_has_stop_words_add_interface_comment(self):
+        comment = self._add_comment('one alert')
+        condition = TextAlertCondition()
+        condition.stop_words = u'one alert\nanother alert'
+
+        executable = getMultiAdapter(
+            (self.portal, condition, CommentDummyEvent(comment)),
+            IExecutable
+        )
+        executable()
+        self.assertTrue(IHasStopWords.providedBy(comment))
+
+    def test_has_stop_words_add_interface_document(self):
+        name = self.portal.invokeFactory(
+            id='doc2',
+            title='Document 1',
+            type_name='Document'
+        )
+        document = self.portal[name]
+        document.setText('this gives one alert')
+        condition = TextAlertCondition()
+        condition.stop_words = u'one alert\nanother alert'
+
+        executable = getMultiAdapter(
+            (self.portal, condition, ContentTypeDummyEvent(document)),
+            IExecutable
+        )
+        executable()
+        self.assertTrue(IHasStopWords.providedBy(document))
+
+    def test_no_stop_words_no_interface(self):
+        comment = self._add_comment('no alert')
+        condition = TextAlertCondition()
+        condition.stop_words = u'one alert\nanother alert'
+
+        executable = getMultiAdapter(
+            (self.portal, condition, CommentDummyEvent(comment)),
+            IExecutable
+        )
+        executable()
+        self.assertFalse(IHasStopWords.providedBy(comment))
+
+    def test_add_and_remove_interface(self):
+        comment = self._add_comment('one alert')
+        condition = TextAlertCondition()
+        condition.stop_words = u'one alert\nanother alert'
+
+        # adds the marker interface
+        executable = getMultiAdapter(
+            (self.portal, condition, CommentDummyEvent(comment)),
+            IExecutable
+        )
+        executable()
+
+        comment.text = 'no longer creating an alert'
+        executable()
+        self.assertFalse(IHasStopWords.providedBy(comment))
 
 
 class DexterityTextAlertConditionTestCase(unittest.TestCase):

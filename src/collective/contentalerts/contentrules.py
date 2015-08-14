@@ -2,6 +2,7 @@
 from OFS.SimpleItem import SimpleItem
 from collective.contentalerts import _
 from collective.contentalerts.interfaces import IAlert
+from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import ITextAlertCondition
 from plone.app.contentrules.browser.formhelper import AddForm
 from plone.app.contentrules.browser.formhelper import EditForm
@@ -9,7 +10,9 @@ from plone.contentrules.rule.interfaces import IRuleElementData
 from plone.stringinterp.adapters import BaseSubstitution
 from zope.component import getUtility
 from zope.formlib import form
+from zope.interface import alsoProvides
 from zope.interface import implementer
+from zope.interface import noLongerProvides
 
 
 class TextAlertConditionExecutor(object):
@@ -45,7 +48,20 @@ class TextAlertConditionExecutor(object):
 
         alert_utility = getUtility(IAlert)
 
-        return alert_utility.has_stop_words(text, stop_words=stop_words)
+        ret_value = alert_utility.has_stop_words(text, stop_words=stop_words)
+        self._apply_marker_interface(ret_value)
+        return ret_value
+
+    def _apply_marker_interface(self, has_stop_words):
+        if getattr(self.event, 'comment', None):
+            obj = self.event.comment
+        else:
+            obj = self.event.object
+
+        if has_stop_words:
+            alsoProvides(obj, IHasStopWords)
+        elif IHasStopWords.providedBy(obj):
+            noLongerProvides(obj, IHasStopWords)
 
 
 @implementer(ITextAlertCondition, IRuleElementData)
