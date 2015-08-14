@@ -30,3 +30,6 @@ Changelog
 
 - Add a string substitution: ``text_alert``. To be used to compose emails on a contentrule
   [gforcada]
+
+- Apply a marker interface to the objects that are found to have a stop words.
+  [gforcada]

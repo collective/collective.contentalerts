@@ -40,6 +40,7 @@ Features
 - provide different word lists if you need them,
   either a general one (plone.registry based) or on a per contentrule basis
 - look for stop words on comments, dexterity and archetypes content types
+- apply a marker interface to objects that are found to have stop words
 
 Where it searches on
 --------------------
