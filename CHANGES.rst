@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.3.post0 (unreleased)
+0.3.post0 (2015-08-15)
 ----------------------
 - Fix package URL.
   [gforcada]
