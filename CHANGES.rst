@@ -1,11 +1,10 @@
 Changelog
 =========
 
-0.4 (unreleased)
-----------------
-
-- Nothing changed yet.
-
+0.3.post0 (unreleased)
+----------------------
+- Fix package URL.
+  [gforcada]
 
 0.3 (2015-08-14)
 ----------------
