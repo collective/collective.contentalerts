@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.4 (unreleased)
+----------------
+
+- Nothing changed yet.
+
+
 0.3.post0 (2015-08-15)
 ----------------------
 - Fix package URL.
