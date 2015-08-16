@@ -62,8 +62,7 @@ class TextAlertConditionTestCase(unittest.TestCase):
 
         self.document = self.portal[name]
 
-        registry = getUtility(IRegistry)
-        self.records = registry.forInterface(IStopWords)
+        self.records = self.registry.forInterface(IStopWords)
 
     def _add_comment(self, text):
         comment = createObject('plone.Comment')
@@ -387,8 +386,7 @@ class DexterityTextAlertConditionTestCase(unittest.TestCase):
             name=self.name
         )
 
-        registry = getUtility(IRegistry)
-        self.records = registry.forInterface(IStopWords)
+        self.records = self.registry.forInterface(IStopWords)
 
     def test_dexterity_document(self):
         document_id = self.portal.invokeFactory('Document', 'bla')
