@@ -3,9 +3,7 @@ from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATIO
 from plone import api
 from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
-from plone.registry.interfaces import IRegistry
 from zope.component import getMultiAdapter
-from zope.component import getUtility
 
 import unittest
 
@@ -21,11 +19,8 @@ class GenericSetupTest(unittest.TestCase):
 
     def test_registry_record(self):
         """Check that the registry record exists."""
-        registry = getUtility(IRegistry)
-        self.assertIn(
-            'collective.contentalerts.interfaces.IStopWords.stop_words',
-            registry
-        )
+        record = 'collective.contentalerts.interfaces.IStopWords.stop_words'
+        self.assertIsNone(api.portal.get_registry_record(record))
 
     def test_roles_with_permission(self):
         """Check that the permission is given to the appropriate roles."""

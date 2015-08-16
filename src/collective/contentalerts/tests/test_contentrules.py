@@ -6,6 +6,7 @@ from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWords
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_DEXTERITY_INTEGRATION_TESTING  # noqa
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
+from plone import api
 from plone.app.contentrules.rule import Rule
 from plone.app.discussion.interfaces import IConversation
 from plone.app.testing import TEST_USER_ID
@@ -54,13 +55,12 @@ class TextAlertConditionTestCase(unittest.TestCase):
             name=self.name
         )
 
-        name = self.portal.invokeFactory(
+        self.document = api.content.create(
+            container=self.portal,
             id='doc1',
             title='Document 1',
-            type_name='Document'
+            type='Document'
         )
-
-        self.document = self.portal[name]
 
         self.records = self.registry.forInterface(IStopWords)
 
@@ -269,12 +269,12 @@ class TextAlertConditionTestCase(unittest.TestCase):
         self.assertFalse(executable())
 
     def test_archetypes_document(self):
-        name = self.portal.invokeFactory(
+        document = api.content.create(
+            container=self.portal,
             id='doc2',
-            title='Document 1',
-            type_name='Document'
+            title='Document 2',
+            type='Document'
         )
-        document = self.portal[name]
         document.setText('this gives one alert')
         condition = TextAlertCondition()
         condition.stop_words = u'one alert\nanother alert'
@@ -325,12 +325,12 @@ class TextAlertConditionTestCase(unittest.TestCase):
         self.assertTrue(IHasStopWords.providedBy(comment))
 
     def test_has_stop_words_add_interface_document(self):
-        name = self.portal.invokeFactory(
+        document = api.content.create(
+            container=self.portal,
             id='doc2',
-            title='Document 1',
-            type_name='Document'
+            title='Document 2',
+            type='Document'
         )
-        document = self.portal[name]
         document.setText('this gives one alert')
         condition = TextAlertCondition()
         condition.stop_words = u'one alert\nanother alert'
@@ -389,8 +389,12 @@ class DexterityTextAlertConditionTestCase(unittest.TestCase):
         self.records = self.registry.forInterface(IStopWords)
 
     def test_dexterity_document(self):
-        document_id = self.portal.invokeFactory('Document', 'bla')
-        document = self.portal[document_id]
+        document = api.content.create(
+            container=self.portal,
+            id='doc1',
+            title='Document 1',
+            type='Document'
+        )
         document.text = u'one alert and no more'
         condition = TextAlertCondition()
         condition.stop_words = u'one alert\nanother alert'
@@ -404,8 +408,12 @@ class DexterityTextAlertConditionTestCase(unittest.TestCase):
     def test_get_substitution_text_from_document(self):
         stop_words = 'hi\nalert'
         self.request.set('stop_words', stop_words)
-        document_id = self.portal.invokeFactory('Document', 'bla')
-        document = self.portal[document_id]
+        document = api.content.create(
+            container=self.portal,
+            id='doc1',
+            title='Document 1',
+            type='Document'
+        )
         document.text = u'Some text that contains an alert and more'
         text_alert = getAdapter(
             document,
@@ -425,12 +433,12 @@ class ContentRulesSubstitutionsTest(unittest.TestCase):
         self.request = self.layer['request']
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
-        name = self.portal.invokeFactory(
+        self.document = api.content.create(
+            container=self.portal,
             id='doc1',
             title='Document 1',
-            type_name='Document')
-
-        self.document = self.portal[name]
+            type='Document'
+        )
 
     def _add_comment(self, text='lilala'):
         comment = createObject('plone.Comment')
