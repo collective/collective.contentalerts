@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.4 (unreleased)
+----------------
+
+- Nothing changed yet.
+
+
 0.3.1 (2015-08-17)
 ------------------
 - Make sure that the ``IHasStopWords`` marker interface is indexed on the catalog.
