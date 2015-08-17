@@ -58,10 +58,16 @@ class TextAlertConditionExecutor(object):
         else:
             obj = self.event.object
 
+        reindex = False
         if has_stop_words:
             alsoProvides(obj, IHasStopWords)
+            reindex = True
         elif IHasStopWords.providedBy(obj):
             noLongerProvides(obj, IHasStopWords)
+            reindex = True
+
+        if reindex:
+            obj.reindexObject(idxs=('object_provides', ))
 
 
 @implementer(ITextAlertCondition, IRuleElementData)

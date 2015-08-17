@@ -370,6 +370,64 @@ class TextAlertConditionTestCase(unittest.TestCase):
         executable()
         self.assertFalse(IHasStopWords.providedBy(comment))
 
+    def test_has_stop_words_add_interface_document_on_catalog(self):
+        document = api.content.create(
+            container=self.portal,
+            id='doc2',
+            title='Document 2',
+            type='Document'
+        )
+        document.setText('this gives one alert')
+        condition = TextAlertCondition()
+        condition.stop_words = u'one alert\nanother alert'
+
+        executable = getMultiAdapter(
+            (self.portal, condition, ContentTypeDummyEvent(document)),
+            IExecutable
+        )
+        executable()
+        brains = api.content.find(
+            self.portal,
+            object_provides=IHasStopWords.__identifier__
+        )
+        self.assertEqual(len(brains), 1)
+
+    def test_no_stop_words_no_interface_on_catalog(self):
+        comment = self._add_comment('no alert')
+        condition = TextAlertCondition()
+        condition.stop_words = u'one alert\nanother alert'
+
+        executable = getMultiAdapter(
+            (self.portal, condition, CommentDummyEvent(comment)),
+            IExecutable
+        )
+        executable()
+        brains = api.content.find(
+            self.portal,
+            object_provides=IHasStopWords.__identifier__
+        )
+        self.assertEqual(len(brains), 0)
+
+    def test_add_and_remove_interface_on_catalog(self):
+        comment = self._add_comment('one alert')
+        condition = TextAlertCondition()
+        condition.stop_words = u'one alert\nanother alert'
+
+        # adds the marker interface
+        executable = getMultiAdapter(
+            (self.portal, condition, CommentDummyEvent(comment)),
+            IExecutable
+        )
+        executable()
+
+        comment.text = 'no longer creating an alert'
+        executable()
+        brains = api.content.find(
+            self.portal,
+            object_provides=IHasStopWords.__identifier__
+        )
+        self.assertEqual(len(brains), 0)
+
 
 class DexterityTextAlertConditionTestCase(unittest.TestCase):
     layer = COLLECTIVE_CONTENTALERTS_DEXTERITY_INTEGRATION_TESTING
