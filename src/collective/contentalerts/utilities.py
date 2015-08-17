@@ -22,19 +22,13 @@ class Alert(object):
         if text is None:
             return u''
 
-        if stop_words is None:
-            stop_words = self._get_registry_stop_words()
-            if not stop_words:
-                return u''
+        normalized_stop_words = self.get_normalized_stop_words(stop_words)
+        if not normalized_stop_words:
+            return u''
 
         # get all the stop words occurrences on the text
         snippets_data = {}
         normalized_text = self.html_normalize(text)
-        normalized_stop_words = [
-            self.html_normalize(a)
-            for a in stop_words.splitlines()
-            if a
-        ]
         for word in normalized_stop_words:
             index = normalized_text.find(word)
             while index != -1:
@@ -72,14 +66,12 @@ class Alert(object):
         if not text or text is None:
             return False
 
-        if stop_words is None:
-            stop_words = self._get_registry_stop_words()
-
-        if stop_words is None or stop_words.strip() == u'':
+        normalized_stop_words = self.get_normalized_stop_words(stop_words)
+        if not normalized_stop_words:
             return False
 
         normalized_text = self.html_normalize(text)
-        for word in stop_words.split('\n'):
+        for word in normalized_stop_words:
             normalized_word = self.html_normalize(word)
             if normalized_text.find(normalized_word) != -1:
                 return True
@@ -151,3 +143,17 @@ class Alert(object):
             return records.stop_words or None
         except KeyError:
             return None
+
+    def get_normalized_stop_words(self, stop_words=None):
+        if stop_words is None:
+            stop_words = self._get_registry_stop_words()
+
+        if stop_words is None or stop_words.strip() == u'':
+            return []
+
+        normalized_stop_words = [
+            self.html_normalize(a)
+            for a in stop_words.splitlines()
+            if a
+        ]
+        return normalized_stop_words
