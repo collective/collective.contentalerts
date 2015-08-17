@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.3.1 (unreleased)
+0.3.1 (2015-08-17)
 ------------------
 - Make sure that the ``IHasStopWords`` marker interface is indexed on the catalog.
   [gforcada]
