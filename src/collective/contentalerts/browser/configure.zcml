@@ -18,4 +18,20 @@
     layer="collective.contentalerts.interfaces.ICollectiveContentalertsLayer"
     />
 
+  <browser:page
+    name="discard-alert"
+    for="Products.CMFCore.interfaces.IContentish"
+    class="collective.contentalerts.browser.discard_alert.DiscardAlertView"
+    permission="collective.contentalerts.stop_words.edit"
+    layer="collective.contentalerts.interfaces.ICollectiveContentalertsLayer"
+    />
+
+  <browser:page
+    name="discard-alert"
+    for="plone.app.discussion.interfaces.IComment"
+    class="collective.contentalerts.browser.discard_alert.DiscardAlertView"
+    permission="collective.contentalerts.stop_words.edit"
+    layer="collective.contentalerts.interfaces.ICollectiveContentalertsLayer"
+    />
+
 </configure>
