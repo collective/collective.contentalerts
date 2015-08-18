@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+from collective.contentalerts import _
 from collective.contentalerts.interfaces import IHasStopWords
+from plone import api
 from zope.interface import noLongerProvides
 from zope.publisher.browser import BrowserView
 
@@ -10,6 +12,14 @@ class DiscardAlertView(BrowserView):
         if IHasStopWords.providedBy(self.context):
             noLongerProvides(self.context, IHasStopWords)
             self.context.reindexObject(idxs=('object_provides', ))
+
+            api.portal.show_message(
+                message=_(
+                    u'stop_words_interface_removed_message',
+                    default=u'The object no longer has an alert on it.'
+                ),
+                request=self.request,
+            )
 
         return self.request.response.redirect(
             self.context.absolute_url(),

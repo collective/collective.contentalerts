@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from Products.statusmessages.interfaces import IStatusMessage
 from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
 from plone import api
@@ -89,3 +90,29 @@ class DiscardAlertsViewTestCase(unittest.TestCase):
             self.document.absolute_url(),
             self.request.response.headers['location']
         )
+
+    def test_message(self):
+        """If the interface gets removed, a portal message is shown."""
+        alsoProvides(self.document, IHasStopWords)
+        discard_view = api.content.get_view(
+            name='discard-alert',
+            context=self.document,
+            request=self.request
+        )
+        discard_view()
+        messages = IStatusMessage(self.request)
+        show = messages.show()
+        self.assertEqual(len(show), 1)
+        self.assertIn('The object no longer ', show[0].message)
+
+    def test_no_message(self):
+        """If no interface gets removed, no portal message is shown."""
+        discard_view = api.content.get_view(
+            name='discard-alert',
+            context=self.document,
+            request=self.request
+        )
+        discard_view()
+        messages = IStatusMessage(self.request)
+        show = messages.show()
+        self.assertEqual(len(show), 0)
