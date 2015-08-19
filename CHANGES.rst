@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.5 (unreleased)
+----------------
+
+- Nothing changed yet.
+
+
 0.4.post0 (2015-08-19)
 ----------------------
 - Create wheels as well.
