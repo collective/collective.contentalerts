@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.4 (unreleased)
+0.4 (2015-08-19)
 ----------------
 - Add a browser view to remove the IHasStopWords marker interface on a per object basis.
   [gforcada]
