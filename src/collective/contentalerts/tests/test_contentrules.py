@@ -409,7 +409,9 @@ class TextAlertConditionTestCase(unittest.TestCase):
         self.assertEqual(len(brains), 0)
 
     def test_add_and_remove_interface_on_catalog(self):
-        comment = self._add_comment('one alert')
+        self._add_comment('one alert')
+        # acquisition wrapped version of the comment
+        comment = IConversation(self.document).values()[0]
         condition = TextAlertCondition()
         condition.stop_words = u'one alert\nanother alert'
 
@@ -419,6 +421,11 @@ class TextAlertConditionTestCase(unittest.TestCase):
             IExecutable
         )
         executable()
+        brains = api.content.find(
+            self.portal,
+            object_provides=IHasStopWords.__identifier__
+        )
+        self.assertEqual(len(brains), 1)
 
         comment.text = 'no longer creating an alert'
         executable()
