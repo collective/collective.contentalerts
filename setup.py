@@ -68,6 +68,7 @@ setup(
             'plone.testing',
             'Products.CMFPlone',
             'Products.MailHost',
+            'Products.statusmessages',
         ],
     },
     entry_points="""
