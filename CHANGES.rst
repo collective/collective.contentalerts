@@ -1,6 +1,12 @@
 Changelog
 =========
 
+0.5 (unreleased)
+----------------
+
+- Nothing changed yet.
+
+
 0.4 (2015-08-19)
 ----------------
 - Add a browser view to remove the IHasStopWords marker interface on a per object basis.
