@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.4.post0 (unreleased)
+0.4.post0 (2015-08-19)
 ----------------------
 - Create wheels as well.
 
