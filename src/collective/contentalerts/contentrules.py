@@ -23,18 +23,21 @@ class TextAlertConditionExecutor(object):
         self.event = event
 
     def __call__(self):
+        obj = None
         text = None
 
         # if it's a comment
         if getattr(self.event, 'comment', None):
             if getattr(self.event.comment, 'text', None):
-                text = self.event.comment.text
+                obj = self.event.comment
+                text = obj.text
         # if it's a AT/DX
         elif getattr(self.event, 'object', None):
-            if getattr(self.event.object, 'getText', None):
-                text = self.event.object.getText()
-            elif getattr(self.event.object, 'text', None):
-                text = self.event.object.text
+            obj = self.event.object
+            if getattr(obj, 'getText', None):
+                text = obj.getText()
+            elif getattr(obj, 'text', None):
+                text = obj.text
 
         if not text:
             return False
@@ -49,15 +52,11 @@ class TextAlertConditionExecutor(object):
         alert_utility = getUtility(IAlert)
 
         ret_value = alert_utility.has_stop_words(text, stop_words=stop_words)
-        self._apply_marker_interface(ret_value)
+        self._apply_marker_interface(obj, ret_value)
         return ret_value
 
-    def _apply_marker_interface(self, has_stop_words):
-        if getattr(self.event, 'comment', None):
-            obj = self.event.comment
-        else:
-            obj = self.event.object
-
+    @staticmethod
+    def _apply_marker_interface(obj, has_stop_words):
         reindex = False
         if has_stop_words:
             alsoProvides(obj, IHasStopWords)
