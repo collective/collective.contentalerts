@@ -72,8 +72,7 @@ class Alert(object):
 
         normalized_text = self.html_normalize(text)
         for word in normalized_stop_words:
-            normalized_word = self.html_normalize(word)
-            if normalized_text.find(normalized_word) != -1:
+            if normalized_text.find(word) != -1:
                 return True
 
         return False
