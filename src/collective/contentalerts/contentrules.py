@@ -140,13 +140,6 @@ class CommentAlertSubstitution(AlertSubstitution):
     category = _(u'Comments')
     description = _(u'Comment alert snippets')
 
-    def safe_call(self):
-        text = self._get_text()
-        stop_words = self._get_stop_words()
-
-        alert_utility = getUtility(IAlert)
-        return alert_utility.get_snippets(text, stop_words=stop_words)
-
     def _get_text(self):
         # Update this once p.a.discussion is updated to >2.3.3
         sdm = getattr(self.context, 'session_data_manager', None)
