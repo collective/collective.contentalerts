@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.4.post1 (unreleased)
+0.4.post1 (2015-08-31)
 ----------------------
 - Add German translation.
   [staeff]
