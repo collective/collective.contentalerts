@@ -1,0 +1,95 @@
+# --- PLEASE EDIT THE LINES BELOW CORRECTLY ---
+# SOME DESCRIPTIVE TITLE.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"POT-Creation-Date: 2015-08-31 12:40+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI +ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0\n"
+"Language-Code: en\n"
+"Language-Name: English\n"
+"Preferred-Encodings: utf-8 latin1\n"
+"Domain: collective.contentalerts\n"
+
+#: ../contentrules.py:90
+msgid "A text alert condition makes the rule apply only if there are stop words on the object's text."
+msgstr ""
+
+#: ../contentrules.py:89
+msgid "Add a text alert condition"
+msgstr ""
+
+#: ../profiles/default/controlpanel.xml
+msgid "Alerts on stop words settings"
+msgstr ""
+
+#: ../contentrules.py:126
+msgid "All Content"
+msgstr ""
+
+#: ../contentrules.py:141
+msgid "Comment alert snippets"
+msgstr ""
+
+#: ../contentrules.py:140
+msgid "Comments"
+msgstr ""
+
+#: ../contentrules.py:92
+msgid "Configure element"
+msgstr ""
+
+#: ../contentrules.py:102
+msgid "Edit a text alert condition"
+msgstr ""
+
+#: ../contentrules.py:127
+msgid "Text alert snippets"
+msgstr ""
+
+#. Default: "One stop word per line, keep it empty if you want to use the generic one."
+#: ../interfaces.py:68
+msgid "contentrules_text_alert_condition_field_description"
+msgstr ""
+
+#. Default: "Stop words"
+#: ../interfaces.py:64
+msgid "contentrules_text_alert_condition_field_title"
+msgstr ""
+
+#. Default: "Provide a stop words list, one per line, or leave it empty to use the shared one (registry based)."
+#: ../contentrules.py:80
+msgid "contentrules_text_alert_condition_summary"
+msgstr ""
+
+#. Default: "Words/sentences that will generate an alert, one per line."
+#: ../interfaces.py:20
+msgid "settings_stop_words_list_description"
+msgstr ""
+
+#. Default: "List"
+#: ../interfaces.py:16
+msgid "settings_stop_words_list_title"
+msgstr ""
+
+#. Default: "Edit stop words."
+#: ../browser/controlpanel.py:14
+msgid "stop_words_controlpanel_settings_description"
+msgstr ""
+
+#. Default: "Stop words"
+#: ../browser/controlpanel.py:10
+msgid "stop_words_controlpanel_settings_label"
+msgstr ""
+
+#. Default: "The object no longer has an alert on it."
+#: ../browser/discard_alert.py:17
+msgid "stop_words_interface_removed_message"
+msgstr ""
+
