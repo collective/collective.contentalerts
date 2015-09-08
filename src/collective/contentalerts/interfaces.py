@@ -3,9 +3,10 @@
 from collective.contentalerts import _
 from zope import schema
 from zope.interface import Interface
+from zope.publisher.interfaces.browser import IDefaultBrowserLayer
 
 
-class ICollectiveContentalertsLayer(Interface):
+class ICollectiveContentalertsLayer(IDefaultBrowserLayer):
     """Marker interface that defines a browser layer."""
 
 
