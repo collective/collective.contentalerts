@@ -25,8 +25,8 @@ Add a content rule
 ------------------
 Create a content rule::
     >>> browser.open(portal_url)
-    >>> browser.getLink('Site Setup').click()
-    >>> browser.getLink('Content Rules').click()
+    >>> browser.follow('Site Setup')
+    >>> browser.follow('Content Rules')
     >>> browser.getControl('Add content rule').click()
     >>> browser.getControl('Title').value = 'Test stop words'
     >>> browser.getControl('Triggering event').value = ['Object added to this container']
@@ -48,8 +48,8 @@ Add a mail action::
     >>> browser.getControl('Save').click()
 
 Apply to the root folder::
-    >>> browser.getLink('Home').click()
-    >>> browser.getLink('Rules').click()
+    >>> browser.follow('Home')
+    >>> browser.follow('Rules')
     >>> browser.getControl('Add').click()
 
 Stop words
@@ -57,8 +57,8 @@ Stop words
 An email is sent if a document contains certain stop words.
 
 Add a document::
-    >>> browser.getLink('Home').click()
-    >>> browser.getLink('Page').click()
+    >>> browser.follow('Home')
+    >>> browser.follow('Page')
     >>> browser.getControl(name='title').value = u'my title'
     >>> browser.getControl(name='text').value = u'alert one here alert two there'
     >>> browser.getControl('Save').click()
