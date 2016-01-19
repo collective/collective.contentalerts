@@ -3,9 +3,11 @@ Changelog
 
 0.5 (unreleased)
 ----------------
+- Support Plone 4.3.7
+  [gforcada]
 
-- Nothing changed yet.
-
+- Make normalize a global function
+  [gforcada] [staeff]
 
 0.4.post1 (2015-08-31)
 ----------------------
