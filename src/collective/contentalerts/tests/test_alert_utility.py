@@ -3,6 +3,7 @@ from collective.contentalerts.interfaces import IAlert
 from collective.contentalerts.interfaces import IStopWords
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
 from collective.contentalerts.utilities import Alert
+from collective.contentalerts.utilities import alert_text_normalize
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 
@@ -78,44 +79,41 @@ class AlertUtilityTestCase(unittest.TestCase):
 
 class HTMLNormalizeTestCase(unittest.TestCase):
 
-    def setUp(self):
-        self.normalize = Alert.html_normalize
-
     def test_regular_text_left_as_is(self):
         text = u'normal text'
-        self.assertEqual(self.normalize(text), text)
+        self.assertEqual(alert_text_normalize(text), text)
 
     def test_lower_case(self):
         text = u'UAU'
-        self.assertEqual(self.normalize(text), u'uau')
+        self.assertEqual(alert_text_normalize(text), u'uau')
 
     def test_unicode_normalized_form(self):
         text = u'älert'
-        self.assertEqual(self.normalize(text), u'alert')
+        self.assertEqual(alert_text_normalize(text), u'alert')
 
     def test_unicode_normalized_form_lower_case(self):
         text = u'Älert'
-        self.assertEqual(self.normalize(text), u'alert')
+        self.assertEqual(alert_text_normalize(text), u'alert')
 
     def test_html_entity(self):
         text = u'alert&#220;s'
-        self.assertEqual(self.normalize(text), u'alertus')
+        self.assertEqual(alert_text_normalize(text), u'alertus')
 
     def test_html_entity_lower_case(self):
         text = u'alert&#252;s'
-        self.assertEqual(self.normalize(text), u'alertus')
+        self.assertEqual(alert_text_normalize(text), u'alertus')
 
     def test_multiple_spaces_on_source(self):
         text = u'alert     text'
-        self.assertEqual(self.normalize(text), u'alert text')
+        self.assertEqual(alert_text_normalize(text), u'alert text')
 
     def test_string(self):
         text = 'some string'
-        self.assertEqual(self.normalize(text), text)
+        self.assertEqual(alert_text_normalize(text), text)
 
     def test_string_umlauts(self):
         text = 'some \xfc'
-        self.assertEqual(self.normalize(text), u'some u')
+        self.assertEqual(alert_text_normalize(text), u'some u')
 
 
 class SnippetTestCase(unittest.TestCase):

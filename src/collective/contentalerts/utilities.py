@@ -28,7 +28,7 @@ class Alert(object):
 
         # get all the stop words occurrences on the text
         snippets_data = {}
-        normalized_text = self.html_normalize(text)
+        normalized_text = alert_text_normalize(text)
         for word in normalized_stop_words:
             index = normalized_text.find(word)
             while index != -1:
@@ -70,35 +70,12 @@ class Alert(object):
         if not normalized_stop_words:
             return False
 
-        normalized_text = self.html_normalize(text)
+        normalized_text = alert_text_normalize(text)
         for word in normalized_stop_words:
             if normalized_text.find(word) != -1:
                 return True
 
         return False
-
-    @staticmethod
-    def html_normalize(text):
-        """Transform text in a way that is suitable for string comparison.
-
-        :param text: text that will be transformed.
-        :type text: str or unicode
-        :returns: text normalized.
-        :rtype: unicode
-        """
-        if isinstance(text, str):
-            text = text.decode('latin-1')
-        text = NBSP_RE.sub(' ', text)
-        parser = HTMLParser.HTMLParser()
-        text = parser.unescape(text)
-        text = text.lower()
-        text = u''.join(
-            [c
-             for c in unicodedata.normalize('NFKD', text)
-             if not unicodedata.combining(c)]
-        )
-
-        return text
 
     @staticmethod
     def _snippet(text, index, word, chars):
@@ -151,8 +128,31 @@ class Alert(object):
             return []
 
         normalized_stop_words = [
-            self.html_normalize(a)
+            alert_text_normalize(a)
             for a in stop_words.splitlines()
             if a
         ]
         return normalized_stop_words
+
+
+def alert_text_normalize(text):
+    """Transform text in a way that is suitable for string comparison.
+
+    :param text: text that will be transformed.
+    :type text: str or unicode
+    :returns: text normalized.
+    :rtype: unicode
+    """
+    if isinstance(text, str):
+        text = text.decode('latin-1')
+    text = NBSP_RE.sub(' ', text)
+    parser = HTMLParser.HTMLParser()
+    text = parser.unescape(text)
+    text = text.lower()
+    text = u''.join(
+        [c
+         for c in unicodedata.normalize('NFKD', text)
+         if not unicodedata.combining(c)]
+    )
+
+    return text
