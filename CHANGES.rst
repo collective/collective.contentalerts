@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.5 (unreleased)
+0.5 (2016-01-19)
 ----------------
 - Support Plone 4.3.7
   [gforcada]
