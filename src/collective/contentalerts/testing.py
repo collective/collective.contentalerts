@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from Acquisition import aq_base
-from Products.CMFPlone.tests.utils import MockMailHost
-from Products.MailHost.interfaces import IMailHost
 from plone.app.contenttypes.testing import PLONE_APP_CONTENTTYPES_FIXTURE
+from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
 from plone.app.testing import IntegrationTesting
 from plone.app.testing import PLONE_FIXTURE
 from plone.app.testing import PloneSandboxLayer
-from plone.app.testing import applyProfile
+from Products.CMFPlone.tests.utils import MockMailHost
+from Products.MailHost.interfaces import IMailHost
 from zope.component import getSiteManager
 
 import collective.contentalerts

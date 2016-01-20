@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from Testing.ZopeTestCase.utils import setupCoreSessions
 from collective.contentalerts.contentrules import TextAlertCondition
 from collective.contentalerts.contentrules import TextAlertConditionEditForm
 from collective.contentalerts.interfaces import IHasStopWords
@@ -9,13 +8,14 @@ from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATIO
 from plone import api
 from plone.app.contentrules.rule import Rule
 from plone.app.discussion.interfaces import IConversation
-from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 from plone.contentrules.engine.interfaces import IRuleStorage
 from plone.contentrules.rule.interfaces import IExecutable
 from plone.contentrules.rule.interfaces import IRuleCondition
 from plone.registry.interfaces import IRegistry
 from plone.stringinterp.interfaces import IStringSubstitution
+from Testing.ZopeTestCase.utils import setupCoreSessions
 from zope.component import createObject
 from zope.component import getAdapter
 from zope.component import getMultiAdapter

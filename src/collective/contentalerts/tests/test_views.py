@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from Products.statusmessages.interfaces import IStatusMessage
 from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWordsVerified
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
 from plone import api
 from plone.app.discussion.interfaces import IConversation
-from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
+from Products.statusmessages.interfaces import IStatusMessage
 from zope.component import createObject
 from zope.interface import alsoProvides
 

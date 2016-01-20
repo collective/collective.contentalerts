@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from OFS.SimpleItem import SimpleItem
 from collective.contentalerts import _
 from collective.contentalerts.interfaces import IAlert
 from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import ITextAlertCondition
+from OFS.SimpleItem import SimpleItem
 from plone.app.contentrules.browser.formhelper import AddForm
 from plone.app.contentrules.browser.formhelper import EditForm
 from plone.contentrules.rule.interfaces import IRuleElementData

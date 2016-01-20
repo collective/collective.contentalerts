@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
 from plone import api
-from plone.app.testing import TEST_USER_ID
 from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 from zope.component import getMultiAdapter
 
 import unittest
