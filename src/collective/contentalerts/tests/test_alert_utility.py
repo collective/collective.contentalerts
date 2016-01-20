@@ -4,6 +4,7 @@ from collective.contentalerts.interfaces import IStopWords
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
 from collective.contentalerts.utilities import Alert
 from collective.contentalerts.utilities import alert_text_normalize
+from plone import api
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
 
@@ -18,8 +19,14 @@ class AlertUtilityTestCase(unittest.TestCase):
         self.request = self.layer['request']
 
         self.registry = getUtility(IRegistry)
-        self.records = self.registry.forInterface(IStopWords)
         self.utility = getUtility(IAlert)
+
+    def _set_record_value(self, value):
+        api.portal.set_registry_record(
+            name='stop_words',
+            interface=IStopWords,
+            value=value
+        )
 
     def test_utility_exists(self):
         self.assertTrue(self.utility)
@@ -27,13 +34,13 @@ class AlertUtilityTestCase(unittest.TestCase):
     def test_no_registry_no_error(self):
         """Check that if the registry does not work the utility handles it."""
         # delete the record on the registry
-        key = self.records.__schema__.__identifier__ + '.stop_words'
+        key = IStopWords.__identifier__ + '.stop_words'
         del self.registry.records[key]
 
         self.assertIsNone(self.utility._get_registry_stop_words())
 
     def test_empty_registry_no_error(self):
-        self.records.stop_words = u''
+        self._set_record_value(u'')
         self.assertEqual(
             self.utility.get_snippets(u'some random text'),
             u''
@@ -41,28 +48,28 @@ class AlertUtilityTestCase(unittest.TestCase):
 
     def test_has_words_from_empty_registry(self):
         """Check that if the registry is empty has_stop_words returns False."""
-        self.records.stop_words = u''
+        self._set_record_value(u'')
         self.assertFalse(
             self.utility.has_stop_words(u'some random text')
         )
 
     def test_has_words_from_registry(self):
         """Check that has_stop_words works with the registry."""
-        self.records.stop_words = u'random\nalert me\nlala'
+        self._set_record_value(u'random\nalert me\nlala')
         self.assertTrue(
             self.utility.has_stop_words(u'some random text')
         )
 
     def test_no_has_words_from_registry(self):
         """Check that has_stop_words works with the registry."""
-        self.records.stop_words = u'random\nalert me\nlala'
+        self._set_record_value(u'random\nalert me\nlala')
         self.assertFalse(
             self.utility.has_stop_words(u'some specific text')
         )
 
     def test_get_snippets_from_registry(self):
         """Check that get_snippets works with the registry."""
-        self.records.stop_words = u'random\nalert me\nlala'
+        self._set_record_value(u'random\nalert me\nlala')
         self.assertEqual(
             self.utility.get_snippets(u'some random text', chars=2),
             u'random\n\n...e random t...'
@@ -70,7 +77,7 @@ class AlertUtilityTestCase(unittest.TestCase):
 
     def test_no_get_snippets_from_registry(self):
         """Check that get_snippets works with the registry."""
-        self.records.stop_words = u'random\nalert me\nlala'
+        self._set_record_value(u'random\nalert me\nlala')
         self.assertEqual(
             self.utility.get_snippets(u'some specific text'),
             u''

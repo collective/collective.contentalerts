@@ -13,7 +13,6 @@ from plone.app.testing import TEST_USER_ID
 from plone.contentrules.engine.interfaces import IRuleStorage
 from plone.contentrules.rule.interfaces import IExecutable
 from plone.contentrules.rule.interfaces import IRuleCondition
-from plone.registry.interfaces import IRegistry
 from plone.stringinterp.interfaces import IStringSubstitution
 from Testing.ZopeTestCase.utils import setupCoreSessions
 from zope.component import createObject
@@ -46,7 +45,7 @@ class TextAlertConditionTestCase(unittest.TestCase):
     def setUp(self):
         self.portal = self.layer['portal']
         self.request = self.layer['request']
-        self.registry = getUtility(IRegistry)
+
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
         self.name = 'collective.contentalerts.TextAlert'
@@ -62,8 +61,6 @@ class TextAlertConditionTestCase(unittest.TestCase):
             type='Document'
         )
 
-        self.records = self.registry.forInterface(IStopWords)
-
     def _add_comment(self, text):
         comment = createObject('plone.Comment')
         comment.text = text
@@ -73,6 +70,13 @@ class TextAlertConditionTestCase(unittest.TestCase):
         conversation = IConversation(self.document)
         conversation.addComment(comment)
         return comment
+
+    def _set_record_value(self, value):
+        api.portal.set_registry_record(
+            name='stop_words',
+            interface=IStopWords,
+            value=value
+        )
 
     def test_registered(self):
         self.assertEqual(self.name, self.element.addview)
@@ -158,7 +162,13 @@ class TextAlertConditionTestCase(unittest.TestCase):
         comment = self._add_comment('regular text')
         condition = TextAlertCondition()
 
-        self.assertEqual(self.records.stop_words, None)
+        self.assertEqual(
+            api.portal.get_registry_record(
+                name='stop_words',
+                interface=IStopWords,
+            ),
+            None
+        )
         self.assertEqual(condition.stop_words, None)
 
         executable = getMultiAdapter(
@@ -171,7 +181,13 @@ class TextAlertConditionTestCase(unittest.TestCase):
         comment = self._add_comment('regular text')
         condition = TextAlertCondition()
 
-        self.assertEqual(self.records.stop_words, None)
+        self.assertEqual(
+            api.portal.get_registry_record(
+                name='stop_words',
+                interface=IStopWords,
+            ),
+            None
+        )
         condition.stop_words = u'one alert\nanother alert'
 
         executable = getMultiAdapter(
@@ -184,7 +200,7 @@ class TextAlertConditionTestCase(unittest.TestCase):
         comment = self._add_comment('regular text')
         condition = TextAlertCondition()
 
-        self.records.stop_words = u'one alert\nanother alert'
+        self._set_record_value(u'one alert\nanother alert')
         self.assertEqual(condition.stop_words, None)
 
         executable = getMultiAdapter(
@@ -197,7 +213,7 @@ class TextAlertConditionTestCase(unittest.TestCase):
         comment = self._add_comment('regular text')
         condition = TextAlertCondition()
 
-        self.records.stop_words = u'yet another\nlast one'
+        self._set_record_value(u'yet another\nlast one')
         condition.stop_words = u'one alert\nanother alert'
 
         executable = getMultiAdapter(
@@ -210,7 +226,7 @@ class TextAlertConditionTestCase(unittest.TestCase):
         comment = self._add_comment('this gives one alert')
         condition = TextAlertCondition()
 
-        self.records.stop_words = u'one alert\nanother alert'
+        self._set_record_value(u'one alert\nanother alert')
         self.assertEqual(condition.stop_words, None)
 
         executable = getMultiAdapter(
@@ -223,7 +239,13 @@ class TextAlertConditionTestCase(unittest.TestCase):
         comment = self._add_comment('this gives one alert')
         condition = TextAlertCondition()
 
-        self.assertEqual(self.records.stop_words, None)
+        self.assertEqual(
+            api.portal.get_registry_record(
+                name='stop_words',
+                interface=IStopWords,
+            ),
+            None
+        )
         condition.stop_words = u'one alert\nanother alert'
 
         executable = getMultiAdapter(
@@ -236,7 +258,7 @@ class TextAlertConditionTestCase(unittest.TestCase):
         comment = self._add_comment('this gives one alert')
         condition = TextAlertCondition()
 
-        self.records.stop_words = u'almost\nlast one'
+        self._set_record_value(u'almost\nlast one')
         condition.stop_words = u'one alert\nanother alert'
 
         executable = getMultiAdapter(
@@ -259,7 +281,7 @@ class TextAlertConditionTestCase(unittest.TestCase):
         comment = self._add_comment('this should give one alert')
         condition = TextAlertCondition()
 
-        self.records.stop_words = u'one alert\nanother alert'
+        self._set_record_value(u'one alert\nanother alert')
         condition.stop_words = u'almost\nlast one'
 
         executable = getMultiAdapter(
@@ -442,7 +464,7 @@ class DexterityTextAlertConditionTestCase(unittest.TestCase):
     def setUp(self):
         self.portal = self.layer['portal']
         self.request = self.layer['request']
-        self.registry = getUtility(IRegistry)
+
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
         self.name = 'collective.contentalerts.TextAlert'
@@ -450,8 +472,6 @@ class DexterityTextAlertConditionTestCase(unittest.TestCase):
             IRuleCondition,
             name=self.name
         )
-
-        self.records = self.registry.forInterface(IStopWords)
 
     def test_dexterity_document(self):
         document = api.content.create(

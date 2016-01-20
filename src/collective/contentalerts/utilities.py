@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from collective.contentalerts.interfaces import IStopWords
-from plone.registry.interfaces import IRegistry
-from zope.component import getUtility
+from plone import api
 
 import HTMLParser
 import re
@@ -113,10 +112,12 @@ class Alert(object):
 
     def _get_registry_stop_words(self):
         """Returns the stop words found on the registry, if any."""
-        registry = getUtility(IRegistry)
         try:
-            records = registry.forInterface(IStopWords)
-            return records.stop_words or None
+            stop_words = api.portal.get_registry_record(
+                name='stop_words',
+                interface=IStopWords
+            )
+            return stop_words or None
         except KeyError:
             return None
 
