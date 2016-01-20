@@ -3,9 +3,11 @@ Changelog
 
 0.6 (unreleased)
 ----------------
+- Apply IStopWordsVerified when discarding an alert.
+  [gforcada] [staeff]
 
-- Nothing changed yet.
-
+- Sort imports, use plone.api and some buildout cleanups.
+  [gforcada]
 
 0.5 (2016-01-19)
 ----------------
