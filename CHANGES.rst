@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.6 (unreleased)
+0.6 (2016-01-20)
 ----------------
 - Apply IStopWordsVerified when discarding an alert.
   [gforcada] [staeff]
