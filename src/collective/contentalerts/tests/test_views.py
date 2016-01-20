@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from Products.statusmessages.interfaces import IStatusMessage
 from collective.contentalerts.interfaces import IHasStopWords
+from collective.contentalerts.interfaces import IStopWordsVerified
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
 from plone import api
 from plone.app.discussion.interfaces import IConversation
@@ -13,6 +14,7 @@ import unittest
 
 
 class DiscardAlertsViewTestCase(unittest.TestCase):
+
     layer = COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING
 
     def setUp(self):
@@ -41,8 +43,8 @@ class DiscardAlertsViewTestCase(unittest.TestCase):
         self.assertFalse(IHasStopWords.providedBy(self.document))
 
     def test_remove_interface_on_a_document(self):
-        """Calling @@discard-alert on a document has the IHasStopWords removes
-        it."""
+        """Calling @@discard-alert on a document that has the IHasStopWords
+        removes it and adds the IStopWordsVerified marker interface"""
         alsoProvides(self.document, IHasStopWords)
         self.assertTrue(IHasStopWords.providedBy(self.document))
 
@@ -54,10 +56,11 @@ class DiscardAlertsViewTestCase(unittest.TestCase):
         discard_view()
 
         self.assertFalse(IHasStopWords.providedBy(self.document))
+        self.assertTrue(IStopWordsVerified.providedBy(self.document))
 
     def test_remove_interface_on_a_comment(self):
-        """Calling @@discard-alert on a comment has the IHasStopWords removes
-        it."""
+        """Calling @@discard-alert on a comment that has the IHasStopWords
+        removes it and adds the IStopWordsVerified marker interface"""
         comment = createObject('plone.Comment')
         comment.text = 'something'
         comment.author_username = 'jim'
@@ -77,6 +80,7 @@ class DiscardAlertsViewTestCase(unittest.TestCase):
         discard_view()
 
         self.assertFalse(IHasStopWords.providedBy(comment))
+        self.assertTrue(IStopWordsVerified.providedBy(comment))
 
     def test_redirect(self):
         self.assertNotIn('location', self.request.response.headers)
