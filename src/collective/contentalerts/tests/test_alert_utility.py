@@ -4,6 +4,7 @@ from collective.contentalerts.interfaces import IStopWords
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
 from collective.contentalerts.utilities import Alert
 from collective.contentalerts.utilities import alert_text_normalize
+from collective.contentalerts.utilities import get_text_from_object
 from plone import api
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
@@ -12,6 +13,7 @@ import unittest
 
 
 class AlertUtilityTestCase(unittest.TestCase):
+
     layer = COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING
 
     def setUp(self):
@@ -300,3 +302,97 @@ class HasStopWordsTestCase(unittest.TestCase):
         text = u'Alerts two text'
         stop_words = u'one\ntwo'
         self.assertTrue(self.has_words(text, stop_words))
+
+
+class GetTextFromObjectTest(unittest.TestCase):
+
+    def test_archetypes_like(self):
+        """Archetypes have a getText method"""
+        class DummyAT(object):
+
+            def getText(self):
+                return 'found!'
+
+        self.assertEqual(
+            get_text_from_object(DummyAT()),
+            'found!'
+        )
+
+    def test_dexterity_comment_like(self):
+        """Dexterity and comments have a text method"""
+        class DummyDXComment(object):
+
+            @property
+            def text(self):
+                return 'found!'
+
+        self.assertEqual(
+            get_text_from_object(DummyDXComment()),
+            'found!'
+        )
+
+    def test_event_with_archetypes_like(self):
+        """Archetypes wrapped in an event"""
+        class DummyAT(object):
+
+            def getText(self):
+                return 'found!'
+
+        class DummyEventAT(object):
+
+            @property
+            def object(self):
+                return DummyAT()
+
+        self.assertEqual(
+            get_text_from_object(DummyEventAT()),
+            'found!'
+        )
+
+    def test_event_with_dexterity_like(self):
+        """Dexterity wrapped in an event"""
+        class DummyDX(object):
+
+            @property
+            def text(self):
+                return 'found!'
+
+        class DummyEventDX(object):
+
+            @property
+            def object(self):
+                return DummyDX()
+
+        self.assertEqual(
+            get_text_from_object(DummyEventDX()),
+            'found!'
+        )
+
+    def test_event_with_comment_like(self):
+        """Comment wrapped in an event"""
+        class DummyComment(object):
+
+            @property
+            def text(self):
+                return 'found!'
+
+        class DummyEventComment(object):
+
+            @property
+            def comment(self):
+                return DummyComment()
+
+        self.assertEqual(
+            get_text_from_object(DummyEventComment()),
+            'found!'
+        )
+
+    def test_something_else(self):
+        """Something that does not have getText nor text"""
+        class Dummy(object):
+            pass
+
+        self.assertEqual(
+            get_text_from_object(Dummy()),
+            ''
+        )

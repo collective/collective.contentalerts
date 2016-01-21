@@ -3,6 +3,7 @@ from collective.contentalerts import _
 from collective.contentalerts.interfaces import IAlert
 from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import ITextAlertCondition
+from collective.contentalerts.utilities import get_text_from_object
 from OFS.SimpleItem import SimpleItem
 from plone.app.contentrules.browser.formhelper import AddForm
 from plone.app.contentrules.browser.formhelper import EditForm
@@ -24,20 +25,15 @@ class TextAlertConditionExecutor(object):
 
     def __call__(self):
         obj = None
-        text = None
+        text = get_text_from_object(self.event)
 
         # if it's a comment
-        if getattr(self.event, 'comment', None):
-            if getattr(self.event.comment, 'text', None):
-                obj = self.event.comment
-                text = obj.text
+        if getattr(self.event, 'comment', None) and \
+                getattr(self.event.comment, 'text', None):
+            obj = self.event.comment
         # if it's a AT/DX
         elif getattr(self.event, 'object', None):
             obj = self.event.object
-            if getattr(obj, 'getText', None):
-                text = obj.getText()
-            elif getattr(obj, 'text', None):
-                text = obj.text
 
         if not text:
             return False

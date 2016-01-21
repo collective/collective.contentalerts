@@ -157,3 +157,35 @@ def alert_text_normalize(text):
     )
 
     return text
+
+
+def get_text_from_object(obj):
+    """Get the text from an object.
+
+    The object can be a comment, a Dexterity or Archetypes object or an event
+    holding any of the three mentioned above.
+    """
+    text = ''
+
+    # an AT type
+    if getattr(obj, 'getText', None):
+        text = obj.getText()
+
+    # a DX type / comment
+    elif getattr(obj, 'text', None):
+        text = obj.text
+
+    # if it's an event on a comment
+    elif getattr(obj, 'comment', None) and \
+            getattr(obj.comment, 'text', None):
+        text = obj.comment.text
+
+    # if it's an event on a AT/DX type
+    elif getattr(obj, 'object', None):
+        obj = obj.object
+        if getattr(obj, 'getText', None):
+            text = obj.getText()
+        elif getattr(obj, 'text', None):
+            text = obj.text
+
+    return text
