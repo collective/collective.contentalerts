@@ -4,8 +4,8 @@ from collective.contentalerts.interfaces import IStopWords
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
 from collective.contentalerts.utilities import Alert
 from collective.contentalerts.utilities import alert_text_normalize
-from collective.contentalerts.utilities import get_text_from_object
 from collective.contentalerts.utilities import get_new_entries
+from collective.contentalerts.utilities import get_text_from_object
 from plone import api
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
@@ -397,6 +397,7 @@ class GetTextFromObjectTest(unittest.TestCase):
             get_text_from_object(Dummy()),
             ''
         )
+
 
 class TestEntryDiff(unittest.TestCase):
     """Test c.contentalerts.handlers.get_new_entries"""
