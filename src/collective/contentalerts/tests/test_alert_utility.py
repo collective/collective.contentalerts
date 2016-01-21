@@ -5,6 +5,7 @@ from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATIO
 from collective.contentalerts.utilities import Alert
 from collective.contentalerts.utilities import alert_text_normalize
 from collective.contentalerts.utilities import get_text_from_object
+from collective.contentalerts.utilities import get_new_entries
 from plone import api
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
@@ -395,4 +396,84 @@ class GetTextFromObjectTest(unittest.TestCase):
         self.assertEqual(
             get_text_from_object(Dummy()),
             ''
+        )
+
+class TestEntryDiff(unittest.TestCase):
+    """Test c.contentalerts.handlers.get_new_entries"""
+
+    def test_none_to_none(self):
+        """What if both lists are none"""
+        self.assertEqual(
+            get_new_entries(None, None),
+            [],
+        )
+
+    def test_something_to_none(self):
+        """What if the list gets empty"""
+        self.assertEqual(
+            get_new_entries('one\ntwo', None),
+            [],
+        )
+
+    def test_none_to_something(self):
+        """What if the list was empty and now has some entries"""
+        self.assertEqual(
+            get_new_entries(None, 'one\ntwo'),
+            ['one', 'two', ],
+        )
+
+    def test_none_to_only_newlines(self):
+        """What if the list was empty and now has only newline characters"""
+        self.assertEqual(
+            get_new_entries(None, '\n\n\n\n'),
+            [],
+        )
+
+    def test_something_to_same_something(self):
+        """What if both, none empty, lists are the same"""
+        self.assertEqual(
+            get_new_entries('one\ntwo', 'one\ntwo'),
+            [],
+        )
+
+    def test_something_plus_new_entries(self):
+        """What if the new list has some new entries"""
+        self.assertEqual(
+            get_new_entries('one\ntwo', 'one\ntwo\nthree\nfour'),
+            ['four', 'three', ],
+        )
+
+    def test_something_minus_some_entries(self):
+        """What if the new list has removed some entries"""
+        self.assertEqual(
+            get_new_entries('one\ntwo\nthree\nfour', 'one\ntwo'),
+            [],
+        )
+
+    def test_something_to_same_something_but_different_order(self):
+        """What if both lists have the same entries but ordered differently"""
+        self.assertEqual(
+            get_new_entries('one\ntwo\nthree\nfour', 'three\none\nfour\ntwo'),
+            [],
+        )
+
+    def test_something_plus_newline_characters(self):
+        """What if the new list only adds newline characters"""
+        self.assertEqual(
+            get_new_entries('one\ntwo', '\n\n\n\none\ntwo\n\n\n\n'),
+            [],
+        )
+
+    def test_something_minus_newline_characters(self):
+        """What if the new list only removes newline characters"""
+        self.assertEqual(
+            get_new_entries('\n\n\n\none\ntwo\n\n\n\n', 'one\ntwo'),
+            [],
+        )
+
+    def test_something_plus_some_minus_some_others(self):
+        """What if the new list has new entries and some entries removed"""
+        self.assertEqual(
+            get_new_entries('one\ntwo\nthree\nfour', 'one\ntwo\nthree\nfive'),
+            [u'five', ],
         )

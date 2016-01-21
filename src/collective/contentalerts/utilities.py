@@ -189,3 +189,32 @@ def get_text_from_object(obj):
             text = obj.text
 
     return text
+
+
+def get_new_entries(old_entries, new_entries):
+    """Return the newly added entries between two lists
+
+    New lines are discarded and the order does not matter.
+
+    Returns a list of all new element were added.
+    """
+    if new_entries is None:
+        return []
+
+    old_set = set([])
+    if old_entries:
+        old_set = set([
+            alert_text_normalize(e)
+            for e in old_entries.split('\n')
+        ])
+        old_set -= {u'', }  # remove empty string
+
+    new_set = set([
+        alert_text_normalize(e)
+        for e in new_entries.split('\n')
+    ])
+    new_set -= {u'', }  # remove empty string
+
+    # set difference, see:
+    # https://docs.python.org/2/library/stdtypes.html#set.difference
+    return sorted(list(new_set - old_set))
