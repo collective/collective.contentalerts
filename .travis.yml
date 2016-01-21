@@ -21,7 +21,7 @@ script:
   - bin/createcoverage
 
 after_success:
-  - pip install -q coveralls
+  - pip install -q coveralls python-coveralls==2.5.0
   - coveralls
 
 notifications:
