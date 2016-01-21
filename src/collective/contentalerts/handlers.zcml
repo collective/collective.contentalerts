@@ -1,0 +1,11 @@
+<configure
+  xmlns="http://namespaces.zope.org/zope">
+
+  <!-- Get the new changes on the registry and review the objects that are whitelisted -->
+  <subscriber
+    for="collective.contentalerts.interfaces.IStopWords
+         plone.registry.interfaces.IRecordModifiedEvent"
+    handler=".handlers.review_verified_objects"
+    />
+
+</configure>

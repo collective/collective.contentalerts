@@ -8,6 +8,7 @@
 
   <include file="permissions.zcml" />
   <include file="contentrules.zcml" />
+  <include file="handlers.zcml" />
 
   <include package=".browser" />
 
