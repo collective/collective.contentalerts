@@ -3,9 +3,15 @@ Changelog
 
 0.7 (unreleased)
 ----------------
+- Monitor registry setting (stop words) for changes.
+  If changes are found, verify if reviewed objects have those new stop words.
+  [gforcada]
 
-- Nothing changed yet.
+- Round of cleanups, refactorings and coverage fixes.
+  [gforcada]
 
+- Conditionally depend on collective.taskqueue to do mass processing asynchronously.
+  [gforcada]
 
 0.6 (2016-01-20)
 ----------------
