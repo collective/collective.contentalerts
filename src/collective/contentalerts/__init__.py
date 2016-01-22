@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from zope.i18nmessageid import MessageFactory
 
+import logging
 import pkg_resources
 
 
@@ -11,4 +12,9 @@ except pkg_resources.DistributionNotFound:
 else:
     ASYNC = True
 
-_ = MessageFactory('collective.contentalerts')
+
+PACKAGE_NAME = 'collective.contentalerts'
+
+_ = MessageFactory(PACKAGE_NAME)
+
+logger = logging.getLogger(PACKAGE_NAME)
