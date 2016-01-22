@@ -1,14 +1,20 @@
 # -*- coding: utf-8 -*-
 from collective.contentalerts.interfaces import IAlert
+from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWords
+from collective.contentalerts.interfaces import IStopWordsVerified
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
 from collective.contentalerts.utilities import Alert
 from collective.contentalerts.utilities import alert_text_normalize
 from collective.contentalerts.utilities import get_new_entries
 from collective.contentalerts.utilities import get_text_from_object
+from collective.contentalerts.utilities import verify_brain
 from plone import api
+from plone.app.testing import setRoles
+from plone.app.testing import TEST_USER_ID
 from plone.registry.interfaces import IRegistry
 from zope.component import getUtility
+from zope.interface import alsoProvides
 
 import unittest
 
@@ -477,4 +483,105 @@ class TestEntryDiff(unittest.TestCase):
         self.assertEqual(
             get_new_entries('one\ntwo\nthree\nfour', 'one\ntwo\nthree\nfive'),
             [u'five', ],
+        )
+
+
+class VerifyBrainTestCase(unittest.TestCase):
+
+    layer = COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        self.request = self.layer['request']
+
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+        # create the document and attach the marker interface
+        self.doc = api.content.create(
+            container=self.portal,
+            id='document-test',
+            title='Document 1',
+            type='Document',
+        )
+        self.doc.setText('Some random text')
+
+    def test_stop_word_not_in_object(self):
+        """Check that the verified marker interface is kept
+
+        It should be removed only if the stop words are found on the object's
+        text.
+        """
+        alsoProvides(self.doc, IStopWordsVerified)
+        self.doc.reindexObject()
+
+        catalog = api.portal.get_tool('portal_catalog')
+        brain = catalog(id=self.doc.id)[0]
+
+        verify_brain(brain, new_entries='else')
+
+        self.assertTrue(IStopWordsVerified.providedBy(self.doc))
+        self.assertFalse(IHasStopWords.providedBy(self.doc))
+
+    def test_stop_word_in_object(self):
+        """Check that the verified marker interface is removed
+
+        It should be removed if the stop words are found on the object's text.
+        """
+        alsoProvides(self.doc, IStopWordsVerified)
+        self.doc.reindexObject()
+
+        catalog = api.portal.get_tool('portal_catalog')
+        brain = catalog(id=self.doc.id)[0]
+
+        verify_brain(brain, new_entries='random')
+
+        self.assertFalse(IStopWordsVerified.providedBy(self.doc))
+        self.assertTrue(IHasStopWords.providedBy(self.doc))
+
+    def test_object_without_verified_marker_interface(self):
+        """Corner case: the object does not have the verified marker interface
+
+        It should add the stop words marker interface without raising any
+        exception.
+        """
+        self.assertFalse(IStopWordsVerified.providedBy(self.doc))
+        self.assertFalse(IHasStopWords.providedBy(self.doc))
+
+        catalog = api.portal.get_tool('portal_catalog')
+        brain = catalog(id=self.doc.id)[0]
+
+        verify_brain(brain, new_entries='random')
+
+        self.assertFalse(IStopWordsVerified.providedBy(self.doc))
+        self.assertTrue(IHasStopWords.providedBy(self.doc))
+
+    def test_no_brain(self):
+        """Corner case: verify_brain does not get a brain but something else
+
+        It should return silently.
+        """
+        self.assertIsNone(
+            verify_brain(self.doc, new_entries='random')
+        )
+
+    def test_no_entries(self):
+        """Corner case: verify_brain gets an empty string as new entries
+
+        It should return silently.
+        """
+        catalog = api.portal.get_tool('portal_catalog')
+        brain = catalog(id=self.doc.id)[0]
+        self.assertIsNone(
+            verify_brain(brain, new_entries='')
+        )
+
+    def test_none_entries(self):
+        """Corner case: verify_brain gets None as new entries
+
+        It should return silently.
+        """
+        catalog = api.portal.get_tool('portal_catalog')
+        brain = catalog(id=self.doc.id)[0]
+        self.assertIsNone(
+            verify_brain(brain, new_entries=None)
         )
