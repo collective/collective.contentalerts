@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.7 (unreleased)
+0.7 (2016-01-22)
 ----------------
 - Monitor registry setting (stop words) for changes.
   If changes are found, verify if reviewed objects have those new stop words.
