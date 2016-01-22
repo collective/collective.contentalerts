@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from Acquisition import aq_base
+from collective.taskqueue.testing import TASK_QUEUE_FIXTURE
 from plone.app.contenttypes.testing import PLONE_APP_CONTENTTYPES_FIXTURE
 from plone.app.testing import applyProfile
 from plone.app.testing import FunctionalTesting
@@ -68,6 +69,14 @@ COLLECTIVE_CONTENTALERTS_FUNCTIONAL_TESTING = FunctionalTesting(
 COLLECTIVE_CONTENTALERTS_DEXTERITY_INTEGRATION_TESTING = IntegrationTesting(
     bases=(COLLECTIVE_CONTENTALERTS_DEXTERITY_FIXTURE,),
     name='CollectiveContentalertsDexterityLayer:IntegrationTesting'
+)
+
+COLLECTIVE_CONTENTALERTS_ASYNC_FUNCTIONAL_TESTING = FunctionalTesting(
+    bases=(
+        TASK_QUEUE_FIXTURE,
+        COLLECTIVE_CONTENTALERTS_FIXTURE,
+    ),
+    name='CollectiveContentalertsAsyncLayer:FunctionalTesting'
 )
 
 optionflags = (doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE)
