@@ -44,7 +44,7 @@ Features
 - mark objects as reviewed
 - monitor the list of words for changes and search for the new stop words on already reviewed objects
 
-  - if ``[async]]`` extra is enable this review will be done via an asynchronous job (vi `collective.taskqueue`_)
+  - if ``[async]`` extra is enable this review will be done via an asynchronous job (vi `collective.taskqueue`_)
 
 Where it searches on
 --------------------
