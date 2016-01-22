@@ -1,18 +1,21 @@
 # -*- coding: utf-8 -*-
 from collective.contentalerts.interfaces import IStopWords
 from collective.contentalerts.interfaces import IStopWordsVerified
-from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
+from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_ASYNC_FUNCTIONAL_TESTING  # noqa
+from collective.taskqueue.interfaces import ITaskQueue
 from plone import api
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID
+from zope.component import getUtility
 from zope.interface import alsoProvides
 
+import transaction
 import unittest
 
 
 class TestVerifiedInterfaceHandler(unittest.TestCase):
 
-    layer = COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING
+    layer = COLLECTIVE_CONTENTALERTS_ASYNC_FUNCTIONAL_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']
@@ -37,8 +40,8 @@ class TestVerifiedInterfaceHandler(unittest.TestCase):
         self.doc.reindexObject()
 
     def test_no_new_word_added(self):
-        """If a document has IStopWordsVerified interface and no new stop word
-        is added, the document keeps the interface
+        """If the stop words list is updated but no new words are added, no
+        async job is queued
         """
         # remove one stop_word
         api.portal.set_registry_record(
@@ -47,14 +50,16 @@ class TestVerifiedInterfaceHandler(unittest.TestCase):
             value=u'lala\n'
         )
 
-        # the document still keeps the interface
-        self.assertTrue(
-            IStopWordsVerified.providedBy(self.doc)
+        # tasks are only queued on a successful transaction
+        transaction.commit()
+        self.assertEqual(
+            len(getUtility(ITaskQueue, name='test-queue')),
+            0,
         )
 
-    def test_new_word_added_and_not_in_document(self):
-        """If a document has IStopWordsVerified interface and a new stop word
-        is added, but is not on the document, it keeps the interface
+    def test_new_word_added(self):
+        """If the stop words list is updated and new words are added, an
+        async job is queued
         """
         # add one stop_word
         api.portal.set_registry_record(
@@ -63,23 +68,50 @@ class TestVerifiedInterfaceHandler(unittest.TestCase):
             value=u'lala\nmagic'
         )
 
-        # the document keeps the interface
-        self.assertTrue(
-            IStopWordsVerified.providedBy(self.doc)
+        # tasks are only queued on a successful transaction
+        transaction.commit()
+        taskqueue = getUtility(ITaskQueue, name='test-queue')
+        self.assertEqual(
+            len(taskqueue),
+            1,
         )
 
-    def test_new_word_added_and_in_document(self):
-        """If a document has IStopWordsVerified interface and a new stop word
-        added is also on the document, the marker interface is removed
-        """
-        # add one stop_word
+        task = taskqueue.get()
+        self.assertIn(
+            'size=300',
+            task['url']
+        )
+        self.assertIn(
+            'start=0',
+            task['url']
+        )
+        self.assertIn(
+            'entries=magic',
+            task['url']
+        )
+
+    def test_new_word_with_spaces_added(self):
+        """Check that the new words are correctly URL encoded"""
+        # add one stop_word with spaces
         api.portal.set_registry_record(
             name='stop_words',
             interface=IStopWords,
-            value=u'lala\nrandom'
+            value=u'lala\nmagic powers & more'
         )
 
-        # the document no longer keeps the interface
-        self.assertFalse(
-            IStopWordsVerified.providedBy(self.doc)
+        # tasks are only queued on a successful transaction
+        transaction.commit()
+        taskqueue = getUtility(ITaskQueue, name='test-queue')
+        task = taskqueue.get()
+        self.assertIn(
+            'size=300',
+            task['url']
+        )
+        self.assertIn(
+            'start=0',
+            task['url']
+        )
+        self.assertIn(
+            'entries=magic+powers+%26+more',
+            task['url']
         )

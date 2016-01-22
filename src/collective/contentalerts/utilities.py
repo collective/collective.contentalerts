@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
+from collective.contentalerts.interfaces import IAlert
+from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWords
+from collective.contentalerts.interfaces import IStopWordsVerified
 from plone import api
+from zope.component import getUtility
+from zope.interface import alsoProvides
+from zope.interface import noLongerProvides
 
 import HTMLParser
 import re
@@ -218,3 +224,21 @@ def get_new_entries(old_entries, new_entries):
     # set difference, see:
     # https://docs.python.org/2/library/stdtypes.html#set.difference
     return sorted(list(new_set - old_set))
+
+
+def verify_brain(brain, new_entries):
+    """Check if the given brain's text has the given new entries
+
+    If so, switch the marker interfaces.
+    """
+    try:
+        obj = brain.getObject()
+    except AttributeError:
+        # it's not a brain, but something else, so abort silently
+        return
+    text = get_text_from_object(obj)
+    utility = getUtility(IAlert)
+    if utility.has_stop_words(text, stop_words=new_entries):
+        noLongerProvides(obj, IStopWordsVerified)
+        alsoProvides(obj, IHasStopWords)
+        obj.reindexObject(idxs=('object_provides', ))

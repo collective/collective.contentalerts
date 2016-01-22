@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
-from collective.contentalerts.interfaces import IAlert
-from collective.contentalerts.interfaces import IHasStopWords
+from collective.contentalerts import ASYNC
+from collective.contentalerts import logger
 from collective.contentalerts.interfaces import IStopWordsVerified
 from collective.contentalerts.utilities import get_new_entries
-from collective.contentalerts.utilities import get_text_from_object
+from collective.contentalerts.utilities import verify_brain
 from plone import api
-from zope.component import getUtility
-from zope.interface import alsoProvides
-from zope.interface import noLongerProvides
+
+
+if ASYNC:
+    from collective.taskqueue import taskqueue
 
 
 def review_verified_objects(settings, event):
@@ -21,13 +22,31 @@ def review_verified_objects(settings, event):
     new_entries = '\n'.join(new_entries)
 
     catalog = api.portal.get_tool('portal_catalog')
-    utility = getUtility(IAlert)
-
     brains = catalog(object_provides=IStopWordsVerified.__identifier__)
-    for brain in brains:
-        obj = brain.getObject()
-        text = get_text_from_object(obj)
-        if utility.has_stop_words(text, stop_words=new_entries):
-            noLongerProvides(obj, IStopWordsVerified)
-            alsoProvides(obj, IHasStopWords)
-            obj.reindexObject(idxs=('object_provides', ))
+
+    if not ASYNC:
+        for brain in brains:
+            verify_brain(brain, new_entries)
+    else:
+        # split the work to review the verified objects for new stop words in
+        # batches
+        batch = 1
+        amount = 300
+        count = len(brains)
+        while count > 0:
+            view_path = '/{0}/@@review-objects?'.format(
+                api.portal.get().id
+            )
+            params = {
+                'start': amount * batch - amount,
+                'size': amount,
+                'entries': new_entries,
+            }
+            logger.warn('Queued request {0} {1}'.format(view_path, params))
+            taskqueue.add(
+                view_path,
+                params=params
+            )
+
+            batch += 1
+            count -= amount

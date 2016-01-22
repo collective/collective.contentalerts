@@ -1,7 +1,7 @@
 <configure
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
-    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:zcml="http://namespaces.zope.org/zcml"
     i18n_domain="collective.contentalerts">
 
   <!-- Publish static files -->
@@ -32,6 +32,16 @@
     class="collective.contentalerts.browser.discard_alert.DiscardAlertView"
     permission="collective.contentalerts.stop_words.edit"
     layer="collective.contentalerts.interfaces.ICollectiveContentalertsLayer"
+    />
+
+  <!-- Async views  -->
+  <browser:page
+    zcml:condition="installed collective.taskqueue"
+    class="collective.contentalerts.browser.review_objects.ReviewObjectsView"
+    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+    name="review-objects"
+    permission="cmf.ManagePortal"
+    layer="collective.taskqueue.interfaces.ITaskQueueLayer"
     />
 
 </configure>
