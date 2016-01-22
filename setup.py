@@ -71,6 +71,9 @@ setup(
             'Products.MailHost',
             'Products.statusmessages',
         ],
+        'async': [
+            'collective.taskqueue',
+        ]
     },
     entry_points="""
     [z3c.autoinclude.plugin]
