@@ -34,7 +34,7 @@ def review_verified_objects(settings, event):
         amount = 300
         count = len(brains)
         while count > 0:
-            view_path = '/{0}/@@review-objects?'.format(
+            view_path = '/{0}/@@review-objects'.format(
                 api.portal.get().id
             )
             params = {
