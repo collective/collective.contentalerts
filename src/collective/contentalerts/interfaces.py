@@ -13,13 +13,26 @@ class ICollectiveContentalertsLayer(IDefaultBrowserLayer):
 class IStopWords(Interface):
     """Registry settings schema being used by this distribution."""
 
-    stop_words = schema.Text(
+    forbidden_words = schema.Text(
         title=_(
-            u'settings_stop_words_list_title',
+            u'settings_forbidden_words_list_title',
+            default=u'Forbidden words'
+        ),
+        description=_(
+            u'settings_forbidden_words_list_description',
+            default=u'Words/sentences that will prevent an object to be made '
+                    u'public, one per line.'
+        ),
+        required=False,
+    )
+
+    inadequate_words = schema.Text(
+        title=_(
+            u'settings_inadequate_words_list_title',
             default=u'List'
         ),
         description=_(
-            u'settings_stop_words_list_description',
+            u'settings_inadequate_words_list_description',
             default=u'Words/sentences that will generate an alert, '
                     u'one per line.'
         ),
