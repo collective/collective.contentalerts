@@ -83,6 +83,28 @@ class Alert(object):
 
         return False
 
+    def has_forbidden_words(self, text):
+        """Checks if the given text has words from the forbidden stop words
+        list
+
+        See IAlert interface docstring for its parameters.
+        """
+        if not text:
+            return False
+
+        normalized_stop_words = self.get_normalized_stop_words(
+            register='forbidden_words'
+        )
+        if not normalized_stop_words:
+            return False
+
+        normalized_text = alert_text_normalize(text)
+        for word in normalized_stop_words:
+            if normalized_text.find(word) != -1:
+                return True
+
+        return False
+
     @staticmethod
     def _snippet(text, index, word, chars):
         """Get the surrounding text of the given word in the given text.

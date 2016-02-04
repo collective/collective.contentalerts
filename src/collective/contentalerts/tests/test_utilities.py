@@ -211,6 +211,57 @@ class AlertUtilityTestCase(unittest.TestCase):
             normalized
         )
 
+    def test_has_forbidden_words_no_text(self):
+        """Check that has_forbidden_words returns False if no text is provided
+        """
+        self.assertFalse(
+            self.utility.has_forbidden_words('')
+        )
+        self.assertFalse(
+            self.utility.has_forbidden_words(None)
+        )
+
+    def test_has_forbidden_words_no_words_in_registry(self):
+        """Check that has_forbidden_words returns False if no words are found
+        on the registry
+        """
+        self.assertIsNone(
+            api.portal.get_registry_record(
+                interface=IStopWords,
+                name='forbidden_words'
+            )
+        )
+        self.assertFalse(
+            self.utility.has_forbidden_words('lalala')
+        )
+
+    def test_has_forbidden_words_no_words_found(self):
+        """Check that has_forbidden_words returns False if no words from the
+        registry are found on the text"""
+        api.portal.set_registry_record(
+            interface=IStopWords,
+            name='forbidden_words',
+            value=u'one\ntwo'
+        )
+
+        self.assertFalse(
+            self.utility.has_forbidden_words('no words found')
+        )
+
+    def test_has_forbidden_words_words_found(self):
+        """Check that has_forbidden_words returns True if words from the
+        registry are found on the text
+        """
+        api.portal.set_registry_record(
+            interface=IStopWords,
+            name='forbidden_words',
+            value=u'one\ntwo'
+        )
+
+        self.assertTrue(
+            self.utility.has_forbidden_words('and now one is found!')
+        )
+
 
 class HTMLNormalizeTestCase(unittest.TestCase):
 
