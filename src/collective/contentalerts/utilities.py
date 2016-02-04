@@ -68,7 +68,7 @@ class Alert(object):
 
         See IAlert interface docstring for its parameters.
         """
-        if not text or text is None:
+        if not text:
             return False
 
         normalized_stop_words = self.get_normalized_stop_words(stop_words)
