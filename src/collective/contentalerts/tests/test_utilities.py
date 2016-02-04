@@ -37,6 +37,18 @@ class AlertUtilityTestCase(unittest.TestCase):
             value=value
         )
 
+    def _set_all_records(self, inadequate=u'inade', forbidden=u'forbid'):
+        api.portal.set_registry_record(
+            name='inadequate_words',
+            interface=IStopWords,
+            value=inadequate
+        )
+        api.portal.set_registry_record(
+            name='forbidden_words',
+            interface=IStopWords,
+            value=forbidden
+        )
+
     def test_utility_exists(self):
         self.assertTrue(self.utility)
 
@@ -90,6 +102,80 @@ class AlertUtilityTestCase(unittest.TestCase):
         self.assertEqual(
             self.utility.get_snippets(u'some specific text'),
             u''
+        )
+
+    def test_get_all_normalized_stop_words(self):
+        """Check that if no register is specified words from both registries
+        are used
+        """
+        self._set_all_records()
+        normalized = self.utility.get_normalized_stop_words()
+        self.assertIn(
+            u'forbid',
+            normalized
+        )
+        self.assertIn(
+            u'inade',
+            normalized
+        )
+
+    def test_get_forbidden_registry_normalized_stop_words(self):
+        """Check that it returns only forbidden if that's passed as an argument
+        """
+        self._set_all_records()
+        normalized = self.utility.get_normalized_stop_words(
+            register='forbidden_words'
+        )
+        self.assertIn(
+            u'forbid',
+            normalized
+        )
+        self.assertNotIn(
+            u'inade',
+            normalized
+        )
+
+    def test_get_inadequate_registry_normalized_stop_words(self):
+        """Check that it returns only inadequate if that's passed as an
+        argument
+        """
+        self._set_all_records()
+        normalized = self.utility.get_normalized_stop_words(
+            register='inadequate_words'
+        )
+        self.assertNotIn(
+            u'forbid',
+            normalized
+        )
+        self.assertIn(
+            u'inade',
+            normalized
+        )
+
+    def test_invalid_registry_normalized_stop_words(self):
+        """Check that no words are returned if an invalid registry is given"""
+        self._set_all_records()
+        normalized = self.utility.get_normalized_stop_words(
+            register='non_existing_words'
+        )
+        self.assertEqual(
+            normalized,
+            []
+        )
+
+    def test_pass_list_registry_normalized_stop_words(self):
+        """Check that passing a list also works"""
+        self._set_all_records()
+        normalized = self.utility.get_normalized_stop_words(
+            register=('inadequate_words', )
+        )
+        self.assertNotIn(
+            u'forbid',
+            normalized
+        )
+        self.assertIn(
+            u'inade',
+            normalized
         )
 
 

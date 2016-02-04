@@ -4,6 +4,7 @@ from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWords
 from collective.contentalerts.interfaces import IStopWordsVerified
 from plone import api
+from plone.api.exc import InvalidParameterError
 from zope.component import getUtility
 from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
@@ -116,20 +117,31 @@ class Alert(object):
         seen_add = seen.add
         return [x for x in sequence if not (x in seen or seen_add(x))]
 
-    def _get_registry_stop_words(self):
+    def _get_registry_stop_words(self, register=None):
         """Returns the stop words found on the registry, if any."""
-        try:
-            stop_words = api.portal.get_registry_record(
-                name='stop_words',
-                interface=IStopWords
-            )
-            return stop_words or None
-        except KeyError:
-            return None
+        return_stop_words = ''
 
-    def get_normalized_stop_words(self, stop_words=None):
+        if register is None:
+            register = ('forbidden_words', 'inadequate_words', )
+        elif isinstance(register, str):
+            register = (register, )
+
+        for key_name in register:
+            try:
+                stop_words = api.portal.get_registry_record(
+                    name=key_name,
+                    interface=IStopWords
+                )
+                if stop_words:
+                    return_stop_words += u'\n{0}'.format(stop_words)
+            except (KeyError, InvalidParameterError):
+                pass
+
+        return return_stop_words
+
+    def get_normalized_stop_words(self, stop_words=None, register=None):
         if stop_words is None:
-            stop_words = self._get_registry_stop_words()
+            stop_words = self._get_registry_stop_words(register=register)
 
         if stop_words is None or stop_words.strip() == u'':
             return []
