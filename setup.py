@@ -70,6 +70,7 @@ setup(
             'Products.CMFPlone',
             'Products.MailHost',
             'Products.statusmessages',
+            'transaction',
         ],
         'async': [
             'collective.taskqueue',
