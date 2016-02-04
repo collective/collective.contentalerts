@@ -24,7 +24,7 @@ class TestVerifiedInterfaceHandler(unittest.TestCase):
 
         # set some stop words
         api.portal.set_registry_record(
-            name='stop_words',
+            name='inadequate_words',
             interface=IStopWords,
             value=u'lala\nlili'
         )
@@ -45,7 +45,7 @@ class TestVerifiedInterfaceHandler(unittest.TestCase):
         """
         # remove one stop_word
         api.portal.set_registry_record(
-            name='stop_words',
+            name='inadequate_words',
             interface=IStopWords,
             value=u'lala\n'
         )
@@ -63,7 +63,7 @@ class TestVerifiedInterfaceHandler(unittest.TestCase):
         """
         # add one stop_word
         api.portal.set_registry_record(
-            name='stop_words',
+            name='inadequate_words',
             interface=IStopWords,
             value=u'lala\nmagic'
         )
@@ -94,7 +94,7 @@ class TestVerifiedInterfaceHandler(unittest.TestCase):
         """Check that the new words are correctly URL encoded"""
         # add one stop_word with spaces
         api.portal.set_registry_record(
-            name='stop_words',
+            name='inadequate_words',
             interface=IStopWords,
             value=u'lala\nmagic powers & more'
         )
@@ -113,5 +113,30 @@ class TestVerifiedInterfaceHandler(unittest.TestCase):
         )
         self.assertIn(
             'entries=magic+powers+%26+more',
+            task['url']
+        )
+
+    def test_new_forbidden_word(self):
+        """Check that with forbidden words work as well"""
+        api.portal.set_registry_record(
+            name='forbidden_words',
+            interface=IStopWords,
+            value=u'lala\nmagic'
+        )
+
+        # tasks are only queued on a successful transaction
+        transaction.commit()
+        taskqueue = getUtility(ITaskQueue, name='test-queue')
+        task = taskqueue.get()
+        self.assertIn(
+            'size=300',
+            task['url']
+        )
+        self.assertIn(
+            'start=0',
+            task['url']
+        )
+        self.assertIn(
+            'entries=lala%0Amagic',
             task['url']
         )

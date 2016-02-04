@@ -32,7 +32,7 @@ class AlertUtilityTestCase(unittest.TestCase):
 
     def _set_record_value(self, value):
         api.portal.set_registry_record(
-            name='stop_words',
+            name='inadequate_words',
             interface=IStopWords,
             value=value
         )
@@ -52,13 +52,46 @@ class AlertUtilityTestCase(unittest.TestCase):
     def test_utility_exists(self):
         self.assertTrue(self.utility)
 
-    def test_no_registry_no_error(self):
-        """Check that if the registry does not work the utility handles it."""
+    def test_no_forbidden_registry_no_error(self):
+        """Check that if the forbidden registry does not exist the utility
+        handles it
+        """
         # delete the record on the registry
-        key = IStopWords.__identifier__ + '.stop_words'
+        key = IStopWords.__identifier__ + '.forbidden_words'
         del self.registry.records[key]
 
-        self.assertIsNone(self.utility._get_registry_stop_words())
+        self.assertEqual(
+            self.utility._get_registry_stop_words(),
+            ''
+        )
+
+    def test_no_inadequate_registry_no_error(self):
+        """Check that if the inadequate registry does not exist the utility
+        handles it
+        """
+        # delete the record on the registry
+        key = IStopWords.__identifier__ + '.inadequate_words'
+        del self.registry.records[key]
+
+        self.assertEqual(
+            self.utility._get_registry_stop_words(),
+            ''
+        )
+
+    def test_no_registry_no_error(self):
+        """Check that if none of the registries exist registry the utility
+        handles it
+        """
+        # delete the records on the registry
+        key = IStopWords.__identifier__ + '.inadequate_words'
+        del self.registry.records[key]
+        key = IStopWords.__identifier__ + '.forbidden_words'
+        del self.registry.records[key]
+
+        self.assertEqual(
+            self.utility._get_registry_stop_words(),
+            ''
+        )
 
     def test_empty_registry_no_error(self):
         self._set_record_value(u'')
