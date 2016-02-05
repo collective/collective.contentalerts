@@ -17,7 +17,6 @@ script:
   - python setup.py check -r -s
   - bin/code-analysis
   - bin/dependencychecker
-  - bin/test
   - bin/coverage run bin/test
   - bin/coverage html
   - bin/coverage report -m
