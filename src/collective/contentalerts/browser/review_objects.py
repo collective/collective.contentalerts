@@ -9,20 +9,8 @@ from zope.publisher.browser import BrowserView
 class ReviewObjectsView(BrowserView):
 
     def __call__(self):
-        start = self.request('start', None)
-        size = self.request('size', None)
-        entries = self.request('entries', None)
+        start, size, entries = self._check_parameters()
 
-        if size is None or start is None or entries is None:
-            raise ValueError(
-                'Missing size "{0}" or start "{1}" or entries "{2}"'.format(
-                    size,
-                    start,
-                    entries,
-                )
-            )
-
-        new_entries = unquote_plus(entries)
         catalog = api.portal.get_tool('portal_catalog')
         brains = catalog(
             object_provides=IStopWordsVerified.__identifier__,
@@ -30,4 +18,23 @@ class ReviewObjectsView(BrowserView):
         )
 
         for brain in brains[start:start + size]:
-            verify_brain(brain, new_entries)
+            verify_brain(brain, entries)
+
+    def _check_parameters(self):
+        start = self.request.get('start', None)
+        size = self.request.get('size', None)
+        entries = self.request.get('entries', None)
+
+        msg = 'Value missing: start "{0}", size "{1}", entries "{2}"'
+        for element in (start, size, entries):
+            if element is None:
+                raise ValueError(msg.format(start, size, entries))
+
+        msg = 'Needs a number: start "{0}", size "{1}"'
+        for element in (start, size):
+            try:
+                int(element)
+            except ValueError:
+                raise ValueError(msg.format(start, size))
+
+        return int(start), int(size), unquote_plus(entries)

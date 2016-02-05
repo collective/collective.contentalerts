@@ -2,6 +2,7 @@
 from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWordsVerified
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
+from collective.taskqueue.interfaces import ITaskQueueLayer
 from plone import api
 from plone.app.discussion.interfaces import IConversation
 from plone.app.testing import setRoles
@@ -120,3 +121,131 @@ class DiscardAlertsViewTestCase(unittest.TestCase):
         messages = IStatusMessage(self.request)
         show = messages.show()
         self.assertEqual(len(show), 0)
+
+
+class ReviewObjectsView(unittest.TestCase):
+
+    layer = COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        self.request = self.layer['request']
+
+        alsoProvides(self.request, ITaskQueueLayer)
+
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+    def _get_view(self):
+        return api.content.get_view(
+            name='review-objects',
+            context=self.portal,
+            request=self.request
+        )
+
+    def test_only_start_parameter(self):
+        self.request.set('start', '2')
+        self.assertRaises(
+            ValueError,
+            self._get_view()._check_parameters
+        )
+
+    def test_only_size_parameter(self):
+        self.request.set('size', '2')
+        self.assertRaises(
+            ValueError,
+            self._get_view()._check_parameters
+        )
+
+    def test_only_entries_parameter(self):
+        self.request.set('entries', '2')
+        self.assertRaises(
+            ValueError,
+            self._get_view()._check_parameters
+        )
+
+    def test_missing_entries_parameter(self):
+        self.request.set('start', '2')
+        self.request.set('size', '2')
+        self.assertRaises(
+            ValueError,
+            self._get_view()._check_parameters
+        )
+
+    def test_missing_size_parameter(self):
+        self.request.set('start', '2')
+        self.request.set('entries', '2')
+        self.assertRaises(
+            ValueError,
+            self._get_view()._check_parameters
+        )
+
+    def test_missing_start_parameter(self):
+        self.request.set('size', '2')
+        self.request.set('entries', '2')
+        self.assertRaises(
+            ValueError,
+            self._get_view()._check_parameters
+        )
+
+    def test_invalid_start_parameter_value(self):
+        self.request.set('start', '2a')
+        self.request.set('size', '2')
+        self.request.set('entries', '2')
+        self.assertRaises(
+            ValueError,
+            self._get_view()._check_parameters
+        )
+
+    def test_invalid_size_parameter_value(self):
+        self.request.set('start', '2')
+        self.request.set('size', '2a')
+        self.request.set('entries', '2')
+        self.assertRaises(
+            ValueError,
+            self._get_view()._check_parameters
+        )
+
+    def test_parameters_converted(self):
+        self.request.set('start', '2')
+        self.request.set('size', '3')
+        self.request.set('entries', 'lala%0Amagic')
+        start, size, entries = self._get_view()._check_parameters()
+
+        self.assertEqual(
+            start,
+            2
+        )
+        self.assertEqual(
+            size,
+            3
+        )
+        self.assertEqual(
+            entries,
+            'lala\nmagic'
+        )
+
+    def test_object_verified(self):
+        """Create a document and call the view. The document should have the
+        IHasStopWords marker interface attached
+        """
+        doc = api.content.create(
+            container=self.portal,
+            type='Document',
+            id='doc'
+        )
+        doc.setText('Document with fishy content')
+        alsoProvides(doc, IStopWordsVerified)
+        doc.reindexObject()
+
+        self.assertFalse(
+            IHasStopWords.providedBy(doc)
+        )
+
+        self.request.set('start', '0')
+        self.request.set('size', '3')
+        self.request.set('entries', 'fishy')
+        self._get_view()()
+
+        self.assertTrue(
+            IHasStopWords.providedBy(doc)
+        )
