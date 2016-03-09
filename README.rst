@@ -87,6 +87,45 @@ Install collective.contentalerts by adding it to your buildout::
 
 and then running "bin/buildout"
 
+Upgrade notes
+-------------
+If you are upgrading from 0.7 to any later version there's one manual step that needs to be done.
+
+On version 1.0 the single list of stop words was split into ``inadequate_words`` and ``forbidden_words``.
+
+As it can not be guessed which list the former list is supposed to map,
+no automatic migration is provided.
+
+An `upgrade step <http://docs.plone.org/develop/addons/components/genericsetup.html#upgrade-steps>`_ needs to be written then.
+
+See below an example on how to migrate the former list to the new ``forbidden_words`` list::
+
+    from plone import api
+    from plone.registry.interfaces import IRegistry
+    from zope.component import getUtility
+
+    # safe the stop words on the old location
+    old_setting = 'collective.contentalerts.interfaces.IStopWords.stop_words'
+    current_forbidden_words = api.portal.get_registry_record(name=old_setting)
+
+    # update registry
+    setup = api.portal.get_tool('portal_setup')
+    setup.runImportStepFromProfile(
+        'profile-collective.contentalerts:default',
+        'plone.app.registry'
+    )
+
+    # set the stop words on the new field
+    api.portal.set_registry_record(
+        name='collective.contentalerts.interfaces.IStopWords.forbidden_words',
+        value=current_forbidden_words
+    )
+
+    # remove the old setting
+    registry = getUtility(IRegistry)
+    del registry.records[old_setting]
+
+
 Contribute
 ----------
 - Issue Tracker: https://github.com/collective/collective.contentalerts/issues
