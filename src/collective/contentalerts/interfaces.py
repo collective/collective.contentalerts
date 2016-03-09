@@ -80,6 +80,16 @@ class IAlert(Interface):
         :rtype: bool
         """
 
+    def has_inadequate_words(text):
+        """Checks if the given text has words from the inadequate stop words
+        list
+
+        :param text: where inadequate words will be searched on.
+        :type text: str
+        :returns: whether the text contains forbidden words.
+        :rtype: bool
+        """
+
 
 class ITextAlertCondition(Interface):
     """Schema for the text alert plone.app.contentrules condition."""
@@ -96,6 +106,14 @@ class ITextAlertCondition(Interface):
         ),
         required=False,
     )
+
+
+class IInadequateTextAlertCondition(ITextAlertCondition):
+    pass
+
+
+class IForbiddenTextAlertCondition(ITextAlertCondition):
+    pass
 
 
 class IHasStopWords(Interface):

@@ -69,19 +69,7 @@ class Alert(object):
 
         See IAlert interface docstring for its parameters.
         """
-        if not text:
-            return False
-
-        normalized_stop_words = self.get_normalized_stop_words(stop_words)
-        if not normalized_stop_words:
-            return False
-
-        normalized_text = alert_text_normalize(text)
-        for word in normalized_stop_words:
-            if normalized_text.find(word) != -1:
-                return True
-
-        return False
+        return self._has_words(text, stop_words=stop_words)
 
     def has_forbidden_words(self, text):
         """Checks if the given text has words from the forbidden stop words
@@ -89,11 +77,23 @@ class Alert(object):
 
         See IAlert interface docstring for its parameters.
         """
+        return self._has_words(text, register='forbidden_words')
+
+    def has_inadequate_words(self, text):
+        """Checks if the given text has words from the inadequate stop words
+        list
+
+        See IAlert interface docstring for its parameters.
+        """
+        return self._has_words(text, register='inadequate_words')
+
+    def _has_words(self, text, stop_words=None, register=None):
         if not text:
             return False
 
         normalized_stop_words = self.get_normalized_stop_words(
-            register='forbidden_words'
+            stop_words=stop_words,
+            register=register,
         )
         if not normalized_stop_words:
             return False

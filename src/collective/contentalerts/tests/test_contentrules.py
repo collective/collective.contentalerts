@@ -72,9 +72,9 @@ class TextAlertConditionTestCase(unittest.TestCase):
         conversation.addComment(comment)
         return comment
 
-    def _set_record_value(self, value):
+    def _set_record_value(self, value, record='inadequate_words'):
         api.portal.set_registry_record(
-            name='inadequate_words',
+            name=record,
             interface=IStopWords,
             value=value
         )

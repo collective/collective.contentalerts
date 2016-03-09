@@ -2,6 +2,8 @@
 from collective.contentalerts import _
 from collective.contentalerts.interfaces import IAlert
 from collective.contentalerts.interfaces import IHasStopWords
+from collective.contentalerts.interfaces import IInadequateTextAlertCondition
+from collective.contentalerts.interfaces import IForbiddenTextAlertCondition
 from collective.contentalerts.interfaces import ITextAlertCondition
 from collective.contentalerts.utilities import get_text_from_object
 from OFS.SimpleItem import SimpleItem
@@ -24,19 +26,31 @@ class TextAlertConditionExecutor(object):
         self.event = event
 
     def __call__(self):
+        return self.check()
+
+    def check(self, forbidden=False, inadequate=False):
         text = get_text_from_object(self.event)
         if not text:
             return False
 
-        stop_words = self.element.stop_words
-        if stop_words is None or stop_words.strip() == u'':
-            stop_words = None
-        else:
-            request = self.context.REQUEST
-            request.set('stop_words', stop_words)
-
         alert_utility = getUtility(IAlert)
-        ret_value = alert_utility.has_stop_words(text, stop_words=stop_words)
+
+        if forbidden:
+            ret_value = alert_utility.has_forbidden_words(text)
+        elif inadequate:
+            ret_value = alert_utility.has_inadequate_words(text)
+        else:
+            stop_words = self.element.stop_words
+            if stop_words is None or stop_words.strip() == u'':
+                stop_words = None
+            else:
+                request = self.context.REQUEST
+                request.set('stop_words', stop_words)
+
+            ret_value = alert_utility.has_stop_words(
+                text,
+                stop_words=stop_words
+            )
 
         # get the object to apply/remove the marker interface
         obj = None
@@ -64,6 +78,18 @@ class TextAlertConditionExecutor(object):
             obj.reindexObject(idxs=('object_provides', ))
 
 
+class InadequateTextAlertConditionExecutor(TextAlertConditionExecutor):
+
+    def __call__(self):
+        return self.check(inadequate=True)
+
+
+class ForbiddenTextAlertConditionExecutor(TextAlertConditionExecutor):
+
+    def __call__(self):
+        return self.check(forbidden=True)
+
+
 @implementer(ITextAlertCondition, IRuleElementData)
 class TextAlertCondition(SimpleItem):
     """The persistent implementation of the text alert condition."""
@@ -77,6 +103,16 @@ class TextAlertCondition(SimpleItem):
             default=u'Provide a stop words list, one per line, or leave it '
                     u'empty to use the shared one (registry based).'
         )
+
+
+@implementer(IInadequateTextAlertCondition, IRuleElementData)
+class InadequateTextAlertCondition(TextAlertCondition):
+    """"""
+
+
+@implementer(IForbiddenTextAlertCondition, IRuleElementData)
+class ForbiddenTextAlertCondition(TextAlertCondition):
+    """"""
 
 
 class TextAlertConditionAddForm(AddForm):

@@ -30,9 +30,9 @@ class AlertUtilityTestCase(unittest.TestCase):
         self.registry = getUtility(IRegistry)
         self.utility = getUtility(IAlert)
 
-    def _set_record_value(self, value):
+    def _set_record_value(self, value, record='inadequate_words'):
         api.portal.set_registry_record(
-            name='inadequate_words',
+            name=record,
             interface=IStopWords,
             value=value
         )
@@ -119,6 +119,48 @@ class AlertUtilityTestCase(unittest.TestCase):
         self._set_record_value(u'random\nalert me\nlala')
         self.assertFalse(
             self.utility.has_stop_words(u'some specific text')
+        )
+
+    def test_no_has_forbidden_words(self):
+        """Check that has_forbidden_words returns False if the text
+        does not have words from the forbidden_words registry
+        """
+        self._set_record_value(
+            u'random\nalert me\nlala',
+            record='forbidden_words'
+        )
+        self.assertFalse(
+            self.utility.has_forbidden_words(u'some specific text')
+        )
+
+    def test_has_forbidden_words(self):
+        """Check that has_forbidden_words returns True if the text has words
+        from the forbidden_words registry
+        """
+        self._set_record_value(
+            u'random\nalert me\nlala',
+            record='forbidden_words'
+        )
+        self.assertFalse(
+            self.utility.has_forbidden_words(u'some specific text')
+        )
+
+    def test_no_has_inadequate_words(self):
+        """Check that has_inadequate_words returns False if the text
+        does not have words from the inadequate_words registry
+        """
+        self._set_record_value(u'random\nalert me\nlala')
+        self.assertFalse(
+            self.utility.has_forbidden_words(u'some specific text')
+        )
+
+    def test_has_inadequate_words(self):
+        """Check that has_inadequate_words returns True if the text has words
+        from the inadequate_words registry
+        """
+        self._set_record_value(u'random\nalert me\nlala')
+        self.assertFalse(
+            self.utility.has_forbidden_words(u'some specific text')
         )
 
     def test_get_snippets_from_registry(self):
