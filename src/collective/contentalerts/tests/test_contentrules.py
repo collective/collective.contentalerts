@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from collective.contentalerts.contentrules import TextAlertCondition
 from collective.contentalerts.contentrules import TextAlertConditionEditForm
+from collective.contentalerts.interfaces import IAlert
 from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWords
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_DEXTERITY_INTEGRATION_TESTING  # noqa
@@ -71,9 +72,9 @@ class TextAlertConditionTestCase(unittest.TestCase):
         conversation.addComment(comment)
         return comment
 
-    def _set_record_value(self, value):
+    def _set_record_value(self, value, record='inadequate_words'):
         api.portal.set_registry_record(
-            name='stop_words',
+            name=record,
             interface=IStopWords,
             value=value
         )
@@ -163,11 +164,8 @@ class TextAlertConditionTestCase(unittest.TestCase):
         condition = TextAlertCondition()
 
         self.assertEqual(
-            api.portal.get_registry_record(
-                name='stop_words',
-                interface=IStopWords,
-            ),
-            None
+            getUtility(IAlert)._get_registry_stop_words(),
+            ''
         )
         self.assertEqual(condition.stop_words, None)
 
@@ -182,11 +180,8 @@ class TextAlertConditionTestCase(unittest.TestCase):
         condition = TextAlertCondition()
 
         self.assertEqual(
-            api.portal.get_registry_record(
-                name='stop_words',
-                interface=IStopWords,
-            ),
-            None
+            getUtility(IAlert)._get_registry_stop_words(),
+            ''
         )
         condition.stop_words = u'one alert\nanother alert'
 
@@ -240,11 +235,8 @@ class TextAlertConditionTestCase(unittest.TestCase):
         condition = TextAlertCondition()
 
         self.assertEqual(
-            api.portal.get_registry_record(
-                name='stop_words',
-                interface=IStopWords,
-            ),
-            None
+            getUtility(IAlert)._get_registry_stop_words(),
+            ''
         )
         condition.stop_words = u'one alert\nanother alert'
 

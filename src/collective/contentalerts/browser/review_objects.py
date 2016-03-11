@@ -12,11 +12,24 @@ class ReviewObjectsView(BrowserView):
         start, size, entries = self._check_parameters()
 
         catalog = api.portal.get_tool('portal_catalog')
-        brains = catalog(
-            object_provides=IStopWordsVerified.__identifier__,
-            sort_on='effective',
-        )
 
+        query = {
+            'sort_on': 'effective',
+        }
+
+        # get the marker interface, if any, to filter objects
+        provides = self.request.get('type', None)
+        if provides:
+            query['object_provides'] = provides
+        else:
+            query['object_provides'] = IStopWordsVerified.__identifier__
+
+        # get the workflow states, if any, to filter objects
+        states = self.request.get('states', None)
+        if states:
+            query['review_state'] = states.split(',')
+
+        brains = catalog(query)
         for brain in brains[start:start + size]:
             verify_brain(brain, entries)
 

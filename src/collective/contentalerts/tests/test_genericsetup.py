@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from collective.contentalerts.interfaces import IStopWords
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
 from plone import api
 from plone.app.testing import setRoles
@@ -17,10 +18,25 @@ class GenericSetupTest(unittest.TestCase):
 
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
-    def test_registry_record(self):
+    def test_forbidden_registry_record(self):
         """Check that the registry record exists."""
-        record = 'collective.contentalerts.interfaces.IStopWords.stop_words'
-        self.assertIsNone(api.portal.get_registry_record(record))
+        record = 'forbidden_words'
+        self.assertIsNone(
+            api.portal.get_registry_record(
+                interface=IStopWords,
+                name=record
+            )
+        )
+
+    def test_inadequate_registry_record(self):
+        """Check that the registry record exists."""
+        record = 'inadequate_words'
+        self.assertIsNone(
+            api.portal.get_registry_record(
+                interface=IStopWords,
+                name=record
+            )
+        )
 
     def test_roles_with_permission(self):
         """Check that the permission is given to the appropriate roles."""

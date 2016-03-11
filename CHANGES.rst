@@ -3,9 +3,26 @@ Changelog
 
 0.8 (unreleased)
 ----------------
+- **Renamed the registry setting**,
+  now two lists are used: ``forbidden_words`` and ``inadequate_words``.
+  See the ``README.rst`` for instructions on how to create an upgrade step to migrate them.
+  [gforcada]
 
-- Nothing changed yet.
+- Updated ``IAlert`` utility to use either both stop words list,
+  or just one if told so (passed as an argument).
+  [gforcada]
 
+- Add a ``has_forbidden_words`` method to ``IAlert`` utility.
+  It allows to check only for forbidden stop words only.
+  [gforcada]
+
+- Make ``@@review-objects`` view more generic by allowing a marker interface and review states to be passed.
+  This allows filtering which elements will be checked for stop words.
+  [gforcada]
+
+- Triple the content rules so one can decide to monitor for any kind of word,
+  only forbidden words or only inadequate ones.
+  [gforcada]
 
 0.7 (2016-01-22)
 ----------------

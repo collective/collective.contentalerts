@@ -142,6 +142,13 @@ class ReviewObjectsView(unittest.TestCase):
             request=self.request
         )
 
+    def set_default_workflow(self):
+        """Document objects created in this test do not have a workflow
+        attached, add a default one for the tests that require that.
+        """
+        workflow_tool = api.portal.get_tool('portal_workflow')
+        workflow_tool.setDefaultChain('simple_publication_workflow')
+
     def test_only_start_parameter(self):
         self.request.set('start', '2')
         self.assertRaises(
@@ -244,6 +251,162 @@ class ReviewObjectsView(unittest.TestCase):
         self.request.set('start', '0')
         self.request.set('size', '3')
         self.request.set('entries', 'fishy')
+        self._get_view()()
+
+        self.assertTrue(
+            IHasStopWords.providedBy(doc)
+        )
+
+    def test_verify_unknown_type_no_interface(self):
+        """Create a document and call the view
+
+        But do so with a type parameter that the Document does not have, so
+        no marker interface is applied.
+        """
+        doc = api.content.create(
+            container=self.portal,
+            type='Document',
+            id='doc'
+        )
+        doc.setText('Document with fishy content')
+        alsoProvides(doc, IStopWordsVerified)
+        doc.reindexObject()
+
+        self.assertFalse(
+            IHasStopWords.providedBy(doc)
+        )
+
+        self.request.set('start', '0')
+        self.request.set('size', '3')
+        self.request.set('entries', 'fishy')
+        self.request.set('type', 'document.action.action')
+        self._get_view()()
+
+        self.assertFalse(
+            IHasStopWords.providedBy(doc)
+        )
+
+    def test_verify_known_type_add_interface(self):
+        """Create a document and call the view
+
+        Specify a marker interface that Document provides, to check that
+        filtering by marker interfaces works.
+        """
+        doc = api.content.create(
+            container=self.portal,
+            type='Document',
+            id='doc'
+        )
+        doc.setText('Document with fishy content')
+        alsoProvides(doc, IStopWordsVerified)
+
+        doc.reindexObject()
+
+        self.assertFalse(
+            IHasStopWords.providedBy(doc)
+        )
+
+        self.request.set('start', '0')
+        self.request.set('size', '3')
+        self.request.set('entries', 'fishy')
+        # use an interface shared between DX and AT to avoid having to update
+        # the test later on
+        self.request.set(
+            'type',
+            'Products.CMFCore.interfaces._content.IContentish',
+        )
+        self._get_view()()
+
+        self.assertTrue(
+            IHasStopWords.providedBy(doc)
+        )
+
+    def test_verify_unknown_state_no_interface(self):
+        """Create a document and call the view
+
+        But do so with a workflow state that the Document does not have, so
+        no marker interface is applied.
+        """
+        self.set_default_workflow()
+        doc = api.content.create(
+            container=self.portal,
+            type='Document',
+            id='doc'
+        )
+        doc.setText('Document with fishy content')
+        alsoProvides(doc, IStopWordsVerified)
+        doc.reindexObject()
+
+        self.assertFalse(
+            IHasStopWords.providedBy(doc)
+        )
+
+        self.request.set('start', '0')
+        self.request.set('size', '3')
+        self.request.set('entries', 'fishy')
+        self.request.set('states', 'non-existing')
+        self._get_view()()
+
+        self.assertFalse(
+            IHasStopWords.providedBy(doc)
+        )
+
+    def test_verify_known_state_add_interface(self):
+        """Create a document and call the view
+
+        Specify the Document workflow state , to check that filtering by
+        workflow state works.
+        """
+        self.set_default_workflow()
+        doc = api.content.create(
+            container=self.portal,
+            type='Document',
+            id='doc'
+        )
+        doc.setText('Document with fishy content')
+        alsoProvides(doc, IStopWordsVerified)
+
+        doc.reindexObject()
+
+        self.assertFalse(
+            IHasStopWords.providedBy(doc)
+        )
+
+        self.request.set('start', '0')
+        self.request.set('size', '3')
+        self.request.set('entries', 'fishy')
+        self.request.set('states', 'private')
+        self._get_view()()
+
+        self.assertTrue(
+            IHasStopWords.providedBy(doc)
+        )
+
+    def test_verify_known_multiple_states_add_interface(self):
+        """Create a document and call the view
+
+        Specify multiple workflow states (including the Document one), to
+        check that filtering by workflow state works.
+        """
+        self.set_default_workflow()
+        doc = api.content.create(
+            container=self.portal,
+            type='Document',
+            id='doc'
+        )
+        doc.setText('Document with fishy content')
+        alsoProvides(doc, IStopWordsVerified)
+
+        doc.reindexObject()
+
+        self.assertFalse(
+            IHasStopWords.providedBy(doc)
+        )
+
+        self.request.set('start', '0')
+        self.request.set('size', '3')
+        self.request.set('entries', 'fishy')
+        self.request.set('states', 'private,published')
         self._get_view()()
 
         self.assertTrue(

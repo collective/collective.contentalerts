@@ -30,23 +30,68 @@ class AlertUtilityTestCase(unittest.TestCase):
         self.registry = getUtility(IRegistry)
         self.utility = getUtility(IAlert)
 
-    def _set_record_value(self, value):
+    def _set_record_value(self, value, record='inadequate_words'):
         api.portal.set_registry_record(
-            name='stop_words',
+            name=record,
             interface=IStopWords,
             value=value
+        )
+
+    def _set_all_records(self, inadequate=u'inade', forbidden=u'forbid'):
+        api.portal.set_registry_record(
+            name='inadequate_words',
+            interface=IStopWords,
+            value=inadequate
+        )
+        api.portal.set_registry_record(
+            name='forbidden_words',
+            interface=IStopWords,
+            value=forbidden
         )
 
     def test_utility_exists(self):
         self.assertTrue(self.utility)
 
-    def test_no_registry_no_error(self):
-        """Check that if the registry does not work the utility handles it."""
+    def test_no_forbidden_registry_no_error(self):
+        """Check that if the forbidden registry does not exist the utility
+        handles it
+        """
         # delete the record on the registry
-        key = IStopWords.__identifier__ + '.stop_words'
+        key = IStopWords.__identifier__ + '.forbidden_words'
         del self.registry.records[key]
 
-        self.assertIsNone(self.utility._get_registry_stop_words())
+        self.assertEqual(
+            self.utility._get_registry_stop_words(),
+            ''
+        )
+
+    def test_no_inadequate_registry_no_error(self):
+        """Check that if the inadequate registry does not exist the utility
+        handles it
+        """
+        # delete the record on the registry
+        key = IStopWords.__identifier__ + '.inadequate_words'
+        del self.registry.records[key]
+
+        self.assertEqual(
+            self.utility._get_registry_stop_words(),
+            ''
+        )
+
+    def test_no_registry_no_error(self):
+        """Check that if none of the registries exist registry the utility
+        handles it
+        """
+        # delete the records on the registry
+        key = IStopWords.__identifier__ + '.inadequate_words'
+        del self.registry.records[key]
+        key = IStopWords.__identifier__ + '.forbidden_words'
+        del self.registry.records[key]
+
+        self.assertEqual(
+            self.utility._get_registry_stop_words(),
+            ''
+        )
 
     def test_empty_registry_no_error(self):
         self._set_record_value(u'')
@@ -76,6 +121,48 @@ class AlertUtilityTestCase(unittest.TestCase):
             self.utility.has_stop_words(u'some specific text')
         )
 
+    def test_no_has_forbidden_words(self):
+        """Check that has_forbidden_words returns False if the text
+        does not have words from the forbidden_words registry
+        """
+        self._set_record_value(
+            u'random\nalert me\nlala',
+            record='forbidden_words'
+        )
+        self.assertFalse(
+            self.utility.has_forbidden_words(u'some specific text')
+        )
+
+    def test_has_forbidden_words(self):
+        """Check that has_forbidden_words returns True if the text has words
+        from the forbidden_words registry
+        """
+        self._set_record_value(
+            u'random\nalert me\nlala',
+            record='forbidden_words'
+        )
+        self.assertFalse(
+            self.utility.has_forbidden_words(u'some specific text')
+        )
+
+    def test_no_has_inadequate_words(self):
+        """Check that has_inadequate_words returns False if the text
+        does not have words from the inadequate_words registry
+        """
+        self._set_record_value(u'random\nalert me\nlala')
+        self.assertFalse(
+            self.utility.has_forbidden_words(u'some specific text')
+        )
+
+    def test_has_inadequate_words(self):
+        """Check that has_inadequate_words returns True if the text has words
+        from the inadequate_words registry
+        """
+        self._set_record_value(u'random\nalert me\nlala')
+        self.assertFalse(
+            self.utility.has_forbidden_words(u'some specific text')
+        )
+
     def test_get_snippets_from_registry(self):
         """Check that get_snippets works with the registry."""
         self._set_record_value(u'random\nalert me\nlala')
@@ -90,6 +177,131 @@ class AlertUtilityTestCase(unittest.TestCase):
         self.assertEqual(
             self.utility.get_snippets(u'some specific text'),
             u''
+        )
+
+    def test_get_all_normalized_stop_words(self):
+        """Check that if no register is specified words from both registries
+        are used
+        """
+        self._set_all_records()
+        normalized = self.utility.get_normalized_stop_words()
+        self.assertIn(
+            u'forbid',
+            normalized
+        )
+        self.assertIn(
+            u'inade',
+            normalized
+        )
+
+    def test_get_forbidden_registry_normalized_stop_words(self):
+        """Check that it returns only forbidden if that's passed as an argument
+        """
+        self._set_all_records()
+        normalized = self.utility.get_normalized_stop_words(
+            register='forbidden_words'
+        )
+        self.assertIn(
+            u'forbid',
+            normalized
+        )
+        self.assertNotIn(
+            u'inade',
+            normalized
+        )
+
+    def test_get_inadequate_registry_normalized_stop_words(self):
+        """Check that it returns only inadequate if that's passed as an
+        argument
+        """
+        self._set_all_records()
+        normalized = self.utility.get_normalized_stop_words(
+            register='inadequate_words'
+        )
+        self.assertNotIn(
+            u'forbid',
+            normalized
+        )
+        self.assertIn(
+            u'inade',
+            normalized
+        )
+
+    def test_invalid_registry_normalized_stop_words(self):
+        """Check that no words are returned if an invalid registry is given"""
+        self._set_all_records()
+        normalized = self.utility.get_normalized_stop_words(
+            register='non_existing_words'
+        )
+        self.assertEqual(
+            normalized,
+            []
+        )
+
+    def test_pass_list_registry_normalized_stop_words(self):
+        """Check that passing a list also works"""
+        self._set_all_records()
+        normalized = self.utility.get_normalized_stop_words(
+            register=('inadequate_words', )
+        )
+        self.assertNotIn(
+            u'forbid',
+            normalized
+        )
+        self.assertIn(
+            u'inade',
+            normalized
+        )
+
+    def test_has_forbidden_words_no_text(self):
+        """Check that has_forbidden_words returns False if no text is provided
+        """
+        self.assertFalse(
+            self.utility.has_forbidden_words('')
+        )
+        self.assertFalse(
+            self.utility.has_forbidden_words(None)
+        )
+
+    def test_has_forbidden_words_no_words_in_registry(self):
+        """Check that has_forbidden_words returns False if no words are found
+        on the registry
+        """
+        self.assertIsNone(
+            api.portal.get_registry_record(
+                interface=IStopWords,
+                name='forbidden_words'
+            )
+        )
+        self.assertFalse(
+            self.utility.has_forbidden_words('lalala')
+        )
+
+    def test_has_forbidden_words_no_words_found(self):
+        """Check that has_forbidden_words returns False if no words from the
+        registry are found on the text"""
+        api.portal.set_registry_record(
+            interface=IStopWords,
+            name='forbidden_words',
+            value=u'one\ntwo'
+        )
+
+        self.assertFalse(
+            self.utility.has_forbidden_words('no words found')
+        )
+
+    def test_has_forbidden_words_words_found(self):
+        """Check that has_forbidden_words returns True if words from the
+        registry are found on the text
+        """
+        api.portal.set_registry_record(
+            interface=IStopWords,
+            name='forbidden_words',
+            value=u'one\ntwo'
+        )
+
+        self.assertTrue(
+            self.utility.has_forbidden_words('and now one is found!')
         )
 
 

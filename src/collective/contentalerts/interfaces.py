@@ -13,13 +13,26 @@ class ICollectiveContentalertsLayer(IDefaultBrowserLayer):
 class IStopWords(Interface):
     """Registry settings schema being used by this distribution."""
 
-    stop_words = schema.Text(
+    forbidden_words = schema.Text(
         title=_(
-            u'settings_stop_words_list_title',
+            u'settings_forbidden_words_list_title',
+            default=u'Forbidden words'
+        ),
+        description=_(
+            u'settings_forbidden_words_list_description',
+            default=u'Words/sentences that will prevent an object to be made '
+                    u'public, one per line.'
+        ),
+        required=False,
+    )
+
+    inadequate_words = schema.Text(
+        title=_(
+            u'settings_inadequate_words_list_title',
             default=u'List'
         ),
         description=_(
-            u'settings_stop_words_list_description',
+            u'settings_inadequate_words_list_description',
             default=u'Words/sentences that will generate an alert, '
                     u'one per line.'
         ),
@@ -57,6 +70,26 @@ class IAlert(Interface):
         :rtype: bool
         """
 
+    def has_forbidden_words(text):
+        """Checks if the given text has words from the forbidden stop words
+        list
+
+        :param text: where forbidden words will be searched on.
+        :type text: str
+        :returns: whether the text contains forbidden words.
+        :rtype: bool
+        """
+
+    def has_inadequate_words(text):
+        """Checks if the given text has words from the inadequate stop words
+        list
+
+        :param text: where inadequate words will be searched on.
+        :type text: str
+        :returns: whether the text contains forbidden words.
+        :rtype: bool
+        """
+
 
 class ITextAlertCondition(Interface):
     """Schema for the text alert plone.app.contentrules condition."""
@@ -73,6 +106,14 @@ class ITextAlertCondition(Interface):
         ),
         required=False,
     )
+
+
+class IInadequateTextAlertCondition(ITextAlertCondition):
+    pass
+
+
+class IForbiddenTextAlertCondition(ITextAlertCondition):
+    pass
 
 
 class IHasStopWords(Interface):
