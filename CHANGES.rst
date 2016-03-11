@@ -1,7 +1,7 @@
 Changelog
 =========
 
-0.8 (unreleased)
+1.0 (2016-03-11)
 ----------------
 - **Renamed the registry setting**,
   now two lists are used: ``forbidden_words`` and ``inadequate_words``.
