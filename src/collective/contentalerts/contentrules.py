@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from collective.contentalerts import _
 from collective.contentalerts.interfaces import IAlert
+from collective.contentalerts.interfaces import IForbiddenTextAlertCondition
 from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IInadequateTextAlertCondition
-from collective.contentalerts.interfaces import IForbiddenTextAlertCondition
 from collective.contentalerts.interfaces import ITextAlertCondition
 from collective.contentalerts.utilities import get_text_from_object
 from OFS.SimpleItem import SimpleItem
