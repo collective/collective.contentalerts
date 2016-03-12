@@ -1,8 +1,8 @@
 Changelog
 =========
 
-1.1 (unreleased)
-----------------
+1.0.post0 (2016-03-12)
+----------------------
 - Update German translation.
   [staeff]
 
