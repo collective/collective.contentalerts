@@ -1,6 +1,12 @@
 Changelog
 =========
 
+1.1 (unreleased)
+----------------
+
+- Nothing changed yet.
+
+
 1.0.post0 (2016-03-12)
 ----------------------
 - Update German translation.
