@@ -35,10 +35,12 @@ class TextAlertConditionExecutor(object):
 
         alert_utility = getUtility(IAlert)
 
-        if forbidden:
-            ret_value = alert_utility.has_forbidden_words(text)
-        elif inadequate:
-            ret_value = alert_utility.has_inadequate_words(text)
+        if forbidden or inadequate:
+            has_words = alert_utility.has_stop_words(text)
+            if forbidden:
+                ret_value = alert_utility.has_forbidden_words(text)
+            else:
+                ret_value = alert_utility.has_inadequate_words(text)
         else:
             stop_words = self.element.stop_words
             if stop_words is None or stop_words.strip() == u'':
@@ -51,6 +53,7 @@ class TextAlertConditionExecutor(object):
                 text,
                 stop_words=stop_words
             )
+            has_words = ret_value
 
         # get the object to apply/remove the marker interface
         obj = None
@@ -61,7 +64,7 @@ class TextAlertConditionExecutor(object):
         elif getattr(self.event, 'object', None):
             obj = self.event.object
 
-        self._apply_marker_interface(obj, ret_value)
+        self._apply_marker_interface(obj, has_words)
         return ret_value
 
     @staticmethod
