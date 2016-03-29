@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.1 (unreleased)
+1.1 (2016-03-29)
 ----------------
 
 - Be sure to remove the marker interface only when its needed.
