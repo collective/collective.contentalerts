@@ -4,8 +4,8 @@ Changelog
 1.1 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Be sure to remove the marker interface only when its needed.
+  [gforcada]
 
 1.0.post0 (2016-03-12)
 ----------------------
