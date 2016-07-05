@@ -2,5 +2,4 @@
 include =
     src/collective/*
 omit =
-    */test*
     */upgrades/*
