@@ -62,7 +62,7 @@ setup(
     extras_require={
         'test': [
             'Acquisition',
-            'plone.app.contenttypes[test]<1.2',  # be Plone 4.3 compatible
+            'plone.app.contenttypes[test]',
             'plone.app.discussion',
             'plone.app.testing',
             'plone.browserlayer',
