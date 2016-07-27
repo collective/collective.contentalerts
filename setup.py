@@ -45,12 +45,18 @@ setup(
     install_requires=[
         'plone.api >= 1.4.11',
         'plone.app.contentrules',
+        'plone.app.contenttypes',
+        'plone.app.discussion',
         'plone.app.registry',
+        'plone.app.textfield',
         'plone.app.z3cform',
         'plone.contentrules',
         'plone.stringinterp',
+        'Products.CMFCore',
+        'Products.CMFPlone',
         'Products.GenericSetup',
         'setuptools',
+        'z3c.form',
         'Zope2',
         'zope.component',
         'zope.i18nmessageid',
@@ -61,7 +67,6 @@ setup(
     extras_require={
         'test': [
             'Acquisition',
-            'plone.app.contenttypes[test]',
             'plone.app.discussion',
             'plone.app.testing',
             'plone.browserlayer',

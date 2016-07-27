@@ -23,7 +23,6 @@ class CollectiveContentalertsLayer(PloneSandboxLayer):
 
     def setUpPloneSite(self, portal):
         applyProfile(portal, 'collective.contentalerts:default')
-        applyProfile(portal, 'plone.app.contenttypes:default')
 
         # Configure mock mail host
         site_manager = getSiteManager(portal)
