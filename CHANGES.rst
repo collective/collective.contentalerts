@@ -1,7 +1,7 @@
 Changelog
 =========
 
-1.2 (unreleased)
+2.0 (unreleased)
 ----------------
 
 - Make collective.contentalerts work with Plone 5
