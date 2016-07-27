@@ -5,6 +5,7 @@ from collective.contentalerts.interfaces import IStopWords
 from collective.contentalerts.interfaces import IStopWordsVerified
 from plone import api
 from plone.api.exc import InvalidParameterError
+from plone.app.textfield.interfaces import IRichTextValue
 from zope.component import getUtility
 from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
@@ -184,6 +185,8 @@ def alert_text_normalize(text):
     :returns: text normalized.
     :rtype: unicode
     """
+    if IRichTextValue.providedBy(text):
+        text = text.raw
     if isinstance(text, str):
         text = text.decode('latin-1')
     text = NBSP_RE.sub(' ', text)
@@ -205,7 +208,7 @@ def get_text_from_object(obj):
     The object can be a comment, a Dexterity or Archetypes object or an event
     holding any of the three mentioned above.
     """
-    text = ''
+    text = u''
 
     # an AT type
     if getattr(obj, 'getText', None):
