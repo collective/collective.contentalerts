@@ -5,6 +5,7 @@ from collective.contentalerts.interfaces import IStopWords
 from collective.contentalerts.interfaces import IStopWordsVerified
 from plone import api
 from plone.api.exc import InvalidParameterError
+from plone.app.textfield.interfaces import IRichTextValue
 from zope.component import getUtility
 from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
@@ -184,6 +185,8 @@ def alert_text_normalize(text):
     :returns: text normalized.
     :rtype: unicode
     """
+    if IRichTextValue.providedBy(text):
+        text = text.raw
     if isinstance(text, str):
         text = text.decode('latin-1')
     text = NBSP_RE.sub(' ', text)
@@ -202,17 +205,12 @@ def alert_text_normalize(text):
 def get_text_from_object(obj):
     """Get the text from an object.
 
-    The object can be a comment, a Dexterity or Archetypes object or an event
-    holding any of the three mentioned above.
+    The object can be a comment, a Dexterity object or an event holding any
+    of the two.
     """
-    text = ''
+    text = u''
 
-    # an AT type
-    if getattr(obj, 'getText', None):
-        text = obj.getText()
-
-    # a DX type / comment
-    elif getattr(obj, 'text', None):
+    if getattr(obj, 'text', None):
         text = obj.text
 
     # if it's an event on a comment
@@ -220,12 +218,10 @@ def get_text_from_object(obj):
             getattr(obj.comment, 'text', None):
         text = obj.comment.text
 
-    # if it's an event on a AT/DX type
+    # if it's an event on a DX type
     elif getattr(obj, 'object', None):
         obj = obj.object
-        if getattr(obj, 'getText', None):
-            text = obj.getText()
-        elif getattr(obj, 'text', None):
+        if getattr(obj, 'text', None):
             text = obj.text
 
     return text

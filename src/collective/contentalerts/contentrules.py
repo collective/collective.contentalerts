@@ -8,11 +8,12 @@ from collective.contentalerts.interfaces import ITextAlertCondition
 from collective.contentalerts.utilities import get_text_from_object
 from OFS.SimpleItem import SimpleItem
 from plone.app.contentrules.browser.formhelper import AddForm
+from plone.app.contentrules.browser.formhelper import ContentRuleFormWrapper
 from plone.app.contentrules.browser.formhelper import EditForm
 from plone.contentrules.rule.interfaces import IRuleElementData
 from plone.stringinterp.adapters import BaseSubstitution
+from z3c.form import form
 from zope.component import getUtility
-from zope.formlib import form
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import noLongerProvides
@@ -60,7 +61,7 @@ class TextAlertConditionExecutor(object):
         # if it's a comment
         if getattr(self.event, 'comment', None):
             obj = self.event.comment
-        # if it's a AT/DX
+        # if it's a content type
         elif getattr(self.event, 'object', None):
             obj = self.event.object
 
@@ -119,7 +120,7 @@ class ForbiddenTextAlertCondition(TextAlertCondition):
 
 
 class TextAlertConditionAddForm(AddForm):
-    form_fields = form.FormFields(ITextAlertCondition)
+    schema = ITextAlertCondition
     label = _(u'Add a text alert condition')
     description = _(u'A text alert condition makes the rule apply '
                     u'only if there are stop words on the object\'s text.')
@@ -127,16 +128,24 @@ class TextAlertConditionAddForm(AddForm):
 
     def create(self, data):
         condition = TextAlertCondition()
-        form.applyChanges(condition, self.form_fields, data)
+        form.applyChanges(self, condition, data)
         return condition
 
 
+class TextAlertConditionAddFormView(ContentRuleFormWrapper):
+    form = TextAlertConditionAddForm
+
+
 class TextAlertConditionEditForm(EditForm):
-    form_fields = form.FormFields(ITextAlertCondition)
+    schema = ITextAlertCondition
     label = _(u'Edit a text alert condition')
     description = _(u'A text alert condition makes the rule apply '
                     u'only if there are stop words on the object\'s text.')
     form_name = _(u'Configure element')
+
+
+class TextAlertConditionEditFormView(ContentRuleFormWrapper):
+    form = TextAlertConditionEditForm
 
 
 class AlertSubstitution(BaseSubstitution):
@@ -161,9 +170,7 @@ class TextAlertSubstitution(AlertSubstitution):
     description = _(u'Text alert snippets')
 
     def _get_text(self):
-        if getattr(self.context, 'getText', None):
-            return self.context.getText()
-        elif getattr(self.context, 'text', None):
+        if getattr(self.context, 'text', None):
             return self.context.text
 
         return u''
@@ -175,16 +182,8 @@ class CommentAlertSubstitution(AlertSubstitution):
     description = _(u'Comment alert snippets')
 
     def _get_text(self):
-        # Update this once p.a.discussion is updated to >2.3.3
-        sdm = getattr(self.context, 'session_data_manager', None)
-        session = {}
-        if sdm:
-            data = sdm.getSessionData(create=False)
-            if data:
-                session = data
-        comment = session.get('comment', {})
-        text = comment.get('text', None)
-        if text is not None:
-            return text
+        event = self.context.REQUEST.get('event')
+        if event is not None:
+            return get_text_from_object(event.comment)
 
         return u''

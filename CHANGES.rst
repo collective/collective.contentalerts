@@ -1,11 +1,13 @@
 Changelog
 =========
 
-1.2 (unreleased)
+2.0 (unreleased)
 ----------------
 
-- Nothing changed yet.
-
+- Make collective.contentalerts work with Plone 5
+  Following adaptions were needed: Remove session_data_manager, use z3c.form instead of
+  formlib, access text via IRichText object, several changes in tests.
+  [staeff]
 
 1.1 (2016-03-29)
 ----------------

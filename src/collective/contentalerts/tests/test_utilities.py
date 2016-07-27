@@ -304,6 +304,20 @@ class AlertUtilityTestCase(unittest.TestCase):
             self.utility.has_forbidden_words('and now one is found!')
         )
 
+    def test_has_inadequate_words_words_found(self):
+        """Check that has_inadequate_words returns True if words from the
+        registry are found on the text
+        """
+        api.portal.set_registry_record(
+            interface=IStopWords,
+            name='inadequate_words',
+            value=u'one\ntwo'
+        )
+
+        self.assertTrue(
+            self.utility.has_inadequate_words('and now one is found!')
+        )
+
 
 class HTMLNormalizeTestCase(unittest.TestCase):
 
@@ -525,20 +539,8 @@ class HasStopWordsTestCase(unittest.TestCase):
 
 class GetTextFromObjectTest(unittest.TestCase):
 
-    def test_archetypes_like(self):
-        """Archetypes have a getText method"""
-        class DummyAT(object):
-
-            def getText(self):
-                return 'found!'
-
-        self.assertEqual(
-            get_text_from_object(DummyAT()),
-            'found!'
-        )
-
-    def test_dexterity_comment_like(self):
-        """Dexterity and comments have a text method"""
+    def test_contentish_like(self):
+        """Dexterity content types and comments have a text method"""
         class DummyDXComment(object):
 
             @property
@@ -550,26 +552,8 @@ class GetTextFromObjectTest(unittest.TestCase):
             'found!'
         )
 
-    def test_event_with_archetypes_like(self):
-        """Archetypes wrapped in an event"""
-        class DummyAT(object):
-
-            def getText(self):
-                return 'found!'
-
-        class DummyEventAT(object):
-
-            @property
-            def object(self):
-                return DummyAT()
-
-        self.assertEqual(
-            get_text_from_object(DummyEventAT()),
-            'found!'
-        )
-
-    def test_event_with_dexterity_like(self):
-        """Dexterity wrapped in an event"""
+    def test_event_with_contentish_like(self):
+        """Content type wrapped in an event"""
         class DummyDX(object):
 
             @property
@@ -715,7 +699,7 @@ class VerifyBrainTestCase(unittest.TestCase):
             title='Document 1',
             type='Document',
         )
-        self.doc.setText('Some random text')
+        self.doc.text = 'Some random text'
 
     def test_stop_word_not_in_object(self):
         """Check that the verified marker interface is kept

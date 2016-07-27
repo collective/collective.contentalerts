@@ -27,7 +27,7 @@ Create a content rule::
     >>> browser.open(portal_url)
     >>> browser.follow('Site Setup')
     >>> browser.follow('Content Rules')
-    >>> browser.getControl('Add content rule').click()
+    >>> browser.follow('Add content rule')
     >>> browser.getControl('Title').value = 'Test stop words'
     >>> browser.getControl('Triggering event').value = ['Object added to this container']
     >>> browser.getControl('Save').click()
@@ -35,16 +35,16 @@ Create a content rule::
 Add the text alert condition::
     >>> browser.getControl('Add condition').value = ['collective.contentalerts.TextAlert']
     >>> browser.getControl('Add', index=1).click()
-    >>> browser.getControl(name='form.stop_words').value = u'alert one\nalert two'
+    >>> browser.getControl(name='form.widgets.stop_words').value = u'alert one\nalert two'
     >>> browser.getControl('Save').click()
 
 Add a mail action::
     >>> browser.getControl('Add action').value = ['plone.actions.Mail']
     >>> browser.getControl('Add', index=3).click()
-    >>> browser.getControl(name='form.subject').value = u'alert'
-    >>> browser.getControl(name='form.source').value = u'plone@plone.org'
-    >>> browser.getControl(name='form.recipients').value = u'moderator@plone.org'
-    >>> browser.getControl(name='form.message').value = u'${text_alert}'
+    >>> browser.getControl(name='form.widgets.subject').value = u'alert'
+    >>> browser.getControl(name='form.widgets.source').value = u'plone@plone.org'
+    >>> browser.getControl(name='form.widgets.recipients').value = u'moderator@plone.org'
+    >>> browser.getControl(name='form.widgets.message').value = u'${text_alert}'
     >>> browser.getControl('Save').click()
 
 Apply to the root folder::
@@ -59,8 +59,8 @@ An email is sent if a document contains certain stop words.
 Add a document::
     >>> browser.follow('Home')
     >>> browser.follow('Page')
-    >>> browser.getControl(name='title').value = u'my title'
-    >>> browser.getControl(name='text').value = u'alert one here alert two there'
+    >>> browser.getControl(name='form.widgets.IDublinCore.title').value = u'my title'
+    >>> browser.getControl(name='form.widgets.IRichText.text').value = u'alert one here alert two there'
     >>> browser.getControl('Save').click()
 
 An email is generated::

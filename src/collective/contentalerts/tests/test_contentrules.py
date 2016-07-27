@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
+from collective.contentalerts.contentrules import ForbiddenTextAlertCondition
+from collective.contentalerts.contentrules import InadequateTextAlertCondition
 from collective.contentalerts.contentrules import TextAlertCondition
-from collective.contentalerts.contentrules import TextAlertConditionEditForm
+from collective.contentalerts.contentrules import TextAlertConditionEditFormView  # noqa
 from collective.contentalerts.interfaces import IAlert
 from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWords
-from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_DEXTERITY_INTEGRATION_TESTING  # noqa
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
 from plone import api
 from plone.app.contentrules.rule import Rule
@@ -99,7 +100,9 @@ class TextAlertConditionTestCase(unittest.TestCase):
             name=self.element.addview
         )
 
-        add_view.createAndAdd(data={})
+        add_view.form_instance.update()
+        content = add_view.form_instance.create(data={})
+        add_view.form_instance.add(content)
 
         condition = rule.conditions[0]
         self.assertTrue(isinstance(condition, TextAlertCondition))
@@ -120,7 +123,11 @@ class TextAlertConditionTestCase(unittest.TestCase):
             name=self.element.addview
         )
 
-        add_view.createAndAdd(data={'stop_words': stop_words})
+        add_view.form_instance.update()
+        content = add_view.form_instance.create(
+            data={'stop_words': stop_words}
+        )
+        add_view.form_instance.add(content)
 
         condition = rule.conditions[0]
         self.assertTrue(isinstance(condition, TextAlertCondition))
@@ -136,7 +143,7 @@ class TextAlertConditionTestCase(unittest.TestCase):
             name=self.element.editview
         )
         self.assertTrue(
-            isinstance(edit_view, TextAlertConditionEditForm)
+            isinstance(edit_view, TextAlertConditionEditFormView)
         )
 
     def test_empty_text_no_condition(self):
@@ -282,14 +289,14 @@ class TextAlertConditionTestCase(unittest.TestCase):
         )
         self.assertFalse(executable())
 
-    def test_archetypes_document(self):
+    def test_document(self):
         document = api.content.create(
             container=self.portal,
             id='doc2',
             title='Document 2',
             type='Document'
         )
-        document.setText('this gives one alert')
+        document.text = 'this gives one alert'
         condition = TextAlertCondition()
         condition.stop_words = u'one alert\nanother alert'
 
@@ -345,7 +352,7 @@ class TextAlertConditionTestCase(unittest.TestCase):
             title='Document 2',
             type='Document'
         )
-        document.setText('this gives one alert')
+        document.text = 'this gives one alert'
         condition = TextAlertCondition()
         condition.stop_words = u'one alert\nanother alert'
 
@@ -391,7 +398,7 @@ class TextAlertConditionTestCase(unittest.TestCase):
             title='Document 2',
             type='Document'
         )
-        document.setText('this gives one alert')
+        document.text = 'this gives one alert'
         condition = TextAlertCondition()
         condition.stop_words = u'one alert\nanother alert'
 
@@ -450,8 +457,9 @@ class TextAlertConditionTestCase(unittest.TestCase):
         self.assertEqual(len(brains), 0)
 
 
-class DexterityTextAlertConditionTestCase(unittest.TestCase):
-    layer = COLLECTIVE_CONTENTALERTS_DEXTERITY_INTEGRATION_TESTING
+class SpecificAlertConditionsTestCase(unittest.TestCase):
+
+    layer = COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING
 
     def setUp(self):
         self.portal = self.layer['portal']
@@ -459,22 +467,23 @@ class DexterityTextAlertConditionTestCase(unittest.TestCase):
 
         setRoles(self.portal, TEST_USER_ID, ['Manager'])
 
-        self.name = 'collective.contentalerts.TextAlert'
-        self.element = getUtility(
-            IRuleCondition,
-            name=self.name
+    def _set_record_value(self, value, record='inadequate_words'):
+        api.portal.set_registry_record(
+            name=record,
+            interface=IStopWords,
+            value=value
         )
 
-    def test_dexterity_document(self):
+    def test_inadequate_condition(self):
         document = api.content.create(
             container=self.portal,
-            id='doc1',
-            title='Document 1',
+            id='doc2',
+            title='Document 2',
             type='Document'
         )
-        document.text = u'one alert and no more'
-        condition = TextAlertCondition()
-        condition.stop_words = u'one alert\nanother alert'
+        document.text = 'this gives one alert'
+        condition = InadequateTextAlertCondition()
+        self._set_record_value(u'one')
 
         executable = getMultiAdapter(
             (self.portal, condition, ContentTypeDummyEvent(document)),
@@ -482,22 +491,22 @@ class DexterityTextAlertConditionTestCase(unittest.TestCase):
         )
         self.assertTrue(executable())
 
-    def test_get_substitution_text_from_document(self):
-        stop_words = 'hi\nalert'
-        self.request.set('stop_words', stop_words)
+    def test_forbidden_condition(self):
         document = api.content.create(
             container=self.portal,
-            id='doc1',
-            title='Document 1',
+            id='doc2',
+            title='Document 2',
             type='Document'
         )
-        document.text = u'Some text that contains an alert and more'
-        text_alert = getAdapter(
-            document,
-            IStringSubstitution,
-            name=u'text_alert'
+        document.text = 'this gives one alert'
+        condition = ForbiddenTextAlertCondition()
+        self._set_record_value(u'one', record='forbidden_words')
+
+        executable = getMultiAdapter(
+            (self.portal, condition, ContentTypeDummyEvent(document)),
+            IExecutable
         )
-        self.assertNotEqual(text_alert().find('alert'), -1)
+        self.assertTrue(executable())
 
 
 class ContentRulesSubstitutionsTest(unittest.TestCase):
@@ -573,7 +582,7 @@ class ContentRulesSubstitutionsTest(unittest.TestCase):
 
     def test_get_text_from_document(self):
         text = 'some random text'
-        self.document.setText(text)
+        self.document.text = text
         text_alert = getAdapter(
             self.document,
             IStringSubstitution,
@@ -587,7 +596,7 @@ class ContentRulesSubstitutionsTest(unittest.TestCase):
     def test_get_snippet(self):
         stop_words = 'hi\nalert'
         self.request.set('stop_words', stop_words)
-        self.document.setText('Some text that contains an alert and more')
+        self.document.text = 'Some text that contains an alert and more'
         text_alert = getAdapter(
             self.document,
             IStringSubstitution,
@@ -596,7 +605,7 @@ class ContentRulesSubstitutionsTest(unittest.TestCase):
         self.assertNotEqual(text_alert().find('alert'), -1)
 
     def test_no_snippet(self):
-        self.document.setText('Some text that contains an alert and more')
+        self.document.text = 'Some text that contains an alert and more'
         text_alert = getAdapter(
             self.document,
             IStringSubstitution,

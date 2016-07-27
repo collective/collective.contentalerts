@@ -240,7 +240,7 @@ class ReviewObjectsView(unittest.TestCase):
             type='Document',
             id='doc'
         )
-        doc.setText('Document with fishy content')
+        doc.text = 'Document with fishy content'
         alsoProvides(doc, IStopWordsVerified)
         doc.reindexObject()
 
@@ -268,7 +268,7 @@ class ReviewObjectsView(unittest.TestCase):
             type='Document',
             id='doc'
         )
-        doc.setText('Document with fishy content')
+        doc.text = 'Document with fishy content'
         alsoProvides(doc, IStopWordsVerified)
         doc.reindexObject()
 
@@ -297,7 +297,7 @@ class ReviewObjectsView(unittest.TestCase):
             type='Document',
             id='doc'
         )
-        doc.setText('Document with fishy content')
+        doc.text = 'Document with fishy content'
         alsoProvides(doc, IStopWordsVerified)
 
         doc.reindexObject()
@@ -309,8 +309,6 @@ class ReviewObjectsView(unittest.TestCase):
         self.request.set('start', '0')
         self.request.set('size', '3')
         self.request.set('entries', 'fishy')
-        # use an interface shared between DX and AT to avoid having to update
-        # the test later on
         self.request.set(
             'type',
             'Products.CMFCore.interfaces._content.IContentish',
@@ -333,7 +331,7 @@ class ReviewObjectsView(unittest.TestCase):
             type='Document',
             id='doc'
         )
-        doc.setText('Document with fishy content')
+        doc.text = 'Document with fishy content'
         alsoProvides(doc, IStopWordsVerified)
         doc.reindexObject()
 
@@ -363,7 +361,7 @@ class ReviewObjectsView(unittest.TestCase):
             type='Document',
             id='doc'
         )
-        doc.setText('Document with fishy content')
+        doc.text = 'Document with fishy content'
         alsoProvides(doc, IStopWordsVerified)
 
         doc.reindexObject()
@@ -394,7 +392,7 @@ class ReviewObjectsView(unittest.TestCase):
             type='Document',
             id='doc'
         )
-        doc.setText('Document with fishy content')
+        doc.text = 'Document with fishy content'
         alsoProvides(doc, IStopWordsVerified)
 
         doc.reindexObject()
