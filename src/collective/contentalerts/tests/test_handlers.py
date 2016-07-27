@@ -35,7 +35,7 @@ class TestVerifiedInterfaceHandler(unittest.TestCase):
             title='Document 1',
             type='Document',
         )
-        self.doc.setText('Some random text')
+        self.doc.text = 'Some random text'
         alsoProvides(self.doc, IStopWordsVerified)
         self.doc.reindexObject()
 

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from collective.contentalerts.contentrules import TextAlertCondition
-from collective.contentalerts.contentrules import TextAlertConditionEditForm
+from collective.contentalerts.contentrules import TextAlertConditionEditFormView  # noqa
 from collective.contentalerts.interfaces import IAlert
 from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWords
@@ -98,7 +98,9 @@ class TextAlertConditionTestCase(unittest.TestCase):
             name=self.element.addview
         )
 
-        add_view.createAndAdd(data={})
+        add_view.form_instance.update()
+        content = add_view.form_instance.create(data={})
+        add_view.form_instance.add(content)
 
         condition = rule.conditions[0]
         self.assertTrue(isinstance(condition, TextAlertCondition))
@@ -119,7 +121,11 @@ class TextAlertConditionTestCase(unittest.TestCase):
             name=self.element.addview
         )
 
-        add_view.createAndAdd(data={'stop_words': stop_words})
+        add_view.form_instance.update()
+        content = add_view.form_instance.create(
+            data={'stop_words': stop_words}
+        )
+        add_view.form_instance.add(content)
 
         condition = rule.conditions[0]
         self.assertTrue(isinstance(condition, TextAlertCondition))
@@ -135,7 +141,7 @@ class TextAlertConditionTestCase(unittest.TestCase):
             name=self.element.editview
         )
         self.assertTrue(
-            isinstance(edit_view, TextAlertConditionEditForm)
+            isinstance(edit_view, TextAlertConditionEditFormView)
         )
 
     def test_empty_text_no_condition(self):
@@ -288,7 +294,7 @@ class TextAlertConditionTestCase(unittest.TestCase):
             title='Document 2',
             type='Document'
         )
-        document.setText('this gives one alert')
+        document.text = 'this gives one alert'
         condition = TextAlertCondition()
         condition.stop_words = u'one alert\nanother alert'
 
@@ -344,7 +350,7 @@ class TextAlertConditionTestCase(unittest.TestCase):
             title='Document 2',
             type='Document'
         )
-        document.setText('this gives one alert')
+        document.text = 'this gives one alert'
         condition = TextAlertCondition()
         condition.stop_words = u'one alert\nanother alert'
 
@@ -390,7 +396,7 @@ class TextAlertConditionTestCase(unittest.TestCase):
             title='Document 2',
             type='Document'
         )
-        document.setText('this gives one alert')
+        document.text = 'this gives one alert'
         condition = TextAlertCondition()
         condition.stop_words = u'one alert\nanother alert'
 
@@ -522,7 +528,7 @@ class ContentRulesSubstitutionsTest(unittest.TestCase):
 
     def test_get_text_from_document(self):
         text = 'some random text'
-        self.document.setText(text)
+        self.document.text = text
         text_alert = getAdapter(
             self.document,
             IStringSubstitution,
@@ -536,7 +542,7 @@ class ContentRulesSubstitutionsTest(unittest.TestCase):
     def test_get_snippet(self):
         stop_words = 'hi\nalert'
         self.request.set('stop_words', stop_words)
-        self.document.setText('Some text that contains an alert and more')
+        self.document.text = 'Some text that contains an alert and more'
         text_alert = getAdapter(
             self.document,
             IStringSubstitution,
@@ -545,7 +551,7 @@ class ContentRulesSubstitutionsTest(unittest.TestCase):
         self.assertNotEqual(text_alert().find('alert'), -1)
 
     def test_no_snippet(self):
-        self.document.setText('Some text that contains an alert and more')
+        self.document.text = 'Some text that contains an alert and more'
         text_alert = getAdapter(
             self.document,
             IStringSubstitution,

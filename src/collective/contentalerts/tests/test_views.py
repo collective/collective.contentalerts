@@ -240,7 +240,7 @@ class ReviewObjectsView(unittest.TestCase):
             type='Document',
             id='doc'
         )
-        doc.setText('Document with fishy content')
+        doc.text = 'Document with fishy content'
         alsoProvides(doc, IStopWordsVerified)
         doc.reindexObject()
 
@@ -268,7 +268,7 @@ class ReviewObjectsView(unittest.TestCase):
             type='Document',
             id='doc'
         )
-        doc.setText('Document with fishy content')
+        doc.text = 'Document with fishy content'
         alsoProvides(doc, IStopWordsVerified)
         doc.reindexObject()
 
@@ -297,7 +297,7 @@ class ReviewObjectsView(unittest.TestCase):
             type='Document',
             id='doc'
         )
-        doc.setText('Document with fishy content')
+        doc.text = 'Document with fishy content'
         alsoProvides(doc, IStopWordsVerified)
 
         doc.reindexObject()
@@ -333,7 +333,7 @@ class ReviewObjectsView(unittest.TestCase):
             type='Document',
             id='doc'
         )
-        doc.setText('Document with fishy content')
+        doc.text = 'Document with fishy content'
         alsoProvides(doc, IStopWordsVerified)
         doc.reindexObject()
 
@@ -363,7 +363,7 @@ class ReviewObjectsView(unittest.TestCase):
             type='Document',
             id='doc'
         )
-        doc.setText('Document with fishy content')
+        doc.text = 'Document with fishy content'
         alsoProvides(doc, IStopWordsVerified)
 
         doc.reindexObject()
@@ -394,7 +394,7 @@ class ReviewObjectsView(unittest.TestCase):
             type='Document',
             id='doc'
         )
-        doc.setText('Document with fishy content')
+        doc.text = 'Document with fishy content'
         alsoProvides(doc, IStopWordsVerified)
 
         doc.reindexObject()
