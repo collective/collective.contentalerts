@@ -62,4 +62,8 @@ COLLECTIVE_CONTENTALERTS_ASYNC_FUNCTIONAL_TESTING = FunctionalTesting(
     name='CollectiveContentalertsAsyncLayer:FunctionalTesting'
 )
 
-optionflags = (doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE)
+optionflags = (
+    doctest.ELLIPSIS |
+    doctest.NORMALIZE_WHITESPACE |
+    doctest.REPORT_ONLY_FIRST_FAILURE
+)
