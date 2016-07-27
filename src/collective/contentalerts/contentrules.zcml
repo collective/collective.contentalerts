@@ -29,14 +29,14 @@
   />
 
   <browser:page
-    class="collective.contentalerts.contentrules.TextAlertConditionAddForm"
+    class="collective.contentalerts.contentrules.TextAlertConditionAddFormView"
     for="plone.app.contentrules.browser.interfaces.IRuleConditionAdding"
     name="collective.contentalerts.TextAlert"
     permission="plone.app.contentrules.ManageContentRules"
   />
 
   <browser:page
-    class="collective.contentalerts.contentrules.TextAlertConditionEditForm"
+    class="collective.contentalerts.contentrules.TextAlertConditionEditFormView"
     for="collective.contentalerts.interfaces.ITextAlertCondition"
     name="edit"
     permission="plone.app.contentrules.ManageContentRules"

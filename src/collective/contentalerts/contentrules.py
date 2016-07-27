@@ -8,11 +8,12 @@ from collective.contentalerts.interfaces import ITextAlertCondition
 from collective.contentalerts.utilities import get_text_from_object
 from OFS.SimpleItem import SimpleItem
 from plone.app.contentrules.browser.formhelper import AddForm
+from plone.app.contentrules.browser.formhelper import ContentRuleFormWrapper
 from plone.app.contentrules.browser.formhelper import EditForm
 from plone.contentrules.rule.interfaces import IRuleElementData
 from plone.stringinterp.adapters import BaseSubstitution
+from z3c.form import form
 from zope.component import getUtility
-from zope.formlib import form
 from zope.interface import alsoProvides
 from zope.interface import implementer
 from zope.interface import noLongerProvides
@@ -119,7 +120,7 @@ class ForbiddenTextAlertCondition(TextAlertCondition):
 
 
 class TextAlertConditionAddForm(AddForm):
-    form_fields = form.FormFields(ITextAlertCondition)
+    schema = ITextAlertCondition
     label = _(u'Add a text alert condition')
     description = _(u'A text alert condition makes the rule apply '
                     u'only if there are stop words on the object\'s text.')
@@ -127,16 +128,24 @@ class TextAlertConditionAddForm(AddForm):
 
     def create(self, data):
         condition = TextAlertCondition()
-        form.applyChanges(condition, self.form_fields, data)
+        form.applyChanges(self, condition, data)
         return condition
 
 
+class TextAlertConditionAddFormView(ContentRuleFormWrapper):
+    form = TextAlertConditionAddForm
+
+
 class TextAlertConditionEditForm(EditForm):
-    form_fields = form.FormFields(ITextAlertCondition)
+    schema = ITextAlertCondition
     label = _(u'Edit a text alert condition')
     description = _(u'A text alert condition makes the rule apply '
                     u'only if there are stop words on the object\'s text.')
     form_name = _(u'Configure element')
+
+
+class TextAlertConditionEditFormView(ContentRuleFormWrapper):
+    form = TextAlertConditionEditForm
 
 
 class AlertSubstitution(BaseSubstitution):
