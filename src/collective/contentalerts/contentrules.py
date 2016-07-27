@@ -175,16 +175,8 @@ class CommentAlertSubstitution(AlertSubstitution):
     description = _(u'Comment alert snippets')
 
     def _get_text(self):
-        # Update this once p.a.discussion is updated to >2.3.3
-        sdm = getattr(self.context, 'session_data_manager', None)
-        session = {}
-        if sdm:
-            data = sdm.getSessionData(create=False)
-            if data:
-                session = data
-        comment = session.get('comment', {})
-        text = comment.get('text', None)
-        if text is not None:
-            return text
+        event = self.context.REQUEST.get('event')
+        if event is not None:
+            return get_text_from_object(event.comment)
 
         return u''
