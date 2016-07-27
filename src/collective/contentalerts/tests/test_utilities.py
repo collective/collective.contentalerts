@@ -525,20 +525,8 @@ class HasStopWordsTestCase(unittest.TestCase):
 
 class GetTextFromObjectTest(unittest.TestCase):
 
-    def test_archetypes_like(self):
-        """Archetypes have a getText method"""
-        class DummyAT(object):
-
-            def getText(self):
-                return 'found!'
-
-        self.assertEqual(
-            get_text_from_object(DummyAT()),
-            'found!'
-        )
-
-    def test_dexterity_comment_like(self):
-        """Dexterity and comments have a text method"""
+    def test_contentish_like(self):
+        """Dexterity content types and comments have a text method"""
         class DummyDXComment(object):
 
             @property
@@ -550,26 +538,8 @@ class GetTextFromObjectTest(unittest.TestCase):
             'found!'
         )
 
-    def test_event_with_archetypes_like(self):
-        """Archetypes wrapped in an event"""
-        class DummyAT(object):
-
-            def getText(self):
-                return 'found!'
-
-        class DummyEventAT(object):
-
-            @property
-            def object(self):
-                return DummyAT()
-
-        self.assertEqual(
-            get_text_from_object(DummyEventAT()),
-            'found!'
-        )
-
-    def test_event_with_dexterity_like(self):
-        """Dexterity wrapped in an event"""
+    def test_event_with_contentish_like(self):
+        """Content type wrapped in an event"""
         class DummyDX(object):
 
             @property

@@ -287,7 +287,7 @@ class TextAlertConditionTestCase(unittest.TestCase):
         )
         self.assertFalse(executable())
 
-    def test_archetypes_document(self):
+    def test_document(self):
         document = api.content.create(
             container=self.portal,
             id='doc2',

@@ -61,7 +61,7 @@ class TextAlertConditionExecutor(object):
         # if it's a comment
         if getattr(self.event, 'comment', None):
             obj = self.event.comment
-        # if it's a AT/DX
+        # if it's a content type
         elif getattr(self.event, 'object', None):
             obj = self.event.object
 
@@ -170,9 +170,7 @@ class TextAlertSubstitution(AlertSubstitution):
     description = _(u'Text alert snippets')
 
     def _get_text(self):
-        if getattr(self.context, 'getText', None):
-            return self.context.getText()
-        elif getattr(self.context, 'text', None):
+        if getattr(self.context, 'text', None):
             return self.context.text
 
         return u''
