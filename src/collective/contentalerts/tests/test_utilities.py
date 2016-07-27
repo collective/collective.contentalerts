@@ -304,6 +304,20 @@ class AlertUtilityTestCase(unittest.TestCase):
             self.utility.has_forbidden_words('and now one is found!')
         )
 
+    def test_has_inadequate_words_words_found(self):
+        """Check that has_inadequate_words returns True if words from the
+        registry are found on the text
+        """
+        api.portal.set_registry_record(
+            interface=IStopWords,
+            name='inadequate_words',
+            value=u'one\ntwo'
+        )
+
+        self.assertTrue(
+            self.utility.has_inadequate_words('and now one is found!')
+        )
+
 
 class HTMLNormalizeTestCase(unittest.TestCase):
 

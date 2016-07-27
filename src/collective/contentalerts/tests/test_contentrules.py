@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from collective.contentalerts.contentrules import ForbiddenTextAlertCondition
+from collective.contentalerts.contentrules import InadequateTextAlertCondition
 from collective.contentalerts.contentrules import TextAlertCondition
 from collective.contentalerts.contentrules import TextAlertConditionEditFormView  # noqa
 from collective.contentalerts.interfaces import IAlert
@@ -453,6 +455,58 @@ class TextAlertConditionTestCase(unittest.TestCase):
             object_provides=IHasStopWords.__identifier__
         )
         self.assertEqual(len(brains), 0)
+
+
+class SpecificAlertConditionsTestCase(unittest.TestCase):
+
+    layer = COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING
+
+    def setUp(self):
+        self.portal = self.layer['portal']
+        self.request = self.layer['request']
+
+        setRoles(self.portal, TEST_USER_ID, ['Manager'])
+
+    def _set_record_value(self, value, record='inadequate_words'):
+        api.portal.set_registry_record(
+            name=record,
+            interface=IStopWords,
+            value=value
+        )
+
+    def test_inadequate_condition(self):
+        document = api.content.create(
+            container=self.portal,
+            id='doc2',
+            title='Document 2',
+            type='Document'
+        )
+        document.text = 'this gives one alert'
+        condition = InadequateTextAlertCondition()
+        self._set_record_value(u'one')
+
+        executable = getMultiAdapter(
+            (self.portal, condition, ContentTypeDummyEvent(document)),
+            IExecutable
+        )
+        self.assertTrue(executable())
+
+    def test_forbidden_condition(self):
+        document = api.content.create(
+            container=self.portal,
+            id='doc2',
+            title='Document 2',
+            type='Document'
+        )
+        document.text = 'this gives one alert'
+        condition = ForbiddenTextAlertCondition()
+        self._set_record_value(u'one', record='forbidden_words')
+
+        executable = getMultiAdapter(
+            (self.portal, condition, ContentTypeDummyEvent(document)),
+            IExecutable
+        )
+        self.assertTrue(executable())
 
 
 class ContentRulesSubstitutionsTest(unittest.TestCase):
