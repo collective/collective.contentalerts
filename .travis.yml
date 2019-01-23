@@ -3,6 +3,13 @@ language: python
 python:
   - 2.7
 
+env:
+  matrix:
+    - PLONE_VERSION=4.3.x
+    - PLONE_VERSION=5.0.x
+    - PLONE_VERSION=5.1.x
+    - PLONE_VERSION=5.2.x
+
 cache:
   pip: true
   directories:
@@ -11,6 +18,7 @@ cache:
 before_install:
   - mkdir -p $HOME/buildout-cache/{eggs,downloads}
   - virtualenv .
+  - sed -ie "s#5.1.x#$PLONE_VERSION#" travis.cfg
   - bin/pip install --upgrade pip setuptools==38.2.4 zc.buildout
 
 install:
