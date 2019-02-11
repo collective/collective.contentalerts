@@ -4,7 +4,7 @@ Changelog
 2.0a2 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Test against Plone 4.3, 5.0, 5.1 and (experimental) 5.2.
 
 
 2.0a1 (2016-07-28)
