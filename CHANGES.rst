@@ -1,7 +1,7 @@
 Changelog
 =========
 
-2.0a2 (unreleased)
+2.0.0 (2019-02-11)
 ------------------
 
 - Test against Plone 4.3, 5.0, 5.1 and (experimental) 5.2.
