@@ -60,7 +60,8 @@ class TextAlertConditionTestCase(unittest.TestCase):
             container=self.portal,
             id='doc1',
             title='Document 1',
-            type='Document'
+            type='Document',
+            text='lala',
         )
 
     def _add_comment(self, text):
@@ -294,9 +295,9 @@ class TextAlertConditionTestCase(unittest.TestCase):
             container=self.portal,
             id='doc2',
             title='Document 2',
-            type='Document'
+            type='Document',
+            text='this gives one alert',
         )
-        document.text = 'this gives one alert'
         condition = TextAlertCondition()
         condition.stop_words = u'one alert\nanother alert'
 
@@ -350,9 +351,9 @@ class TextAlertConditionTestCase(unittest.TestCase):
             container=self.portal,
             id='doc2',
             title='Document 2',
-            type='Document'
+            type='Document',
+            text='this gives one alert'
         )
-        document.text = 'this gives one alert'
         condition = TextAlertCondition()
         condition.stop_words = u'one alert\nanother alert'
 
@@ -396,9 +397,9 @@ class TextAlertConditionTestCase(unittest.TestCase):
             container=self.portal,
             id='doc2',
             title='Document 2',
-            type='Document'
+            type='Document',
+            text='this gives one alert'
         )
-        document.text = 'this gives one alert'
         condition = TextAlertCondition()
         condition.stop_words = u'one alert\nanother alert'
 
@@ -479,9 +480,9 @@ class SpecificAlertConditionsTestCase(unittest.TestCase):
             container=self.portal,
             id='doc2',
             title='Document 2',
-            type='Document'
+            type='Document',
+            text='this gives one alert'
         )
-        document.text = 'this gives one alert'
         condition = InadequateTextAlertCondition()
         self._set_record_value(u'one')
 
@@ -496,9 +497,9 @@ class SpecificAlertConditionsTestCase(unittest.TestCase):
             container=self.portal,
             id='doc2',
             title='Document 2',
-            type='Document'
+            type='Document',
+            text = 'this gives one alert'
         )
-        document.text = 'this gives one alert'
         condition = ForbiddenTextAlertCondition()
         self._set_record_value(u'one', record='forbidden_words')
 
@@ -523,7 +524,8 @@ class ContentRulesSubstitutionsTest(unittest.TestCase):
             container=self.portal,
             id='doc1',
             title='Document 1',
-            type='Document'
+            type='Document',
+            text='lala'
         )
 
     def _add_comment(self, text='lilala'):
