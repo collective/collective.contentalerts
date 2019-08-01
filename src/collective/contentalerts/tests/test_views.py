@@ -308,7 +308,7 @@ class ReviewObjectsView(unittest.TestCase):
         self.request.set('entries', 'fishy')
         self.request.set(
             'type',
-            'Products.CMFCore.interfaces._content.IContentish',
+            'Products.CMFCore.interfaces.IContentish',
         )
         self._get_view()()
 

@@ -55,9 +55,6 @@ class GenericSetupTest(unittest.TestCase):
             (self.portal, self.request),
             name='stop-words-settings'
         )
-        # Put the view into the acquisition chain
-        view = view.__of__(self.portal)
-
         self.assertTrue(view())
 
     def test_controlpanel_registered(self):
