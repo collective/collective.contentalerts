@@ -7,6 +7,7 @@ from collective.contentalerts.interfaces import IAlert
 from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWords
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
+from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_FUNCTIONAL_TESTING  # noqa
 from plone import api
 from plone.app.contentrules.rule import Rule
 from plone.app.discussion.interfaces import IConversation
@@ -511,7 +512,7 @@ class SpecificAlertConditionsTestCase(unittest.TestCase):
 
 
 class ContentRulesSubstitutionsTest(unittest.TestCase):
-    layer = COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING
+    layer = COLLECTIVE_CONTENTALERTS_FUNCTIONAL_TESTING
 
     def setUp(self):
         setupCoreSessions(self.layer['app'])
