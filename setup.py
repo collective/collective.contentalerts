@@ -18,7 +18,7 @@ long_description = (
 
 setup(
     name='collective.contentalerts',
-    version='2.0.1.dev0',
+    version='3.0.0a0',
     description='An add-on for Plone to get alerts about content',
     long_description=long_description,
     # Get more from http://pypi.python.org/pypi?%3Aaction=list_classifiers

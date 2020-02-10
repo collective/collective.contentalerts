@@ -1,8 +1,8 @@
 Changelog
 =========
 
-2.0.1 (unreleased)
-------------------
+3.0.0a0 (2020-02-10)
+--------------------
 
 - Add uninstall profile.
   [gforcada]
