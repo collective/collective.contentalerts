@@ -85,6 +85,10 @@ and then running "bin/buildout"
 Upgrade notes
 =============
 
+Version 3.0
+-----------
+This version is meant to be compatible with Plone 5.2 (still on python 2.7).
+
 Version 2.0
 -----------
 This version only supports Plone 5 and Dexterity,
