@@ -123,7 +123,7 @@ class TextAlertConditionAddForm(AddForm):
     schema = ITextAlertCondition
     label = _(u'Add a text alert condition')
     description = _(u'A text alert condition makes the rule apply '
-                    u'only if there are stop words on the object\'s text.')
+                    u"only if there are stop words on the object's text.")
     form_name = _(u'Configure element')
 
     def create(self, data):
@@ -140,7 +140,7 @@ class TextAlertConditionEditForm(EditForm):
     schema = ITextAlertCondition
     label = _(u'Edit a text alert condition')
     description = _(u'A text alert condition makes the rule apply '
-                    u'only if there are stop words on the object\'s text.')
+                    u"only if there are stop words on the object's text.")
     form_name = _(u'Configure element')
 
 
@@ -161,7 +161,7 @@ class AlertSubstitution(BaseSubstitution):
         return self.context.REQUEST.get('stop_words') or None
 
     def _get_text(self):
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class TextAlertSubstitution(AlertSubstitution):

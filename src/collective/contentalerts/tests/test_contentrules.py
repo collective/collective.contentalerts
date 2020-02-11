@@ -499,7 +499,7 @@ class SpecificAlertConditionsTestCase(unittest.TestCase):
             id='doc2',
             title='Document 2',
             type='Document',
-            text = 'this gives one alert'
+            text='this gives one alert'
         )
         condition = ForbiddenTextAlertCondition()
         self._set_record_value(u'one', record='forbidden_words')
