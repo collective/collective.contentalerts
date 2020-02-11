@@ -1,11 +1,20 @@
 Changelog
 =========
 
-2.0.1 (unreleased)
-------------------
+3.0.0a1 (unreleased)
+--------------------
 
 - Nothing changed yet.
 
+
+3.0.0a0 (2020-02-10)
+--------------------
+
+- Add uninstall profile.
+  [gforcada]
+
+- Adapt code and tests to Plone 5.2.
+  [gforcada]
 
 2.0.0 (2019-02-11)
 ------------------

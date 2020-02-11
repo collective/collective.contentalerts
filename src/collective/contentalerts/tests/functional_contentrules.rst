@@ -60,7 +60,7 @@ Add a document::
     >>> browser.follow('Home')
     >>> browser.follow('Page')
     >>> browser.getControl(name='form.widgets.IDublinCore.title').value = u'my title'
-    >>> browser.getControl(name='form.widgets.IRichText.text').value = u'alert one here alert two there'
+    >>> browser.getControl(name='form.widgets.IRichTextBehavior.text').value = u'alert one here alert two there'
     >>> browser.getControl('Save').click()
 
 An email is generated::

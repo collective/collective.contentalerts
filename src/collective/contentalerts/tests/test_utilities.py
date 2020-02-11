@@ -698,8 +698,8 @@ class VerifyBrainTestCase(unittest.TestCase):
             id='document-test',
             title='Document 1',
             type='Document',
+            text='Some random text'
         )
-        self.doc.text = 'Some random text'
 
     def test_stop_word_not_in_object(self):
         """Check that the verified marker interface is kept

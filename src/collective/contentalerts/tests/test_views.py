@@ -27,7 +27,8 @@ class DiscardAlertsViewTestCase(unittest.TestCase):
             container=self.portal,
             id='doc1',
             title='Document 1',
-            type='Document'
+            type='Document',
+            text='lala'
         )
 
     def test_no_interface_no_problem(self):
@@ -142,6 +143,17 @@ class ReviewObjectsView(unittest.TestCase):
             request=self.request
         )
 
+    def _create_document(self, text):
+        if not text:
+            text = 'lala'
+        doc = api.content.create(
+            container=self.portal,
+            type='Document',
+            id='doc',
+            text=text
+        )
+        return doc
+
     def set_default_workflow(self):
         """Document objects created in this test do not have a workflow
         attached, add a default one for the tests that require that.
@@ -235,12 +247,7 @@ class ReviewObjectsView(unittest.TestCase):
         """Create a document and call the view. The document should have the
         IHasStopWords marker interface attached
         """
-        doc = api.content.create(
-            container=self.portal,
-            type='Document',
-            id='doc'
-        )
-        doc.text = 'Document with fishy content'
+        doc = self._create_document('Document with fishy content')
         alsoProvides(doc, IStopWordsVerified)
         doc.reindexObject()
 
@@ -263,12 +270,7 @@ class ReviewObjectsView(unittest.TestCase):
         But do so with a type parameter that the Document does not have, so
         no marker interface is applied.
         """
-        doc = api.content.create(
-            container=self.portal,
-            type='Document',
-            id='doc'
-        )
-        doc.text = 'Document with fishy content'
+        doc = self._create_document('Document with fishy content')
         alsoProvides(doc, IStopWordsVerified)
         doc.reindexObject()
 
@@ -292,12 +294,7 @@ class ReviewObjectsView(unittest.TestCase):
         Specify a marker interface that Document provides, to check that
         filtering by marker interfaces works.
         """
-        doc = api.content.create(
-            container=self.portal,
-            type='Document',
-            id='doc'
-        )
-        doc.text = 'Document with fishy content'
+        doc = self._create_document('Document with fishy content')
         alsoProvides(doc, IStopWordsVerified)
 
         doc.reindexObject()
@@ -311,7 +308,7 @@ class ReviewObjectsView(unittest.TestCase):
         self.request.set('entries', 'fishy')
         self.request.set(
             'type',
-            'Products.CMFCore.interfaces._content.IContentish',
+            'Products.CMFCore.interfaces.IContentish',
         )
         self._get_view()()
 
@@ -326,12 +323,7 @@ class ReviewObjectsView(unittest.TestCase):
         no marker interface is applied.
         """
         self.set_default_workflow()
-        doc = api.content.create(
-            container=self.portal,
-            type='Document',
-            id='doc'
-        )
-        doc.text = 'Document with fishy content'
+        doc = self._create_document('Document with fishy content')
         alsoProvides(doc, IStopWordsVerified)
         doc.reindexObject()
 
@@ -356,12 +348,7 @@ class ReviewObjectsView(unittest.TestCase):
         workflow state works.
         """
         self.set_default_workflow()
-        doc = api.content.create(
-            container=self.portal,
-            type='Document',
-            id='doc'
-        )
-        doc.text = 'Document with fishy content'
+        doc = self._create_document('Document with fishy content')
         alsoProvides(doc, IStopWordsVerified)
 
         doc.reindexObject()
@@ -387,12 +374,7 @@ class ReviewObjectsView(unittest.TestCase):
         check that filtering by workflow state works.
         """
         self.set_default_workflow()
-        doc = api.content.create(
-            container=self.portal,
-            type='Document',
-            id='doc'
-        )
-        doc.text = 'Document with fishy content'
+        doc = self._create_document('Document with fishy content')
         alsoProvides(doc, IStopWordsVerified)
 
         doc.reindexObject()

@@ -18,7 +18,7 @@ long_description = (
 
 setup(
     name='collective.contentalerts',
-    version='2.0.1.dev0',
+    version='3.0.0a1.dev0',
     description='An add-on for Plone to get alerts about content',
     long_description=long_description,
     # Get more from http://pypi.python.org/pypi?%3Aaction=list_classifiers
@@ -26,9 +26,7 @@ setup(
         'Development Status :: 5 - Production/Stable',
         'Environment :: Web Environment',
         'Framework :: Plone',
-        'Framework :: Plone :: 4.3',
-        'Framework :: Plone :: 5.0',
-        'Framework :: Plone :: 5.1',
+        'Framework :: Plone :: 5.2',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
         'Operating System :: OS Independent',
@@ -53,6 +51,7 @@ setup(
         'plone.app.textfield',
         'plone.app.z3cform',
         'plone.contentrules',
+        'plone.registry',
         'plone.stringinterp',
         'Products.CMFCore',
         'Products.CMFPlone',

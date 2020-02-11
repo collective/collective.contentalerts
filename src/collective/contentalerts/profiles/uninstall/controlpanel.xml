@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<object name="portal_controlpanel">
+
+  <configlet
+    remove="true"
+    title="Alerts on stop words settings"
+    action_id="collective.contentalerts.settings"
+    appId="collective.contentalerts.alerts"
+    category="Products"
+  />
+
+</object>

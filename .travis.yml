@@ -1,46 +1,35 @@
+version: ~> 1.0
+import: collective/buildout.plonetest:travis/default.yml
 language: python
-
-python:
-  - 2.7
-
-env:
-  matrix:
-    - PLONE_VERSION=4.3.x
-    - PLONE_VERSION=5.0.x
-    - PLONE_VERSION=5.1.x
-    - PLONE_VERSION=5.2.x
-
-matrix:
-  allow_failures:
-    - env: PLONE_VERSION=5.2.x
+python: 2.7
+env: PLONE_VERSION=5.2.x
 
 cache:
   pip: true
   directories:
+    - eggs
     - $HOME/buildout-cache
 
 before_install:
   - mkdir -p $HOME/buildout-cache/{eggs,downloads}
   - virtualenv .
+  - pip install -r requirements.txt
   - sed -ie "s#5.1.x#$PLONE_VERSION#" travis.cfg
   - git diff
-  - bin/pip install --upgrade pip setuptools==38.2.4 zc.buildout
+  - buildout -N -t 3 annotate
 
 install:
   - pip install -q docutils  # for setup.py check -r -s
-  - bin/buildout -Nc travis.cfg
+  - bin/buildout -N -t 3 -c travis.cfg
 
 script:
   - bin/check-manifest
   - python setup.py check -r -s
   - bin/code-analysis
   - bin/dependencychecker
-  - bin/coverage run bin/test
-  - bin/coverage html
-  - bin/coverage report -m
 
 after_success:
-  - pip install -q coverage==3.6 coveralls
+  - pip install -q coverage coveralls
   - coveralls
 
 notifications:

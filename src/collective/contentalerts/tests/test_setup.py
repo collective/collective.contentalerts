@@ -2,10 +2,13 @@
 """Setup tests for this package."""
 from collective.contentalerts.interfaces import ICollectiveContentalertsLayer
 from collective.contentalerts.testing import COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING  # noqa
-from plone import api
 from plone.browserlayer import utils
+from Products.CMFPlone.utils import get_installer
 
 import unittest
+
+
+PKG_NAME = 'collective.contentalerts'
 
 
 class TestSetup(unittest.TestCase):
@@ -16,30 +19,22 @@ class TestSetup(unittest.TestCase):
     def setUp(self):
         """Custom shared utility setup for tests."""
         self.portal = self.layer['portal']
-        self.installer = api.portal.get_tool('portal_quickinstaller')
+        self.request = self.layer['request']
+        self.installer = get_installer(self.portal, self.request)
 
     def test_product_installed(self):
         """Test if the add-on is installed with portal_quickinstaller."""
         self.assertTrue(
-            self.installer.isProductInstalled('collective.contentalerts')
+            self.installer.is_product_installed(PKG_NAME)
         )
 
     def test_browserlayer(self):
         """Test that ICollectiveContentalertsLayer is registered."""
         self.assertIn(ICollectiveContentalertsLayer, utils.registered_layers())
 
-
-class TestUninstall(unittest.TestCase):
-
-    layer = COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING
-
-    def setUp(self):
-        self.portal = self.layer['portal']
-        self.installer = api.portal.get_tool('portal_quickinstaller')
-        self.installer.uninstallProducts(['collective.contentalerts'])
-
     def test_product_uninstalled(self):
         """Test if collective.contentalerts is cleanly uninstalled."""
+        self.installer.uninstall_product(PKG_NAME)
         self.assertFalse(
-            self.installer.isProductInstalled('collective.contentalerts')
+            self.installer.is_product_installed(PKG_NAME)
         )
