@@ -1,0 +1,4 @@
+[tool.dependencychecker]
+ignore-packages = ['collective.taskqueue' ]
+Zope2 = ['OFS', 'Testing', ]
+

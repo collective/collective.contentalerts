@@ -51,6 +51,7 @@ setup(
         'plone.app.textfield',
         'plone.app.z3cform',
         'plone.contentrules',
+        'plone.registry',
         'plone.stringinterp',
         'Products.CMFCore',
         'Products.CMFPlone',
