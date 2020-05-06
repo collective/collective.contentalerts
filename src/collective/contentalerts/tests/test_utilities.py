@@ -357,6 +357,10 @@ class HTMLNormalizeTestCase(unittest.TestCase):
         text = 'some \xfc'
         self.assertEqual(alert_text_normalize(text), u'some u')
 
+    def test_string_other_unicode_chars(self):
+        text = u's\ufe05o\ufe06m\ufe05e'
+        self.assertEqual(alert_text_normalize(text), u'some')
+
 
 class SnippetTestCase(unittest.TestCase):
 
