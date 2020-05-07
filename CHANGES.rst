@@ -1,7 +1,7 @@
 Changelog
 =========
 
-3.0.1 (unreleased)
+3.1.0 (2020-05-07)
 ------------------
 
 - Make text normalization more thorough (#14).
