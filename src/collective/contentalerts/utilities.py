@@ -194,7 +194,7 @@ def alert_text_normalize(text):
     text = parser.unescape(text)
     text = text.lower()
     text = u''.join(
-        [c
+        [c.encode('ascii', 'ignore')
          for c in unicodedata.normalize('NFKD', text)
          if not unicodedata.combining(c)]
     )

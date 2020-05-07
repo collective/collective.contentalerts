@@ -4,7 +4,8 @@ Changelog
 3.0.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
+- Make text normalization more thorough (#14).
+  [staeff]
 
 
 3.0.0 (2020-02-11)
