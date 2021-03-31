@@ -4,8 +4,8 @@ Changelog
 3.1.1 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Make it python 3 compatible.
+  [gforcada]
 
 3.1.0 (2020-05-07)
 ------------------
