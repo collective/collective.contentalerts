@@ -17,7 +17,6 @@ from plone.contentrules.engine.interfaces import IRuleStorage
 from plone.contentrules.rule.interfaces import IExecutable
 from plone.contentrules.rule.interfaces import IRuleCondition
 from plone.stringinterp.interfaces import IStringSubstitution
-from Testing.ZopeTestCase.utils import setupCoreSessions
 from zope.component import createObject
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
@@ -515,8 +514,6 @@ class ContentRulesSubstitutionsTest(unittest.TestCase):
     layer = COLLECTIVE_CONTENTALERTS_FUNCTIONAL_TESTING
 
     def setUp(self):
-        setupCoreSessions(self.layer['app'])
-
         self.portal = self.layer['portal']
         self.request = self.layer['request']
         setRoles(self.portal, TEST_USER_ID, ['Manager'])

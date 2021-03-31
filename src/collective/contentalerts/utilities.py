@@ -10,9 +10,14 @@ from zope.component import getUtility
 from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
 
-import HTMLParser
 import re
+import six
 import unicodedata
+
+if six.PY2:
+    from HTMLParser import HTMLParser
+else:
+    import html
 
 
 NBSP_RE = re.compile(r'\s+|&#160;|&nbsp;', re.UNICODE)
@@ -187,18 +192,25 @@ def alert_text_normalize(text):
     """
     if IRichTextValue.providedBy(text):
         text = text.raw
-    if isinstance(text, str):
-        text = text.decode('latin-1')
+    if six.PY2:
+        if isinstance(text, str):
+            text = text.decode('latin-1')
     text = NBSP_RE.sub(' ', text)
-    parser = HTMLParser.HTMLParser()
-    text = parser.unescape(text)
+    if six.PY2:
+        parser = HTMLParser()
+        text = parser.unescape(text)
+    else:
+        text = html.unescape(text)
     text = text.lower()
-    text = u''.join(
-        [c.encode('ascii', 'ignore')
-         for c in unicodedata.normalize('NFKD', text)
-         if not unicodedata.combining(c)]
-    )
-
+    text_list = [
+        c.encode('ascii', 'ignore')
+        for c in unicodedata.normalize('NFKD', text)
+        if not unicodedata.combining(c)
+    ]
+    if six.PY2:
+        text = u''.join(text_list)
+    else:
+        text = b''.join(text_list).decode()
     return text
 
 
