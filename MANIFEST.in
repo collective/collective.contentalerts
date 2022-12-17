@@ -2,3 +2,4 @@ graft src/collective
 graft docs
 include *.cfg *.rst *.in *.py *.txt *.toml
 exclude __pycache__
+recursive-exclude news *
