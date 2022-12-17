@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.contentalerts import _
 from collective.contentalerts.interfaces import IAlert
 from collective.contentalerts.interfaces import IForbiddenTextAlertCondition
@@ -19,8 +18,9 @@ from zope.interface import implementer
 from zope.interface import noLongerProvides
 
 
-class TextAlertConditionExecutor(object):
+class TextAlertConditionExecutor:
     """The executor for this condition."""
+
     def __init__(self, context, element, event):
         self.context = context
         self.element = element
@@ -44,25 +44,22 @@ class TextAlertConditionExecutor(object):
                 ret_value = alert_utility.has_inadequate_words(text)
         else:
             stop_words = self.element.stop_words
-            if stop_words is None or stop_words.strip() == u'':
+            if stop_words is None or stop_words.strip() == "":
                 stop_words = None
             else:
                 request = self.context.REQUEST
-                request.set('stop_words', stop_words)
+                request.set("stop_words", stop_words)
 
-            ret_value = alert_utility.has_stop_words(
-                text,
-                stop_words=stop_words
-            )
+            ret_value = alert_utility.has_stop_words(text, stop_words=stop_words)
             has_words = ret_value
 
         # get the object to apply/remove the marker interface
         obj = None
         # if it's a comment
-        if getattr(self.event, 'comment', None):
+        if getattr(self.event, "comment", None):
             obj = self.event.comment
         # if it's a content type
-        elif getattr(self.event, 'object', None):
+        elif getattr(self.event, "object", None):
             obj = self.event.object
 
         self._apply_marker_interface(obj, has_words)
@@ -79,17 +76,15 @@ class TextAlertConditionExecutor(object):
             reindex = True
 
         if reindex:
-            obj.reindexObject(idxs=('object_provides', ))
+            obj.reindexObject(idxs=("object_provides",))
 
 
 class InadequateTextAlertConditionExecutor(TextAlertConditionExecutor):
-
     def __call__(self):
         return self.check(inadequate=True)
 
 
 class ForbiddenTextAlertConditionExecutor(TextAlertConditionExecutor):
-
     def __call__(self):
         return self.check(forbidden=True)
 
@@ -97,15 +92,16 @@ class ForbiddenTextAlertConditionExecutor(TextAlertConditionExecutor):
 @implementer(ITextAlertCondition, IRuleElementData)
 class TextAlertCondition(SimpleItem):
     """The persistent implementation of the text alert condition."""
+
     stop_words = None
-    element = 'collective.contentalerts.TextAlert'
+    element = "collective.contentalerts.TextAlert"
 
     @property
     def summary(self):
         return _(
-            u'contentrules_text_alert_condition_summary',
-            default=u'Provide a stop words list, one per line, or leave it '
-                    u'empty to use the shared one (registry based).'
+            "contentrules_text_alert_condition_summary",
+            default="Provide a stop words list, one per line, or leave it "
+            "empty to use the shared one (registry based).",
         )
 
 
@@ -121,10 +117,12 @@ class ForbiddenTextAlertCondition(TextAlertCondition):
 
 class TextAlertConditionAddForm(AddForm):
     schema = ITextAlertCondition
-    label = _(u'Add a text alert condition')
-    description = _(u'A text alert condition makes the rule apply '
-                    u"only if there are stop words on the object's text.")
-    form_name = _(u'Configure element')
+    label = _("Add a text alert condition")
+    description = _(
+        "A text alert condition makes the rule apply "
+        "only if there are stop words on the object's text."
+    )
+    form_name = _("Configure element")
 
     def create(self, data):
         condition = TextAlertCondition()
@@ -138,10 +136,12 @@ class TextAlertConditionAddFormView(ContentRuleFormWrapper):
 
 class TextAlertConditionEditForm(EditForm):
     schema = ITextAlertCondition
-    label = _(u'Edit a text alert condition')
-    description = _(u'A text alert condition makes the rule apply '
-                    u"only if there are stop words on the object's text.")
-    form_name = _(u'Configure element')
+    label = _("Edit a text alert condition")
+    description = _(
+        "A text alert condition makes the rule apply "
+        "only if there are stop words on the object's text."
+    )
+    form_name = _("Configure element")
 
 
 class TextAlertConditionEditFormView(ContentRuleFormWrapper):
@@ -149,7 +149,6 @@ class TextAlertConditionEditFormView(ContentRuleFormWrapper):
 
 
 class AlertSubstitution(BaseSubstitution):
-
     def safe_call(self):
         text = self._get_text()
         stop_words = self._get_stop_words()
@@ -158,7 +157,7 @@ class AlertSubstitution(BaseSubstitution):
         return alert_utility.get_snippets(text, stop_words=stop_words)
 
     def _get_stop_words(self):
-        return self.context.REQUEST.get('stop_words') or None
+        return self.context.REQUEST.get("stop_words") or None
 
     def _get_text(self):
         raise NotImplementedError
@@ -166,24 +165,26 @@ class AlertSubstitution(BaseSubstitution):
 
 class TextAlertSubstitution(AlertSubstitution):
     """Text alert string substitution."""
-    category = _(u'All Content')
-    description = _(u'Text alert snippets')
+
+    category = _("All Content")
+    description = _("Text alert snippets")
 
     def _get_text(self):
-        if getattr(self.context, 'text', None):
+        if getattr(self.context, "text", None):
             return self.context.text
 
-        return u''
+        return ""
 
 
 class CommentAlertSubstitution(AlertSubstitution):
     """Comment alert string substitution."""
-    category = _(u'Comments')
-    description = _(u'Comment alert snippets')
+
+    category = _("Comments")
+    description = _("Comment alert snippets")
 
     def _get_text(self):
-        event = self.context.REQUEST.get('event')
+        event = self.context.REQUEST.get("event")
         if event is not None:
             return get_text_from_object(event.comment)
 
-        return u''
+        return ""

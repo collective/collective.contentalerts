@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.contentalerts import _
 from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWordsVerified
@@ -9,17 +8,16 @@ from zope.publisher.browser import BrowserView
 
 
 class DiscardAlertView(BrowserView):
-
     def __call__(self):
         if IHasStopWords.providedBy(self.context):
             noLongerProvides(self.context, IHasStopWords)
             alsoProvides(self.context, IStopWordsVerified)
-            self.context.reindexObject(idxs=('object_provides', ))
+            self.context.reindexObject(idxs=("object_provides",))
 
             api.portal.show_message(
                 message=_(
-                    u'stop_words_interface_removed_message',
-                    default=u'The object no longer has an alert on it.'
+                    "stop_words_interface_removed_message",
+                    default="The object no longer has an alert on it.",
                 ),
                 request=self.request,
             )

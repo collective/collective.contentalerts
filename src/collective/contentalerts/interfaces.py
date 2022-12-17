@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Module where all interfaces, events and exceptions live."""
 from collective.contentalerts import _
 from zope import schema
@@ -14,27 +13,20 @@ class IStopWords(Interface):
     """Registry settings schema being used by this distribution."""
 
     forbidden_words = schema.Text(
-        title=_(
-            u'settings_forbidden_words_list_title',
-            default=u'Forbidden words'
-        ),
+        title=_("settings_forbidden_words_list_title", default="Forbidden words"),
         description=_(
-            u'settings_forbidden_words_list_description',
-            default=u'Words/sentences that will prevent an object to be made '
-                    u'public, one per line.'
+            "settings_forbidden_words_list_description",
+            default="Words/sentences that will prevent an object to be made "
+            "public, one per line.",
         ),
         required=False,
     )
 
     inadequate_words = schema.Text(
-        title=_(
-            u'settings_inadequate_words_list_title',
-            default=u'List'
-        ),
+        title=_("settings_inadequate_words_list_title", default="List"),
         description=_(
-            u'settings_inadequate_words_list_description',
-            default=u'Words/sentences that will generate an alert, '
-                    u'one per line.'
+            "settings_inadequate_words_list_description",
+            default="Words/sentences that will generate an alert, " "one per line.",
         ),
         required=False,
     )
@@ -95,14 +87,11 @@ class ITextAlertCondition(Interface):
     """Schema for the text alert plone.app.contentrules condition."""
 
     stop_words = schema.Text(
-        title=_(
-            u'contentrules_text_alert_condition_field_title',
-            default=u'Stop words'
-        ),
+        title=_("contentrules_text_alert_condition_field_title", default="Stop words"),
         description=_(
-            u'contentrules_text_alert_condition_field_description',
-            default=u'One stop word per line, keep it empty if you want to '
-                    u'use the generic one.'
+            "contentrules_text_alert_condition_field_description",
+            default="One stop word per line, keep it empty if you want to "
+            "use the generic one.",
         ),
         required=False,
     )

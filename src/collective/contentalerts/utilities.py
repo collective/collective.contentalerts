@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.contentalerts.interfaces import IAlert
 from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWords
@@ -14,16 +13,14 @@ import re
 import six
 import unicodedata
 
-if six.PY2:
-    from HTMLParser import HTMLParser
-else:
-    import html
+
+import html
 
 
-NBSP_RE = re.compile(r'\s+|&#160;|&nbsp;', re.UNICODE)
+NBSP_RE = re.compile(r"\s+|&#160;|&nbsp;", re.UNICODE)
 
 
-class Alert(object):
+class Alert:
     """Utility to know if a given text contains stop words."""
 
     def get_snippets(self, text, stop_words=None, chars=150):
@@ -32,11 +29,11 @@ class Alert(object):
         See IAlert interface docstring for its parameters.
         """
         if text is None:
-            return u''
+            return ""
 
         normalized_stop_words = self.get_normalized_stop_words(stop_words)
         if not normalized_stop_words:
-            return u''
+            return ""
 
         # get all the stop words occurrences on the text
         snippets_data = {}
@@ -44,30 +41,22 @@ class Alert(object):
         for word in normalized_stop_words:
             index = normalized_text.find(word)
             while index != -1:
-                snippet = self._snippet(
-                    normalized_text,
-                    index,
-                    word,
-                    chars
-                )
+                snippet = self._snippet(normalized_text, index, word, chars)
                 snippets_data[index] = (snippet, word)
 
                 index = normalized_text.find(word, index + 1)
 
         if not snippets_data:
-            return u''
+            return ""
 
         # sort the snippets so that the original text flow is respected
-        snippet = u''
+        snippet = ""
         stop_words_found = []
         for index in sorted(snippets_data.keys()):
             snippet += snippets_data[index][0]
             stop_words_found.append(snippets_data[index][1])
 
-        result = u'{0}{1}'.format(
-            ', '.join(self._unique(stop_words_found)),
-            snippet
-        )
+        result = "{}{}".format(", ".join(self._unique(stop_words_found)), snippet)
         return result
 
     def has_stop_words(self, text, stop_words=None):
@@ -83,7 +72,7 @@ class Alert(object):
 
         See IAlert interface docstring for its parameters.
         """
-        return self._has_words(text, register='forbidden_words')
+        return self._has_words(text, register="forbidden_words")
 
     def has_inadequate_words(self, text):
         """Checks if the given text has words from the inadequate stop words
@@ -91,7 +80,7 @@ class Alert(object):
 
         See IAlert interface docstring for its parameters.
         """
-        return self._has_words(text, register='inadequate_words')
+        return self._has_words(text, register="inadequate_words")
 
     def _has_words(self, text, stop_words=None, register=None):
         if not text:
@@ -130,7 +119,7 @@ class Alert(object):
         if before < 0:
             before = 0
         after = index + len(word) + chars
-        return u'\n\n...{0}...'.format(text[before:after])
+        return f"\n\n...{text[before:after]}..."
 
     @staticmethod
     def _unique(sequence):
@@ -147,21 +136,23 @@ class Alert(object):
 
     def _get_registry_stop_words(self, register=None):
         """Returns the stop words found on the registry, if any."""
-        return_stop_words = ''
+        return_stop_words = ""
 
         if register is None:
-            register = ('forbidden_words', 'inadequate_words', )
+            register = (
+                "forbidden_words",
+                "inadequate_words",
+            )
         elif isinstance(register, str):
-            register = (register, )
+            register = (register,)
 
         for key_name in register:
             try:
                 stop_words = api.portal.get_registry_record(
-                    name=key_name,
-                    interface=IStopWords
+                    name=key_name, interface=IStopWords
                 )
                 if stop_words:
-                    return_stop_words += u'\n{0}'.format(stop_words)
+                    return_stop_words += f"\n{stop_words}"
             except (KeyError, InvalidParameterError):
                 pass
 
@@ -171,13 +162,11 @@ class Alert(object):
         if stop_words is None:
             stop_words = self._get_registry_stop_words(register=register)
 
-        if stop_words is None or stop_words.strip() == u'':
+        if stop_words is None or stop_words.strip() == "":
             return []
 
         normalized_stop_words = [
-            alert_text_normalize(a)
-            for a in stop_words.splitlines()
-            if a
+            alert_text_normalize(a) for a in stop_words.splitlines() if a
         ]
         return normalized_stop_words
 
@@ -194,23 +183,16 @@ def alert_text_normalize(text):
         text = text.raw
     if six.PY2:
         if isinstance(text, str):
-            text = text.decode('latin-1')
-    text = NBSP_RE.sub(' ', text)
-    if six.PY2:
-        parser = HTMLParser()
-        text = parser.unescape(text)
-    else:
-        text = html.unescape(text)
+            text = text.decode("latin-1")
+    text = NBSP_RE.sub(" ", text)
+    text = html.unescape(text)
     text = text.lower()
     text_list = [
-        c.encode('ascii', 'ignore')
-        for c in unicodedata.normalize('NFKD', text)
+        c.encode("ascii", "ignore")
+        for c in unicodedata.normalize("NFKD", text)
         if not unicodedata.combining(c)
     ]
-    if six.PY2:
-        text = u''.join(text_list)
-    else:
-        text = b''.join(text_list).decode()
+    text = b"".join(text_list).decode()
     return text
 
 
@@ -220,20 +202,19 @@ def get_text_from_object(obj):
     The object can be a comment, a Dexterity object or an event holding any
     of the two.
     """
-    text = u''
+    text = ""
 
-    if getattr(obj, 'text', None):
+    if getattr(obj, "text", None):
         text = obj.text
 
     # if it's an event on a comment
-    elif getattr(obj, 'comment', None) and \
-            getattr(obj.comment, 'text', None):
+    elif getattr(obj, "comment", None) and getattr(obj.comment, "text", None):
         text = obj.comment.text
 
     # if it's an event on a DX type
-    elif getattr(obj, 'object', None):
+    elif getattr(obj, "object", None):
         obj = obj.object
-        if getattr(obj, 'text', None):
+        if getattr(obj, "text", None):
             text = obj.text
 
     return text
@@ -249,19 +230,17 @@ def get_new_entries(old_entries, new_entries):
     if new_entries is None:
         return []
 
-    old_set = set([])
+    old_set = set()
     if old_entries:
-        old_set = set([
-            alert_text_normalize(e)
-            for e in old_entries.split('\n')
-        ])
-        old_set -= {u'', }  # remove empty string
+        old_set = {alert_text_normalize(e) for e in old_entries.split("\n")}
+        old_set -= {
+            "",
+        }  # remove empty string
 
-    new_set = set([
-        alert_text_normalize(e)
-        for e in new_entries.split('\n')
-    ])
-    new_set -= {u'', }  # remove empty string
+    new_set = {alert_text_normalize(e) for e in new_entries.split("\n")}
+    new_set -= {
+        "",
+    }  # remove empty string
 
     # set difference, see:
     # https://docs.python.org/2/library/stdtypes.html#set.difference
@@ -283,4 +262,4 @@ def verify_brain(brain, new_entries):
     if utility.has_stop_words(text, stop_words=new_entries):
         noLongerProvides(obj, IStopWordsVerified)
         alsoProvides(obj, IHasStopWords)
-        obj.reindexObject(idxs=('object_provides', ))
+        obj.reindexObject(idxs=("object_provides",))

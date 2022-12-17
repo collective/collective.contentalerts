@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from Acquisition import aq_base
 from collective.taskqueue.testing import TASK_QUEUE_FIXTURE
 from plone.app.testing import applyProfile
@@ -22,12 +21,12 @@ class CollectiveContentalertsLayer(PloneSandboxLayer):
         self.loadZCML(package=collective.contentalerts)
 
     def setUpPloneSite(self, portal):
-        applyProfile(portal, 'collective.contentalerts:default')
+        applyProfile(portal, "collective.contentalerts:default")
 
         # Configure mock mail host
         site_manager = getSiteManager(portal)
         site_manager.unregisterUtility(provided=IMailHost)
-        mail_host = MockMailHost('MailHost')
+        mail_host = MockMailHost("MailHost")
         site_manager.registerUtility(mail_host, IMailHost)
         portal._original_MailHost = portal.MailHost
         portal.MailHost = mail_host
@@ -37,8 +36,7 @@ class CollectiveContentalertsLayer(PloneSandboxLayer):
         portal.MailHost = portal._original_MailHost
         site_manager.unregisterUtility(provided=IMailHost)
         site_manager.registerUtility(
-            aq_base(portal._original_MailHost),
-            provided=IMailHost
+            aq_base(portal._original_MailHost), provided=IMailHost
         )
 
 
@@ -47,11 +45,11 @@ COLLECTIVE_CONTENTALERTS_FIXTURE = CollectiveContentalertsLayer()
 
 COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING = IntegrationTesting(
     bases=(COLLECTIVE_CONTENTALERTS_FIXTURE,),
-    name='CollectiveContentalertsLayer:IntegrationTesting'
+    name="CollectiveContentalertsLayer:IntegrationTesting",
 )
 COLLECTIVE_CONTENTALERTS_FUNCTIONAL_TESTING = FunctionalTesting(
     bases=(COLLECTIVE_CONTENTALERTS_FIXTURE,),
-    name='CollectiveContentalertsLayer:FunctionalTesting'
+    name="CollectiveContentalertsLayer:FunctionalTesting",
 )
 
 COLLECTIVE_CONTENTALERTS_ASYNC_FUNCTIONAL_TESTING = FunctionalTesting(
@@ -59,11 +57,9 @@ COLLECTIVE_CONTENTALERTS_ASYNC_FUNCTIONAL_TESTING = FunctionalTesting(
         TASK_QUEUE_FIXTURE,
         COLLECTIVE_CONTENTALERTS_FIXTURE,
     ),
-    name='CollectiveContentalertsAsyncLayer:FunctionalTesting'
+    name="CollectiveContentalertsAsyncLayer:FunctionalTesting",
 )
 
 optionflags = (
-    doctest.ELLIPSIS |
-    doctest.NORMALIZE_WHITESPACE |
-    doctest.REPORT_ONLY_FIRST_FAILURE
+    doctest.ELLIPSIS | doctest.NORMALIZE_WHITESPACE | doctest.REPORT_ONLY_FIRST_FAILURE
 )
