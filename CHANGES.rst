@@ -8,6 +8,18 @@ Changelog
 
 .. towncrier release notes start
 
+3.2.1 (2022-12-17)
+------------------
+
+Bug fixes:
+
+
+- Add linting actions via GitHub Actions.
+  [gforcada] (#1)
+- Add support for Plone 5.2.10.
+  [gforcada] (#2)
+
+
 3.2.0 (2021-03-31)
 ------------------
 

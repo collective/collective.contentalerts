@@ -21,7 +21,7 @@ Contributors
 
 setup(
     name="collective.contentalerts",
-    version="3.2.1.dev0",
+    version="3.2.1",
     description="An add-on for Plone to get alerts about content",
     long_description=long_description,
     # Get more strings from
