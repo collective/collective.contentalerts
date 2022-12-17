@@ -7,13 +7,9 @@ from plone.app.registry.browser import controlpanel
 class ControlPanelForm(controlpanel.RegistryEditForm):
 
     schema = IStopWords
-    label = _(
-        u'stop_words_controlpanel_settings_label',
-        default=u'Stop words'
-    )
+    label = _("stop_words_controlpanel_settings_label", default="Stop words")
     description = _(
-        u'stop_words_controlpanel_settings_description',
-        default=u'Edit stop words.'
+        "stop_words_controlpanel_settings_description", default="Edit stop words."
     )
 
 
