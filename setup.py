@@ -3,23 +3,29 @@ from setuptools import find_packages
 from setuptools import setup
 
 
-long_description = (
-    open("README.rst").read() + "\n" + "Contributors\n"
-    "============\n"
-    + "\n"
-    + open("CONTRIBUTORS.rst").read()
-    + "\n"
-    + open("CHANGES.rst").read()
-    + "\n"
-)
+def read_file(filename):
+    with open(filename) as file_obj:
+        file_contents = file_obj.read()
+    return file_contents
 
+
+long_description = f"""
+{read_file('README.rst')}
+
+Contributors
+============
+{read_file('CONTRIBUTORS.rst')}
+
+{read_file('CHANGES.rst')}
+"""
 
 setup(
     name="collective.contentalerts",
     version="3.2.1.dev0",
     description="An add-on for Plone to get alerts about content",
     long_description=long_description,
-    # Get more from http://pypi.python.org/pypi?%3Aaction=list_classifiers
+    # Get more strings from
+    # https://pypi.org/classifiers/
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
@@ -31,6 +37,7 @@ setup(
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
         "Operating System :: OS Independent",
         "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
     ],
