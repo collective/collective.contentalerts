@@ -8,6 +8,7 @@ Test setup
 ==========
     >>> from email import message_from_string
     >>> from plone.testing.z2 import Browser
+    >>> from Products.CMFPlone.utils import safe_unicode
 
     >>> app = layer['app']
     >>> portal = layer['portal']
@@ -64,7 +65,8 @@ Add a document::
     >>> browser.getControl('Save').click()
 
 An email is generated::
-    >>> mail = message_from_string(mailhost.messages[0])
+    >>> raw_mail = safe_unicode(mailhost.messages[0])
+    >>> mail = message_from_string(raw_mail)
     >>> mail['To'] == 'moderator@plone.org'
     True
     >>> subject = mail['Subject']
