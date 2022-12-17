@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.contentalerts.interfaces import IAlert
 from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWords
@@ -435,7 +434,7 @@ class GetTextFromObjectTest(unittest.TestCase):
     def test_contentish_like(self):
         """Dexterity content types and comments have a text method"""
 
-        class DummyDXComment(object):
+        class DummyDXComment:
             @property
             def text(self):
                 return "found!"
@@ -445,12 +444,12 @@ class GetTextFromObjectTest(unittest.TestCase):
     def test_event_with_contentish_like(self):
         """Content type wrapped in an event"""
 
-        class DummyDX(object):
+        class DummyDX:
             @property
             def text(self):
                 return "found!"
 
-        class DummyEventDX(object):
+        class DummyEventDX:
             @property
             def object(self):
                 return DummyDX()
@@ -460,12 +459,12 @@ class GetTextFromObjectTest(unittest.TestCase):
     def test_event_with_comment_like(self):
         """Comment wrapped in an event"""
 
-        class DummyComment(object):
+        class DummyComment:
             @property
             def text(self):
                 return "found!"
 
-        class DummyEventComment(object):
+        class DummyEventComment:
             @property
             def comment(self):
                 return DummyComment()
@@ -475,7 +474,7 @@ class GetTextFromObjectTest(unittest.TestCase):
     def test_something_else(self):
         """Something that does not have getText nor text"""
 
-        class Dummy(object):
+        class Dummy:
             pass
 
         self.assertEqual(get_text_from_object(Dummy()), "")

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.contentalerts.testing import (  # noqa
     COLLECTIVE_CONTENTALERTS_FUNCTIONAL_TESTING,
 )
@@ -18,7 +17,7 @@ def test_suite():
         [
             layered(
                 doctest.DocFileSuite(
-                    "tests/{0}".format(test_file),
+                    f"tests/{test_file}",
                     package="collective.contentalerts",
                     optionflags=optionflags,
                 ),

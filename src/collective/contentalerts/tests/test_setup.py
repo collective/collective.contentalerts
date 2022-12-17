@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Setup tests for this package."""
 from collective.contentalerts.interfaces import ICollectiveContentalertsLayer
 from collective.contentalerts.testing import (  # noqa

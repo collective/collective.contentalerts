@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.contentalerts import _
 from collective.contentalerts.interfaces import IStopWords
 from plone.app.registry.browser import controlpanel

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.contentalerts import ASYNC
 from collective.contentalerts import logger
 from collective.contentalerts.interfaces import IStopWordsVerified
@@ -34,13 +33,13 @@ def review_verified_objects(settings, event):
         amount = 300
         count = len(brains)
         while count > 0:
-            view_path = "/{0}/@@review-objects".format(api.portal.get().id)
+            view_path = f"/{api.portal.get().id}/@@review-objects"
             params = {
                 "start": amount * batch - amount,
                 "size": amount,
                 "entries": new_entries,
             }
-            logger.warn("Queued request {0} {1}".format(view_path, params))
+            logger.warn(f"Queued request {view_path} {params}")
             taskqueue.add(view_path, params=params)
 
             batch += 1

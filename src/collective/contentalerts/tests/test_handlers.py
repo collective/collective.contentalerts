@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.contentalerts.interfaces import IStopWords
 from collective.contentalerts.interfaces import IStopWordsVerified
 from collective.contentalerts.testing import (  # noqa

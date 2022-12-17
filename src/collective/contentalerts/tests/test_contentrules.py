@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.contentalerts.contentrules import ForbiddenTextAlertCondition
 from collective.contentalerts.contentrules import InadequateTextAlertCondition
 from collective.contentalerts.contentrules import TextAlertCondition
@@ -32,13 +31,13 @@ import unittest
 
 
 @implementer(IObjectEvent)
-class CommentDummyEvent(object):
+class CommentDummyEvent:
     def __init__(self, obj):
         self.comment = obj
 
 
 @implementer(IObjectEvent)
-class ContentTypeDummyEvent(object):
+class ContentTypeDummyEvent:
     def __init__(self, obj):
         self.object = obj
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from Acquisition import aq_base
 from collective.taskqueue.testing import TASK_QUEUE_FIXTURE
 from plone.app.testing import applyProfile

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.contentalerts.interfaces import IAlert
 from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWords
@@ -15,16 +14,13 @@ import six
 import unicodedata
 
 
-if six.PY2:
-    from HTMLParser import HTMLParser
-else:
-    import html
+import html
 
 
 NBSP_RE = re.compile(r"\s+|&#160;|&nbsp;", re.UNICODE)
 
 
-class Alert(object):
+class Alert:
     """Utility to know if a given text contains stop words."""
 
     def get_snippets(self, text, stop_words=None, chars=150):
@@ -60,7 +56,7 @@ class Alert(object):
             snippet += snippets_data[index][0]
             stop_words_found.append(snippets_data[index][1])
 
-        result = "{0}{1}".format(", ".join(self._unique(stop_words_found)), snippet)
+        result = "{}{}".format(", ".join(self._unique(stop_words_found)), snippet)
         return result
 
     def has_stop_words(self, text, stop_words=None):
@@ -123,7 +119,7 @@ class Alert(object):
         if before < 0:
             before = 0
         after = index + len(word) + chars
-        return "\n\n...{0}...".format(text[before:after])
+        return f"\n\n...{text[before:after]}..."
 
     @staticmethod
     def _unique(sequence):
@@ -156,7 +152,7 @@ class Alert(object):
                     name=key_name, interface=IStopWords
                 )
                 if stop_words:
-                    return_stop_words += "\n{0}".format(stop_words)
+                    return_stop_words += f"\n{stop_words}"
             except (KeyError, InvalidParameterError):
                 pass
 
@@ -189,21 +185,14 @@ def alert_text_normalize(text):
         if isinstance(text, str):
             text = text.decode("latin-1")
     text = NBSP_RE.sub(" ", text)
-    if six.PY2:
-        parser = HTMLParser()
-        text = parser.unescape(text)
-    else:
-        text = html.unescape(text)
+    text = html.unescape(text)
     text = text.lower()
     text_list = [
         c.encode("ascii", "ignore")
         for c in unicodedata.normalize("NFKD", text)
         if not unicodedata.combining(c)
     ]
-    if six.PY2:
-        text = "".join(text_list)
-    else:
-        text = b"".join(text_list).decode()
+    text = b"".join(text_list).decode()
     return text
 
 
@@ -241,14 +230,14 @@ def get_new_entries(old_entries, new_entries):
     if new_entries is None:
         return []
 
-    old_set = set([])
+    old_set = set()
     if old_entries:
-        old_set = set([alert_text_normalize(e) for e in old_entries.split("\n")])
+        old_set = {alert_text_normalize(e) for e in old_entries.split("\n")}
         old_set -= {
             "",
         }  # remove empty string
 
-    new_set = set([alert_text_normalize(e) for e in new_entries.split("\n")])
+    new_set = {alert_text_normalize(e) for e in new_entries.split("\n")}
     new_set -= {
         "",
     }  # remove empty string

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from collective.contentalerts import _
 from collective.contentalerts.interfaces import IAlert
 from collective.contentalerts.interfaces import IForbiddenTextAlertCondition
@@ -19,7 +18,7 @@ from zope.interface import implementer
 from zope.interface import noLongerProvides
 
 
-class TextAlertConditionExecutor(object):
+class TextAlertConditionExecutor:
     """The executor for this condition."""
 
     def __init__(self, context, element, event):
