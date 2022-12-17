@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from collective.contentalerts.interfaces import IStopWords
-from collective.contentalerts.testing import (
+from collective.contentalerts.testing import (  # noqa
     COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING,
-)  # noqa
+)
 from plone import api
 from plone.app.testing import setRoles
 from plone.app.testing import TEST_USER_ID

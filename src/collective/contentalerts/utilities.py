@@ -14,6 +14,7 @@ import re
 import six
 import unicodedata
 
+
 if six.PY2:
     from HTMLParser import HTMLParser
 else:

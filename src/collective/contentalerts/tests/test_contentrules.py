@@ -6,12 +6,12 @@ from collective.contentalerts.contentrules import TextAlertConditionEditFormView
 from collective.contentalerts.interfaces import IAlert
 from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWords
-from collective.contentalerts.testing import (
-    COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING,
-)  # noqa
-from collective.contentalerts.testing import (
+from collective.contentalerts.testing import (  # noqa
     COLLECTIVE_CONTENTALERTS_FUNCTIONAL_TESTING,
-)  # noqa
+)
+from collective.contentalerts.testing import (  # noqa
+    COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING,
+)
 from plone import api
 from plone.app.contentrules.rule import Rule
 from plone.app.discussion.interfaces import IConversation

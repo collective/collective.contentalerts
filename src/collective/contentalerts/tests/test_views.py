@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWordsVerified
-from collective.contentalerts.testing import (
+from collective.contentalerts.testing import (  # noqa
     COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING,
-)  # noqa
+)
 from collective.taskqueue.interfaces import ITaskQueueLayer
 from plone import api
 from plone.app.discussion.interfaces import IConversation

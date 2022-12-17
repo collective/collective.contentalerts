@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Setup tests for this package."""
 from collective.contentalerts.interfaces import ICollectiveContentalertsLayer
-from collective.contentalerts.testing import (
+from collective.contentalerts.testing import (  # noqa
     COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING,
-)  # noqa
+)
 from plone.browserlayer import utils
 from Products.CMFPlone.utils import get_installer
 

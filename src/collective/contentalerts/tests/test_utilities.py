@@ -3,9 +3,9 @@ from collective.contentalerts.interfaces import IAlert
 from collective.contentalerts.interfaces import IHasStopWords
 from collective.contentalerts.interfaces import IStopWords
 from collective.contentalerts.interfaces import IStopWordsVerified
-from collective.contentalerts.testing import (
+from collective.contentalerts.testing import (  # noqa
     COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING,
-)  # noqa
+)
 from collective.contentalerts.utilities import Alert
 from collective.contentalerts.utilities import alert_text_normalize
 from collective.contentalerts.utilities import get_new_entries

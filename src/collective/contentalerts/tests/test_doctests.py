@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from collective.contentalerts.testing import (
+from collective.contentalerts.testing import (  # noqa
     COLLECTIVE_CONTENTALERTS_FUNCTIONAL_TESTING,
-)  # noqa
+)
 from collective.contentalerts.testing import optionflags
 from plone.testing import layered
 

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from collective.contentalerts.interfaces import IStopWords
 from collective.contentalerts.interfaces import IStopWordsVerified
-from collective.contentalerts.testing import (
+from collective.contentalerts.testing import (  # noqa
     COLLECTIVE_CONTENTALERTS_ASYNC_FUNCTIONAL_TESTING,
-)  # noqa
+)
 from collective.taskqueue.interfaces import ITaskQueue
 from plone import api
 from plone.app.testing import setRoles
