@@ -24,8 +24,8 @@ from zope.component import createObject
 from zope.component import getAdapter
 from zope.component import getMultiAdapter
 from zope.component import getUtility
-from zope.component.interfaces import IObjectEvent
 from zope.interface import implementer
+from zope.interface.interfaces import IObjectEvent
 
 import unittest
 
