@@ -15,7 +15,6 @@ import unittest
 
 
 class TestVerifiedInterfaceHandler(unittest.TestCase):
-
     layer = COLLECTIVE_CONTENTALERTS_ASYNC_FUNCTIONAL_TESTING
 
     def setUp(self):
