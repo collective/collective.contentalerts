@@ -68,7 +68,7 @@ setup(
         "Products.GenericSetup",
         "setuptools",
         "z3c.form",
-        "Zope2",
+        "Zope",
         "zope.component",
         "zope.i18nmessageid",
         "zope.interface",
