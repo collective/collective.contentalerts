@@ -4,8 +4,6 @@ from plone import api
 from urllib.parse import unquote_plus
 from zope.publisher.browser import BrowserView
 
-import six
-
 
 class ReviewObjectsView(BrowserView):
     def __call__(self):
