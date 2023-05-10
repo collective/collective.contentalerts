@@ -67,7 +67,6 @@ setup(
         "Products.CMFPlone",
         "Products.GenericSetup",
         "setuptools",
-        "six",
         "z3c.form",
         "Zope2",
         "zope.component",

@@ -10,7 +10,6 @@ from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
 
 import re
-import six
 import unicodedata
 
 
@@ -181,9 +180,6 @@ def alert_text_normalize(text):
     """
     if IRichTextValue.providedBy(text):
         text = text.raw
-    if six.PY2:
-        if isinstance(text, str):
-            text = text.decode("latin-1")
     text = NBSP_RE.sub(" ", text)
     text = html.unescape(text)
     text = text.lower()
