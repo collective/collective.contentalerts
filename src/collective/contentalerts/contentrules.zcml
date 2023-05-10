@@ -1,111 +1,111 @@
 <configure
-  xmlns="http://namespaces.zope.org/zope"
-  xmlns:browser="http://namespaces.zope.org/browser"
-  xmlns:plone="http://namespaces.plone.org/plone">
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    >
 
   <!-- Text alert condition -->
   <adapter
-    factory="collective.contentalerts.contentrules.TextAlertConditionExecutor"
-    for="zope.interface.Interface
-         collective.contentalerts.interfaces.ITextAlertCondition
-         zope.interface.Interface"
-    provides="plone.contentrules.rule.interfaces.IExecutable"
-  />
+      factory="collective.contentalerts.contentrules.TextAlertConditionExecutor"
+      provides="plone.contentrules.rule.interfaces.IExecutable"
+      for="zope.interface.Interface
+           collective.contentalerts.interfaces.ITextAlertCondition
+           zope.interface.Interface"
+      />
 
   <adapter
-    factory="collective.contentalerts.contentrules.InadequateTextAlertConditionExecutor"
-    for="zope.interface.Interface
-         collective.contentalerts.interfaces.IInadequateTextAlertCondition
-         zope.interface.Interface"
-    provides="plone.contentrules.rule.interfaces.IExecutable"
-  />
+      factory="collective.contentalerts.contentrules.InadequateTextAlertConditionExecutor"
+      provides="plone.contentrules.rule.interfaces.IExecutable"
+      for="zope.interface.Interface
+           collective.contentalerts.interfaces.IInadequateTextAlertCondition
+           zope.interface.Interface"
+      />
 
   <adapter
-    factory="collective.contentalerts.contentrules.ForbiddenTextAlertConditionExecutor"
-    for="zope.interface.Interface
-         collective.contentalerts.interfaces.IForbiddenTextAlertCondition
-         zope.interface.Interface"
-    provides="plone.contentrules.rule.interfaces.IExecutable"
-  />
+      factory="collective.contentalerts.contentrules.ForbiddenTextAlertConditionExecutor"
+      provides="plone.contentrules.rule.interfaces.IExecutable"
+      for="zope.interface.Interface
+           collective.contentalerts.interfaces.IForbiddenTextAlertCondition
+           zope.interface.Interface"
+      />
 
   <browser:page
-    class="collective.contentalerts.contentrules.TextAlertConditionAddFormView"
-    for="plone.app.contentrules.browser.interfaces.IRuleConditionAdding"
-    name="collective.contentalerts.TextAlert"
-    permission="plone.app.contentrules.ManageContentRules"
-  />
+      name="collective.contentalerts.TextAlert"
+      for="plone.app.contentrules.browser.interfaces.IRuleConditionAdding"
+      class="collective.contentalerts.contentrules.TextAlertConditionAddFormView"
+      permission="plone.app.contentrules.ManageContentRules"
+      />
 
   <browser:page
-    class="collective.contentalerts.contentrules.TextAlertConditionAddFormView"
-    for="plone.app.contentrules.browser.interfaces.IRuleConditionAdding"
-    name="collective.contentalerts.TextAlertInadequate"
-    permission="plone.app.contentrules.ManageContentRules"
-  />
+      name="collective.contentalerts.TextAlertInadequate"
+      for="plone.app.contentrules.browser.interfaces.IRuleConditionAdding"
+      class="collective.contentalerts.contentrules.TextAlertConditionAddFormView"
+      permission="plone.app.contentrules.ManageContentRules"
+      />
 
   <browser:page
-    class="collective.contentalerts.contentrules.TextAlertConditionAddFormView"
-    for="plone.app.contentrules.browser.interfaces.IRuleConditionAdding"
-    name="collective.contentalerts.TextAlertForbidden"
-    permission="plone.app.contentrules.ManageContentRules"
-  />
+      name="collective.contentalerts.TextAlertForbidden"
+      for="plone.app.contentrules.browser.interfaces.IRuleConditionAdding"
+      class="collective.contentalerts.contentrules.TextAlertConditionAddFormView"
+      permission="plone.app.contentrules.ManageContentRules"
+      />
 
   <browser:page
-    class="collective.contentalerts.contentrules.TextAlertConditionEditFormView"
-    for="collective.contentalerts.interfaces.ITextAlertCondition"
-    name="edit"
-    permission="plone.app.contentrules.ManageContentRules"
-  />
+      name="edit"
+      for="collective.contentalerts.interfaces.ITextAlertCondition"
+      class="collective.contentalerts.contentrules.TextAlertConditionEditFormView"
+      permission="plone.app.contentrules.ManageContentRules"
+      />
 
   <plone:ruleCondition
-    addview="collective.contentalerts.TextAlert"
-    description="Apply when words from a list are found on the text"
-    editview="edit"
-    event="zope.interface.interfaces.IObjectEvent"
-    factory="collective.contentalerts.contentrules.TextAlertCondition"
-    for="*"
-    name="collective.contentalerts.TextAlert"
-    schema="collective.contentalerts.interfaces.ITextAlertCondition"
-    title="Text alert"
-  />
+      name="collective.contentalerts.TextAlert"
+      title="Text alert"
+      description="Apply when words from a list are found on the text"
+      for="*"
+      event="zope.interface.interfaces.IObjectEvent"
+      schema="collective.contentalerts.interfaces.ITextAlertCondition"
+      factory="collective.contentalerts.contentrules.TextAlertCondition"
+      addview="collective.contentalerts.TextAlert"
+      editview="edit"
+      />
 
   <plone:ruleCondition
-    addview="collective.contentalerts.TextAlertInadequate"
-    description="Apply when inadequate words are found on the text"
-    editview="edit"
-    event="zope.interface.interfaces.IObjectEvent"
-    factory="collective.contentalerts.contentrules.InadequateTextAlertCondition"
-    for="*"
-    name="collective.contentalerts.InadequateTextAlert"
-    schema="collective.contentalerts.interfaces.IInadequateTextAlertCondition"
-    title="Inadequate text alert"
-  />
+      name="collective.contentalerts.InadequateTextAlert"
+      title="Inadequate text alert"
+      description="Apply when inadequate words are found on the text"
+      for="*"
+      event="zope.interface.interfaces.IObjectEvent"
+      schema="collective.contentalerts.interfaces.IInadequateTextAlertCondition"
+      factory="collective.contentalerts.contentrules.InadequateTextAlertCondition"
+      addview="collective.contentalerts.TextAlertInadequate"
+      editview="edit"
+      />
 
   <plone:ruleCondition
-    addview="collective.contentalerts.TextAlertForbidden"
-    description="Apply when forbidden words are found on the text"
-    editview="edit"
-    event="zope.interface.interfaces.IObjectEvent"
-    factory="collective.contentalerts.contentrules.ForbiddenTextAlertCondition"
-    for="*"
-    name="collective.contentalerts.ForbiddenTextAlert"
-    schema="collective.contentalerts.interfaces.IForbiddenTextAlertCondition"
-    title="Forbidden text alert"
-  />
+      name="collective.contentalerts.ForbiddenTextAlert"
+      title="Forbidden text alert"
+      description="Apply when forbidden words are found on the text"
+      for="*"
+      event="zope.interface.interfaces.IObjectEvent"
+      schema="collective.contentalerts.interfaces.IForbiddenTextAlertCondition"
+      factory="collective.contentalerts.contentrules.ForbiddenTextAlertCondition"
+      addview="collective.contentalerts.TextAlertForbidden"
+      editview="edit"
+      />
 
   <!-- Content rules string substitution -->
   <adapter
-    factory="collective.contentalerts.contentrules.TextAlertSubstitution"
-    for="zope.interface.Interface"
-    name="text_alert"
-    provides="plone.stringinterp.interfaces.IStringSubstitution"
-  />
+      factory="collective.contentalerts.contentrules.TextAlertSubstitution"
+      provides="plone.stringinterp.interfaces.IStringSubstitution"
+      for="zope.interface.Interface"
+      name="text_alert"
+      />
 
   <adapter
-    factory="collective.contentalerts.contentrules.CommentAlertSubstitution"
-    for="zope.interface.Interface"
-    name="comment_alert"
-    provides="plone.stringinterp.interfaces.IStringSubstitution"
-  />
+      factory="collective.contentalerts.contentrules.CommentAlertSubstitution"
+      provides="plone.stringinterp.interfaces.IStringSubstitution"
+      for="zope.interface.Interface"
+      name="comment_alert"
+      />
 
 </configure>
-

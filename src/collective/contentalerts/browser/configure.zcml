@@ -2,7 +2,8 @@
     xmlns="http://namespaces.zope.org/zope"
     xmlns:browser="http://namespaces.zope.org/browser"
     xmlns:zcml="http://namespaces.zope.org/zcml"
-    i18n_domain="collective.contentalerts">
+    i18n_domain="collective.contentalerts"
+    >
 
   <!-- Publish static files -->
   <browser:resourceDirectory
@@ -11,37 +12,37 @@
       />
 
   <browser:page
-    name="stop-words-settings"
-    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-    class="collective.contentalerts.browser.controlpanel.ControlPanelView"
-    permission="collective.contentalerts.stop_words.edit"
-    layer="collective.contentalerts.interfaces.ICollectiveContentalertsLayer"
-    />
+      name="stop-words-settings"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class="collective.contentalerts.browser.controlpanel.ControlPanelView"
+      permission="collective.contentalerts.stop_words.edit"
+      layer="collective.contentalerts.interfaces.ICollectiveContentalertsLayer"
+      />
 
   <browser:page
-    name="discard-alert"
-    for="Products.CMFCore.interfaces.IContentish"
-    class="collective.contentalerts.browser.discard_alert.DiscardAlertView"
-    permission="collective.contentalerts.stop_words.edit"
-    layer="collective.contentalerts.interfaces.ICollectiveContentalertsLayer"
-    />
+      name="discard-alert"
+      for="Products.CMFCore.interfaces.IContentish"
+      class="collective.contentalerts.browser.discard_alert.DiscardAlertView"
+      permission="collective.contentalerts.stop_words.edit"
+      layer="collective.contentalerts.interfaces.ICollectiveContentalertsLayer"
+      />
 
   <browser:page
-    name="discard-alert"
-    for="plone.app.discussion.interfaces.IComment"
-    class="collective.contentalerts.browser.discard_alert.DiscardAlertView"
-    permission="collective.contentalerts.stop_words.edit"
-    layer="collective.contentalerts.interfaces.ICollectiveContentalertsLayer"
-    />
+      name="discard-alert"
+      for="plone.app.discussion.interfaces.IComment"
+      class="collective.contentalerts.browser.discard_alert.DiscardAlertView"
+      permission="collective.contentalerts.stop_words.edit"
+      layer="collective.contentalerts.interfaces.ICollectiveContentalertsLayer"
+      />
 
   <!-- Async views  -->
   <browser:page
-    zcml:condition="installed collective.taskqueue"
-    class="collective.contentalerts.browser.review_objects.ReviewObjectsView"
-    for="Products.CMFPlone.interfaces.IPloneSiteRoot"
-    name="review-objects"
-    permission="cmf.ManagePortal"
-    layer="collective.taskqueue.interfaces.ITaskQueueLayer"
-    />
+      name="review-objects"
+      for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+      class="collective.contentalerts.browser.review_objects.ReviewObjectsView"
+      permission="cmf.ManagePortal"
+      layer="collective.taskqueue.interfaces.ITaskQueueLayer"
+      zcml:condition="installed collective.taskqueue"
+      />
 
 </configure>
