@@ -36,6 +36,20 @@
   />
 
   <browser:page
+    class="collective.contentalerts.contentrules.TextAlertConditionAddFormView"
+    for="plone.app.contentrules.browser.interfaces.IRuleConditionAdding"
+    name="collective.contentalerts.TextAlertInadequate"
+    permission="plone.app.contentrules.ManageContentRules"
+  />
+
+  <browser:page
+    class="collective.contentalerts.contentrules.TextAlertConditionAddFormView"
+    for="plone.app.contentrules.browser.interfaces.IRuleConditionAdding"
+    name="collective.contentalerts.TextAlertForbidden"
+    permission="plone.app.contentrules.ManageContentRules"
+  />
+
+  <browser:page
     class="collective.contentalerts.contentrules.TextAlertConditionEditFormView"
     for="collective.contentalerts.interfaces.ITextAlertCondition"
     name="edit"
@@ -55,7 +69,7 @@
   />
 
   <plone:ruleCondition
-    addview="collective.contentalerts.TextAlert"
+    addview="collective.contentalerts.TextAlertInadequate"
     description="Apply when inadequate words are found on the text"
     editview="edit"
     event="zope.interface.interfaces.IObjectEvent"
@@ -67,7 +81,7 @@
   />
 
   <plone:ruleCondition
-    addview="collective.contentalerts.TextAlert"
+    addview="collective.contentalerts.TextAlertForbidden"
     description="Apply when forbidden words are found on the text"
     editview="edit"
     event="zope.interface.interfaces.IObjectEvent"
