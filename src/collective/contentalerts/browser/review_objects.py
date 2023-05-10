@@ -1,10 +1,8 @@
 from collective.contentalerts.interfaces import IStopWordsVerified
 from collective.contentalerts.utilities import verify_brain
 from plone import api
-from zope.publisher.browser import BrowserView
-
-
 from urllib.parse import unquote_plus
+from zope.publisher.browser import BrowserView
 
 
 class ReviewObjectsView(BrowserView):
