@@ -30,6 +30,7 @@ repos:
     rev: v2.2.4
     hooks:
     -   id: codespell
+        exclude: .po
         additional_dependencies:
           - tomli
 -   repo: https://github.com/mgedmin/check-manifest
