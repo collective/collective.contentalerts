@@ -2,4 +2,6 @@ graft src/collective
 graft docs
 include *.cfg *.rst *.in *.py *.txt *.toml
 exclude __pycache__
+exclude .pre-commit-config.yaml
+exclude tox.ini
 recursive-exclude news *
