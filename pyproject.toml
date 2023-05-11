@@ -28,3 +28,6 @@ profile = "plone"
 
 [tool.black]
 target-version = ["py38"]
+
+[tool.codespell]
+ignore-words-list = "te,nd"
