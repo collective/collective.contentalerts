@@ -8,7 +8,7 @@ attrs==22.1.0
     # via flake8-bugbear
 black==22.12.0
     # via -r requirements-lint.in
-certifi==2022.12.7
+certifi==2023.7.22
     # via requests
 charset-normalizer==2.1.1
     # via requests
@@ -75,9 +75,5 @@ requests==2.28.1
     # via coveralls
 tokenize-rt==5.0.0
     # via pyupgrade
-tomli==2.0.1
-    # via black
-typing-extensions==4.4.0
-    # via black
 urllib3==1.26.13
     # via requests
