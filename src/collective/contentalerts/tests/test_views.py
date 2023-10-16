@@ -16,7 +16,6 @@ import unittest
 
 
 class DiscardAlertsViewTestCase(unittest.TestCase):
-
     layer = COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING
 
     def setUp(self):
@@ -113,7 +112,6 @@ class DiscardAlertsViewTestCase(unittest.TestCase):
 
 
 class ReviewObjectsView(unittest.TestCase):
-
     layer = COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING
 
     def setUp(self):

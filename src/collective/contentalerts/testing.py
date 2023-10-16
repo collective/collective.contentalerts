@@ -14,7 +14,6 @@ import doctest
 
 
 class CollectiveContentalertsLayer(PloneSandboxLayer):
-
     defaultBases = (PLONE_FIXTURE,)
 
     def setUpZope(self, app, configurationContext):

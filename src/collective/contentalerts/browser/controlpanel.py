@@ -4,7 +4,6 @@ from plone.app.registry.browser import controlpanel
 
 
 class ControlPanelForm(controlpanel.RegistryEditForm):
-
     schema = IStopWords
     label = _("stop_words_controlpanel_settings_label", default="Stop words")
     description = _(
@@ -13,5 +12,4 @@ class ControlPanelForm(controlpanel.RegistryEditForm):
 
 
 class ControlPanelView(controlpanel.ControlPanelFormWrapper):
-
     form = ControlPanelForm
