@@ -1,7 +1,9 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <rolemap>
   <permissions>
-    <permission name="collective.contentalerts: Edit stop words" acquire="True">
+    <permission acquire="True"
+                name="collective.contentalerts: Edit stop words"
+    >
       <role name="Manager" />
       <role name="Site Administrator" />
     </permission>
