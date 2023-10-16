@@ -21,7 +21,6 @@ import unittest
 
 
 class AlertUtilityTestCase(unittest.TestCase):
-
     layer = COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING
 
     def setUp(self):
@@ -570,7 +569,6 @@ class TestEntryDiff(unittest.TestCase):
 
 
 class VerifyBrainTestCase(unittest.TestCase):
-
     layer = COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING
 
     def setUp(self):

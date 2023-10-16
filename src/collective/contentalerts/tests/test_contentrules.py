@@ -401,7 +401,6 @@ class TextAlertConditionTestCase(unittest.TestCase):
 
 
 class SpecificAlertConditionsTestCase(unittest.TestCase):
-
     layer = COLLECTIVE_CONTENTALERTS_INTEGRATION_TESTING
 
     def setUp(self):
