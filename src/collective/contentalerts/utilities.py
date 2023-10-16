@@ -9,12 +9,10 @@ from zope.component import getUtility
 from zope.interface import alsoProvides
 from zope.interface import noLongerProvides
 
+import html
 import re
 import six
 import unicodedata
-
-
-import html
 
 
 NBSP_RE = re.compile(r"\s+|&#160;|&nbsp;", re.UNICODE)
