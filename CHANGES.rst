@@ -11,8 +11,8 @@ Changelog
 3.2.3 (unreleased)
 ------------------
 
-- Nothing changed yet.
-
+- Update to Plone 6.
+  [gforcada]
 
 3.2.1 (2022-12-17)
 ------------------
