@@ -8,8 +8,8 @@ Changelog
 
 .. towncrier release notes start
 
-3.2.3 (unreleased)
-------------------
+4.0.0a0 (2023-12-01)
+--------------------
 
 - Update to Plone 6.
   [gforcada]
