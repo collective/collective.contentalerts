@@ -34,14 +34,14 @@ Create a content rule::
     >>> browser.getControl('Save').click()
 
 Add the text alert condition::
-    >>> browser.getControl('Add condition').value = ['collective.contentalerts.TextAlert']
-    >>> browser.getControl('Add', index=1).click()
+    >>> browser.getControl(name=':action', index=0).value = ['collective.contentalerts.TextAlert']
+    >>> browser.getControl('Add', index=0).click()
     >>> browser.getControl(name='form.widgets.stop_words').value = u'alert one\nalert two'
     >>> browser.getControl('Save').click()
 
 Add a mail action::
-    >>> browser.getControl('Add action').value = ['plone.actions.Mail']
-    >>> browser.getControl('Add', index=3).click()
+    >>> browser.getControl(name=':action', index=1).value = ['plone.actions.Mail']
+    >>> browser.getControl('Add', index=1).click()
     >>> browser.getControl(name='form.widgets.subject').value = u'alert'
     >>> browser.getControl(name='form.widgets.source').value = u'plone@plone.org'
     >>> browser.getControl(name='form.widgets.recipients').value = u'moderator@plone.org'
