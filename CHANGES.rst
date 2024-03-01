@@ -8,6 +8,22 @@ Changelog
 
 .. towncrier release notes start
 
+4.0.0 (2024-03-01)
+------------------
+
+Bug fixes:
+
+
+- Avoid a deprecation warning.
+  [gforcada] (#1)
+
+
+Internal:
+
+
+- Update configuration files.
+
+
 4.0.0a1 (unreleased)
 --------------------
 
