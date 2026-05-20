@@ -13,7 +13,6 @@ import html
 import re
 import unicodedata
 
-
 NBSP_RE = re.compile(r"\s+|&#160;|&nbsp;", re.UNICODE)
 
 
