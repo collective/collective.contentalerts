@@ -5,7 +5,6 @@ from collective.contentalerts.utilities import get_new_entries
 from collective.contentalerts.utilities import verify_brain
 from plone import api
 
-
 if ASYNC:
     from collective.taskqueue import taskqueue
 

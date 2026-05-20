@@ -7,7 +7,6 @@ from plone.testing import layered
 import doctest
 import unittest
 
-
 functional_tests = ("functional_contentrules.rst",)
 
 

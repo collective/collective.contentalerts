@@ -1,9 +1,9 @@
 # Generated from:
-# https://github.com/plone/meta/tree/master/config/default
+# https://github.com/plone/meta/tree/2.x/src/plone/meta/default
 # See the inline comments on how to expand/tweak this configuration file
 [meta]
 template = "default"
-commit-id = "68cda6e4"
+commit-id = "2.8.0"
 
 [pyproject]
 codespell_ignores = "te,nd"
@@ -15,13 +15,13 @@ check_manifest_ignores = """
 [github]
 jobs = [
     "qa",
-    "test",
-    "coverage",
     "dependencies",
     "release_ready",
-    ]
+    "circular",
+]
 
 [tox]
+test_matrix = { "6.2" = ["*"] }
 test_extras = """
     async
 """

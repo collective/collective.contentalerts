@@ -1,12 +1,12 @@
+from importlib.metadata import distribution
+from importlib.metadata import PackageNotFoundError
 from zope.i18nmessageid import MessageFactory
 
 import logging
-import pkg_resources
-
 
 try:
-    pkg_resources.get_distribution("collective.taskqueue")
-except pkg_resources.DistributionNotFound:
+    distribution("collective.taskqueue")
+except PackageNotFoundError:
     ASYNC = False
 else:
     ASYNC = True
