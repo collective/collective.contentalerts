@@ -30,16 +30,19 @@ jobs:
     - uses: actions/checkout@v6
       with:
         persist-credentials: false
-    - name: Install uv + caching
-      uses: astral-sh/setup-uv@v8.0.0
+
+    - uses: actions/setup-python@v6
       with:
-        enable-cache: true
-        cache-dependency-glob: |
-          setup.*
-          tox.ini
-          pyproject.toml
         python-version: ${{ matrix.config[0] }}
 
+    - name: Cache
+      uses: actions/cache@v5
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ matrix.config[0] }}-${{ hashFiles('tox.ini') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-${{ matrix.config[0] }}-
+          ${{ runner.os }}-pip-
 ##
 # Add extra configuration options in .meta.toml:
 #  [github]
@@ -51,9 +54,9 @@ jobs:
       # the bash one-liner below does not work on Windows
       if: contains(matrix.os, 'ubuntu')
       run: |
-        if [ `uvx tox list --no-desc -f init|wc -l` = 1 ]; then uvx --with tox-uv tox -e init;else true; fi
+        pip install tox
     - name: Test
-      run: uvx --with tox-uv tox -e ${{ matrix.config[2] }}
+      run: tox -e ${{ matrix.config[2] }}
 
 
 ##
