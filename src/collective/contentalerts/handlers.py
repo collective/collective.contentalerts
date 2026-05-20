@@ -38,7 +38,7 @@ def review_verified_objects(settings, event):
                 "size": amount,
                 "entries": new_entries,
             }
-            logger.warn(f"Queued request {view_path} {params}")
+            logger.warning(f"Queued request {view_path} {params}")
             taskqueue.add(view_path, params=params)
 
             batch += 1
