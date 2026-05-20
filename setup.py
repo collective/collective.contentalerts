@@ -1,6 +1,5 @@
 """Installer for the collective.contentalerts package."""
 
-from setuptools import find_packages
 from setuptools import setup
 
 
@@ -31,7 +30,7 @@ setup(
         "Development Status :: 5 - Production/Stable",
         "Environment :: Web Environment",
         "Framework :: Plone",
-        "Framework :: Plone :: 6.0",
+        "Framework :: Plone :: 6.2",
         "Framework :: Plone :: Addon",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
@@ -48,9 +47,6 @@ setup(
     author_email="gilforcada@gmail.com",
     url="https://github.com/collective/collective.contentalerts",
     license="GPL version 2",
-    packages=find_packages("src", exclude=["ez_setup"]),
-    namespace_packages=["collective"],
-    package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
     python_requires=">=3.10",
@@ -68,7 +64,6 @@ setup(
         "Products.CMFCore",
         "Products.CMFPlone",
         "Products.GenericSetup",
-        "setuptools",
         "z3c.form",
         "Zope",
         "zope.component",
