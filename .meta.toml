@@ -8,10 +8,21 @@ commit-id = "68cda6e4"
 [pyproject]
 codespell_ignores = "te,nd"
 dependencies_ignores = "['collective.taskqueue']"
+check_manifest_ignores = """
+   "*.whl",
+"""
 
 [github]
 jobs = [
     "qa",
+    "test",
+    "coverage",
     "dependencies",
     "release_ready",
     ]
+
+[tox]
+test_extras = """
+    async
+"""
+test_deps_additional = "collective.taskqueue-0.8.3.dev0-py3-none-any.whl"

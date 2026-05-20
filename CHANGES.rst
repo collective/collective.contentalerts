@@ -8,11 +8,33 @@ Changelog
 
 .. towncrier release notes start
 
-3.2.3 (unreleased)
+4.0.0 (2024-03-01)
 ------------------
+
+Bug fixes:
+
+
+- Avoid a deprecation warning.
+  [gforcada] (#1)
+
+
+Internal:
+
+
+- Update configuration files.
+
+
+4.0.0a1 (unreleased)
+--------------------
 
 - Nothing changed yet.
 
+
+4.0.0a0 (2023-12-01)
+--------------------
+
+- Update to Plone 6.
+  [gforcada]
 
 3.2.1 (2022-12-17)
 ------------------

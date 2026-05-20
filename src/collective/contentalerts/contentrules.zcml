@@ -37,6 +37,20 @@
       />
 
   <browser:page
+      name="collective.contentalerts.TextAlertInadequate"
+      for="plone.app.contentrules.browser.interfaces.IRuleConditionAdding"
+      class="collective.contentalerts.contentrules.TextAlertConditionAddFormView"
+      permission="plone.app.contentrules.ManageContentRules"
+      />
+
+  <browser:page
+      name="collective.contentalerts.TextAlertForbidden"
+      for="plone.app.contentrules.browser.interfaces.IRuleConditionAdding"
+      class="collective.contentalerts.contentrules.TextAlertConditionAddFormView"
+      permission="plone.app.contentrules.ManageContentRules"
+      />
+
+  <browser:page
       name="edit"
       for="collective.contentalerts.interfaces.ITextAlertCondition"
       class="collective.contentalerts.contentrules.TextAlertConditionEditFormView"
@@ -63,7 +77,7 @@
       event="zope.interface.interfaces.IObjectEvent"
       schema="collective.contentalerts.interfaces.IInadequateTextAlertCondition"
       factory="collective.contentalerts.contentrules.InadequateTextAlertCondition"
-      addview="collective.contentalerts.TextAlert"
+      addview="collective.contentalerts.TextAlertInadequate"
       editview="edit"
       />
 
@@ -75,7 +89,7 @@
       event="zope.interface.interfaces.IObjectEvent"
       schema="collective.contentalerts.interfaces.IForbiddenTextAlertCondition"
       factory="collective.contentalerts.contentrules.ForbiddenTextAlertCondition"
-      addview="collective.contentalerts.TextAlert"
+      addview="collective.contentalerts.TextAlertForbidden"
       editview="edit"
       />
 
